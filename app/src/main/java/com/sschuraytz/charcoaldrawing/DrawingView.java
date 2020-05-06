@@ -5,8 +5,10 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
 
 public class DrawingView extends View {
 
@@ -19,8 +21,9 @@ public class DrawingView extends View {
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
 
-    public DrawingView(Context context) {
-        super(context);
+    //AttributeSet = XML attributes, need since inflating from XML
+    public DrawingView(Context context, AttributeSet attributes) {
+        super(context, attributes);
         initializeDrawing();
     }
 

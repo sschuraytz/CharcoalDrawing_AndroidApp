@@ -8,4 +8,9 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <com.sschuraytz.charcoaldrawing.DrawingView
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
