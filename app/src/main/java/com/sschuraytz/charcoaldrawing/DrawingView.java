@@ -5,9 +5,13 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.text.Layout;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.Toast;
 
 
 public class DrawingView extends View {
@@ -21,9 +25,15 @@ public class DrawingView extends View {
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
 
+    SeekBar drawingThickness;
+
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        View itemLayoutView = LayoutInflater(context.inflate(
+
+        ))
+        setUp();
         initializeDrawing();
     }
 
@@ -31,6 +41,9 @@ public class DrawingView extends View {
         path = new Path();
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStyle(Paint.Style.STROKE);
+        //setupSlider();
+        //System.out.println(drawingThickness.getProgress());
+        //paint.setStrokeWidth(drawingThickness.getProgress());
         //drawPaint.setStrokeJoin(Paint.Join.ROUND);
         //drawPaint.setStrokeWidth(8f);
     }
@@ -70,4 +83,75 @@ public class DrawingView extends View {
         canvas.drawBitmap(bitmap, 0, 0, paint);
         canvas.drawPath(path, paint);   //this is the place to experiment with different charcoal textures, I think
     }
+
+  /*  public void setupSlider() {
+        drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
+        //the next line is causing errors. it's throwing a null pointer exception
+        drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+    }
+*/
+    public void setUp()
+    {
+       // LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+       // View layout = (View) inflater.inflate(R.layout.activity_main, null);
+        //drawingThickness = (SeekBar) view.findViewById(R.id.thicknessSlider);
+/*        View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(
+
+        )*/
+        drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
+        drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                System.out.println("showed up?");
+                Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                //Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /*public void setUp()
+    {
+        drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
+        drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Toast.makeText(getContext(), "success", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+               // Toast.makeText(getApplicationContext(), "2", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                //Toast.makeText(getApplicationContext(), "3", Toast.LENGTH_LONG).show();
+            }
+        });
+    }*/
 }
