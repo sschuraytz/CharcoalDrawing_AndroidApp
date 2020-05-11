@@ -8,32 +8,19 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <LinearLayout
+    <com.sschuraytz.charcoaldrawing.DrawingView
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/thicknessSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="30dp"
+        android:layout_alignParentBottom="true"
+        android:paddingBottom="25dp"
+        android:progress="35"
+        android:max="100"/>
 
-        <com.sschuraytz.charcoaldrawing.DrawingView
-            android:id="@+id/canvas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-
-        <SeekBar
-            android:id="@+id/thicknessSlider"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginVertical="30dp"
-            android:progress="35"
-            android:max="100"/>
-
-    </RelativeLayout>
 </RelativeLayout>

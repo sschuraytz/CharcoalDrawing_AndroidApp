@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    public SeekBar drawingThickness;
+    private SeekBar drawingThickness;
     private DrawingView drawingView;
 
     @Override
