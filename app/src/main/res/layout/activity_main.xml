@@ -20,7 +20,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -30,29 +30,10 @@
             android:id="@+id/thicknessSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="20dp"
-            android:paddingTop="20dp"
-            android:progress="40"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginVertical="30dp"
+            android:progress="35"
             android:max="100"/>
 
-<!--        <ImageButton
-            android:id="@+id/newDrawing"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccent"
-            android:contentDescription=""/>
-
-        <ImageButton
-            android:id="@+id/erase"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            style="?android:attr/borderlessButtonStyle"
-            android:background="@color/colorPrimary" />-->
-
-    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
