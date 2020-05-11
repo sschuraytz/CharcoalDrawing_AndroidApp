@@ -21,6 +21,7 @@ public class DrawingView extends View {
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
 
+
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
@@ -30,9 +31,9 @@ public class DrawingView extends View {
     private void initializeDrawing() {
         path = new Path();
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
-        //drawPaint.setStrokeJoin(Paint.Join.ROUND);
-        //drawPaint.setStrokeWidth(8f);
+        //paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     @Override
@@ -68,6 +69,11 @@ public class DrawingView extends View {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, paint);
-        canvas.drawPath(path, paint);   //this is the place to experiment with different charcoal textures, I think
+        canvas.drawPath(path, paint);
+        //this is the place to experiment with different charcoal textures, I think
+    }
+
+    public Paint getPaint() {
+        return paint;
     }
 }
