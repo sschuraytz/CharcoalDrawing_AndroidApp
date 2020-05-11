@@ -73,7 +73,15 @@ public class DrawingView extends View {
         //this is the place to experiment with different charcoal textures, I think
     }
 
+    public Path getPath() {
+        return path;
+    }
+
     public Paint getPaint() {
         return paint;
+    }
+
+    public Canvas getBitmapCanvas() {
+        return bitmapCanvas;
     }
 }
