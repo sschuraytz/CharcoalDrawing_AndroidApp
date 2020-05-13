@@ -3,6 +3,7 @@ package com.sschuraytz.charcoaldrawing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
@@ -14,6 +15,8 @@ public class DrawingView extends View {
 
     //drawing primitive
     private Path path;
+    //drawing style
+    private Paint backgroundPaint;
     //drawing style
     private Paint paint;
     //what to draw (writing into bitmap)
@@ -30,8 +33,8 @@ public class DrawingView extends View {
 
     private void initializeDrawing() {
         path = new Path();
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
+        setPaint();
         paint.setStyle(Paint.Style.STROKE);
         //paint.setStrokeJoin(Paint.Join.ROUND);
     }
@@ -43,6 +46,7 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                invalidate();
                 path.moveTo(pointX, pointY);
                 break;
             case MotionEvent.ACTION_MOVE:
@@ -68,7 +72,7 @@ public class DrawingView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, 0, 0, paint);
+        canvas.drawBitmap(bitmap, 0, 0, backgroundPaint);
         canvas.drawPath(path, paint);
         //this is the place to experiment with different charcoal textures, I think
     }
@@ -77,8 +81,17 @@ public class DrawingView extends View {
         return path;
     }
 
+    private void setPaint() {
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        backgroundPaint = new Paint(Color.BLUE);
+    }
+
     public Paint getPaint() {
         return paint;
+    }
+
+    public Paint getBackgroundPaint() {
+        return backgroundPaint;
     }
 
     public Canvas getBitmapCanvas() {
