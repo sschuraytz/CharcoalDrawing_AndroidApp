@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         drawingView.getBitmapCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         drawingView.getPaint().setColor(Color.BLACK);
         drawingView.getPaint().setXfermode(null);
+        drawingView.setEraseMode(false);
     }
 
     public void setUpErase()
@@ -83,13 +84,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void startEraseMode()
     {
-        //Paint erasePaint = new Paint(Color.WHITE);
-        //drawingView.getBitmapCanvas().drawPaint(erasePaint);
-        //drawingView.getBitmapCanvas().drawColor(0, PorterDuff.Mode.CLEAR);
-        //drawingView.getPaint().setColor(0);
-        drawingView.getPaint().setColor(Color.BLUE);
+        drawingView.setEraseMode(true);
         drawingView.getPaint().setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
-       // drawingView.getPaint().setColor(Color);
     }
 
 }

@@ -24,6 +24,8 @@ public class DrawingView extends View {
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
 
+    private boolean isEraseMode;
+
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -35,8 +37,7 @@ public class DrawingView extends View {
         path = new Path();
         //make line strokes instead of painting area
         setPaint();
-        paint.setStyle(Paint.Style.STROKE);
-        //paint.setStrokeJoin(Paint.Join.ROUND);
+
     }
 
     @Override
@@ -46,15 +47,22 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                invalidate();
                 path.moveTo(pointX, pointY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 path.lineTo(pointX, pointY);
+                if (isEraseMode)
+                {
+                    bitmapCanvas.drawPath(path, paint);
+                    path.reset();
+                    path.moveTo(pointX, pointY);
+                }
                 break;
             case MotionEvent.ACTION_UP:
-                bitmapCanvas.drawPath(path, paint);
-                path.reset();
+                if (!isEraseMode) {
+                    bitmapCanvas.drawPath(path, paint);
+                    path.reset();
+                }
                 break;
             default:
                 return false;
@@ -83,7 +91,8 @@ public class DrawingView extends View {
 
     private void setPaint() {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        backgroundPaint = new Paint(Color.BLUE);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     public Paint getPaint() {
@@ -96,5 +105,13 @@ public class DrawingView extends View {
 
     public Canvas getBitmapCanvas() {
         return bitmapCanvas;
+    }
+
+    public boolean getEraseMode() {
+        return isEraseMode;
+    }
+
+    public void setEraseMode(boolean isOn) {
+        isEraseMode = isOn;
     }
 }
