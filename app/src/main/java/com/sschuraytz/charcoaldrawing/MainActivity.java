@@ -31,15 +31,6 @@ public class MainActivity extends AppCompatActivity {
                 | View.SYSTEM_UI_FLAG_FULLSCREEN  //hide status bar
                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
         hideTopBar();
-
-        decorView.setOnSystemUiVisibilityChangeListener(
-                new View.OnSystemUiVisibilityChangeListener()
-                {
-                    public void onSystemUiVisibilityChange(int visible)
-                    {
-                       hideTopBar();
-                    }
-                });
     }
 
     public void hideTopBar()
