@@ -5,9 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 public class DrawingView extends View {
@@ -20,6 +25,8 @@ public class DrawingView extends View {
     private Canvas bitmapCanvas;
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
+    private Random rand;
+    private int radius;
 
 
     //AttributeSet = XML attributes, need since inflating from XML
@@ -44,9 +51,11 @@ public class DrawingView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(pointX, pointY);
+                printTexturedCircle(pointX, pointY);
                 break;
             case MotionEvent.ACTION_MOVE:
-                path.lineTo(pointX, pointY);
+                //path.lineTo(pointX, pointY);
+                printTexturedCircle(pointX, pointY);
                 break;
             case MotionEvent.ACTION_UP:
                 bitmapCanvas.drawPath(path, paint);
@@ -75,5 +84,27 @@ public class DrawingView extends View {
 
     public Paint getPaint() {
         return paint;
+    }
+
+    private void printTexturedCircle(float pointX, float pointY)
+    {
+        rand = new Random();
+        int angle;
+        int magnitude;
+        float horizontalShift;
+        float verticalShift;
+        for (int i = 0; i < 30; i++)
+        {
+            angle = ThreadLocalRandom.current().nextInt(0, 360 + 1);
+            magnitude = ThreadLocalRandom.current().nextInt(0, (radius * 3) + 1);
+            horizontalShift = (float) (magnitude * Math.cos(angle));
+            verticalShift = (float) (magnitude * Math.sin(angle));
+            bitmapCanvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
+        }
+    }
+
+    public void setRadius(int value)
+    {
+        radius = value;
     }
 }

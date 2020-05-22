@@ -27,11 +27,13 @@ public class MainActivity extends AppCompatActivity {
     {
         drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
         drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
+        drawingView.setRadius(drawingThickness.getProgress());
         drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
+                drawingView.setRadius(drawingThickness.getProgress());
             }
 
             @Override
