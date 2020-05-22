@@ -9,6 +9,7 @@ import android.graphics.PathMeasure;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 
 public class DrawingView extends View {
@@ -50,18 +51,25 @@ public class DrawingView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(pointX, pointY);
-                path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
+                //path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
+                //path.addCircle(pointX, pointY, 10.0f, Path.Direction.CCW);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
+                //path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
                // path.lineTo(pointX, pointY);
+                drawBetween(pointX, pointY, previousX, previousY);
+                //previousX = pointX;
+                //previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
+                drawBetween(pointX, pointY, previousX, previousY);
+                previousX = pointX;
+                previousY = pointY;
                // path.lineTo(previousX, previousY);
                // path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
-                drawBetween(pointX, pointY);
+                //drawBetween(pointX, pointY);
                // bitmapCanvas.draw(previousX, previousY, pointX, pointY, paint);
 /*                measure = new PathMeasure(path, false);
                 speed = measure.getLength() / 30;
@@ -79,7 +87,30 @@ public class DrawingView extends View {
         return true;
     }
 
-    private void drawBetween(float pointX, float pointY)
+    private void drawBetween(float x1, float y1, float x2, float y2)
+    {
+        final float RADIUS = 1.0f;
+        float dx = x2 - x2;
+        float dy = y2 - y1;
+        float distance = (float)Math.sqrt(dx * dx + dy * dy);
+        float slope = (dx == 0) ? 0 : dy/dx;
+
+        float times = distance / RADIUS - 1;
+        for (float i = 0; i < times; i++)
+        {
+            //Toast.makeText(getContext(), times + " " + i, Toast.LENGTH_LONG).show();
+            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( 1 /times);
+            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
+            path.addCircle(x1 + xIncrement, y1 + yIncrement, RADIUS, Path.Direction.CCW);
+        }
+
+        if (times <= 0)
+        {
+            path.addCircle(x1, y1, RADIUS, Path.Direction.CCW);
+        }
+    }
+
+/*    private void drawBetween(float pointX, float pointY)
     {
         float smallerX = Math.min(previousX, pointX);
         float largerX = Math.max(previousX, pointX);
@@ -126,7 +157,7 @@ public class DrawingView extends View {
                 }
             }
         }
-    }
+    }*/
 
     private float useEquation(float xVal, float currX, float yVal, float slope)
     {
