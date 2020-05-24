@@ -60,13 +60,13 @@ public class DrawingView extends View {
                 //path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
                // path.lineTo(pointX, pointY);
                 drawBetween(pointX, pointY, previousX, previousY);
-                //previousX = pointX;
-                //previousY = pointY;
-                break;
-            case MotionEvent.ACTION_UP:
-                drawBetween(pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
+                break;
+            case MotionEvent.ACTION_UP:
+                //drawBetween(pointX, pointY, previousX, previousY);
+                //previousX = pointX;
+                //previousY = pointY;
                // path.lineTo(previousX, previousY);
                // path.addCircle(pointX, pointY, 5, Path.Direction.CCW);
                 //drawBetween(pointX, pointY);
