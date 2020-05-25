@@ -65,6 +65,13 @@ public class DrawingView extends View {
         return true;
     }
 
+    /**
+     * Adapted from https://stackoverflow.com/a/34142336/2700520
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
     private void drawContinuouslyBetweenPoints(float x1, float y1, float x2, float y2)
     {
         final float RADIUS = 10.0f;
