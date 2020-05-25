@@ -3,6 +3,7 @@ package com.sschuraytz.charcoaldrawing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -25,7 +26,7 @@ public class DrawingView extends View {
     private Canvas bitmapCanvas;
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
-    private Random rand;
+    private Random rand = new Random();
     private int radius;
 
 
@@ -86,21 +87,41 @@ public class DrawingView extends View {
         return paint;
     }
 
-    private void printTexturedCircle(float pointX, float pointY)
+    private void printTexturedCircleBorder(float pointX, float pointY, float maxMagnitude)
     {
-        rand = new Random();
-        int angle;
-        int magnitude;
         float horizontalShift;
         float verticalShift;
-        for (int i = 0; i < 30; i++)
+        for (int angle = 0; angle < 360; angle+=20)
         {
-            angle = ThreadLocalRandom.current().nextInt(0, 360 + 1);
-            magnitude = ThreadLocalRandom.current().nextInt(0, (radius * 3) + 1);
+            horizontalShift = (float) (maxMagnitude * Math.cos(angle));
+            verticalShift = (float) (maxMagnitude * Math.sin(angle));
+            paint.setAlpha(255 - (int)maxMagnitude);
+            bitmapCanvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
+            if ( angle % 3 == 0)
+            {
+                angle+=20;
+            }
+        }
+    }
+
+    private void printTexturedCircle(float pointX, float pointY)
+    {
+
+        int angle;
+        int magnitude;
+        int maxMagnitude = radius * 3;
+        float horizontalShift;
+        float verticalShift;
+        for (int i = 0; i < 20; i++)
+        {
+            angle = rand.nextInt(350);
+            magnitude = rand.nextInt(maxMagnitude);
             horizontalShift = (float) (magnitude * Math.cos(angle));
             verticalShift = (float) (magnitude * Math.sin(angle));
+            paint.setAlpha(255 - magnitude);
             bitmapCanvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
+        printTexturedCircleBorder(pointX, pointY, maxMagnitude);
     }
 
     public void setRadius(int value)
