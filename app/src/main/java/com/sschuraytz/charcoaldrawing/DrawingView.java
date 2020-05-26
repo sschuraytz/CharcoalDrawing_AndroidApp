@@ -28,7 +28,8 @@ public class DrawingView extends View {
     private Bitmap bitmap;
     private Random rand = new Random();
     private int radius;
-
+    private float previousX;
+    private float previousY;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -52,11 +53,14 @@ public class DrawingView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 path.moveTo(pointX, pointY);
-                printTexturedCircle(pointX, pointY);
+                previousX = pointX;
+                previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                //path.lineTo(pointX, pointY);
                 printTexturedCircle(pointX, pointY);
+                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
+                previousX = pointX;
+                previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
                 bitmapCanvas.drawPath(path, paint);
@@ -70,6 +74,35 @@ public class DrawingView extends View {
         return true;
     }
 
+    /**
+     * Adapted from https://stackoverflow.com/a/34142336/2700520
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    private void drawContinuouslyBetweenPoints(float x1, float y1, float x2, float y2)
+    {
+        final float RADIUS = 10.0f;
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float distance = (float)Math.sqrt(dx * dx + dy * dy);
+        float slope = (dx == 0) ? 0 : dy/dx;
+
+        float times = distance / RADIUS - 1;
+        for (float i = 0; i < times; i++)
+        {
+            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
+            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
+            path.addCircle(x1 + xIncrement, y1 + yIncrement, 1, Path.Direction.CCW);
+        }
+
+        if (times <= 0)
+        {
+            path.addCircle(x1, y1, 1, Path.Direction.CCW);
+        }
+    }
+
     @Override
     protected void onSizeChanged(int height, int width, int previousHeight, int previousWidth) {
         bitmap = Bitmap.createBitmap(height, width, Bitmap.Config.ARGB_8888);
@@ -80,7 +113,6 @@ public class DrawingView extends View {
     public void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, paint);
         canvas.drawPath(path, paint);
-        //this is the place to experiment with different charcoal textures, I think
     }
 
     public Paint getPaint() {
