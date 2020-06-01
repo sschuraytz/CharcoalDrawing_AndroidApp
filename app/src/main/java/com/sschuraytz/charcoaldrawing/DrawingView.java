@@ -50,7 +50,7 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //printTexturedCircle(pointX, pointY);
+                //TODO: need to be able to adjust circle size and opacity in this class
                 printCircleWithLocation(pointX, pointY);
                 path.moveTo(pointX, pointY);
                 previousX = pointX;
@@ -58,7 +58,6 @@ public class DrawingView extends View {
                 break;
             case MotionEvent.ACTION_MOVE:
                 printCircleWithLocation(pointX, pointY);
-                //printTexturedCircle(pointX, pointY);
                 //drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
@@ -105,8 +104,8 @@ public class DrawingView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int height, int width, int previousHeight, int previousWidth) {
-        bitmap = Bitmap.createBitmap(height, width, Bitmap.Config.ARGB_8888);
+    protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
+        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmapCanvas = new Canvas(bitmap);
     }
 
@@ -124,28 +123,6 @@ public class DrawingView extends View {
     {
         bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), pointX, pointY, paint);
     }
-
-/*
-    private void printTexturedCircle(float pointX, float pointY)
-    {
-
-        int angle;
-        int magnitude;
-        int maxMagnitude = radius * 3;
-        float horizontalShift;
-        float verticalShift;
-        for (int i = 0; i < 20; i++)
-        {
-            angle = rand.nextInt(360);
-            magnitude = rand.nextInt(maxMagnitude);
-            horizontalShift = (float) (magnitude * Math.cos(angle));
-            verticalShift = (float) (magnitude * Math.sin(angle));
-            paint.setAlpha(255 - magnitude);
-            bitmapCanvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
-        }
-        printTexturedCircleBorder(pointX, pointY, maxMagnitude);
-    }
-*/
 
     public void setRadius(int value)
     {

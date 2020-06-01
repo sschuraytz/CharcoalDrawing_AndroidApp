@@ -15,53 +15,27 @@ public class CharcoalTool{
     private int radius;
 
     public CharcoalTool() {
-        bitmap = Bitmap.createBitmap(450, 450, Bitmap.Config.ARGB_8888);
+        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(10);
         createCircleWithNoLocation();
-       // onDraw(canvas);
     }
-
-//    public void onDraw(Canvas canvas) {
-//        canvas.drawBitmap(bitmap, 0, 0, paint);
-//    }
 
     private void createCircleWithNoLocation()
     {
-        int angle;
-        int magnitude;
-        int maxMagnitude = 360;
-        //int maxMagnitude = radius * 3;
-        float horizontalShift;
-        float verticalShift;
-        for (int i = 0; i < 20; i++)
-        {
-            angle = rand.nextInt(maxMagnitude);
-            //magnitude = rand.nextInt(maxMagnitude);
-            magnitude = rand.nextInt(300);
-            horizontalShift = (float) (magnitude * Math.cos(angle));
-            verticalShift = (float) (magnitude * Math.sin(angle));
-            //paint.setAlpha(255 - magnitude);
-           // canvas.drawPoint(horizontalShift, verticalShift, paint);
-            //canvas.drawPoint(5, 5, paint);
-        }
-       // printTexturedCircleBorder(pointX, pointY, maxMagnitude);
-        printTexturedCircleBorder(0, 0, 100);
-
+        printTexturedCircle(50, 50);
     }
 
-    //TODO: this needs to be circular. the code didn't change, but it's not going all the way around
-    private void printTexturedCircleBorder(float pointX, float pointY, float maxMagnitude)
+    private void printTexturedCircleBorder(float pointX, float pointY, int maxMagnitude)
     {
         float horizontalShift;
         float verticalShift;
-        for (int angle = 0; angle < 360; angle+=10)
+        for (int angle = 0; angle < 360; angle+=20)
         {
             horizontalShift = (float) (maxMagnitude * Math.cos(angle));
             verticalShift = (float) (maxMagnitude * Math.sin(angle));
-            //paint.setAlpha(255 - (int)maxMagnitude);
-            //canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
+            paint.setAlpha(255 - maxMagnitude);
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
             if ( angle % 3 == 0)
             {
@@ -70,12 +44,12 @@ public class CharcoalTool{
         }
     }
 
-/*    private void printTexturedCircle(float pointX, float pointY)
+    private void printTexturedCircle(float pointX, float pointY)
     {
-
         int angle;
         int magnitude;
-        int maxMagnitude = radius * 3;
+        //int maxMagnitude = radius * 3;
+        int maxMagnitude = 50;
         float horizontalShift;
         float verticalShift;
         for (int i = 0; i < 20; i++)
@@ -87,8 +61,8 @@ public class CharcoalTool{
             paint.setAlpha(255 - magnitude);
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
-      //  printTexturedCircleBorder(pointX, pointY, maxMagnitude);
-    }*/
+        printTexturedCircleBorder(pointX, pointY, maxMagnitude);
+    }
 
     public Bitmap getBitmap()
     {
