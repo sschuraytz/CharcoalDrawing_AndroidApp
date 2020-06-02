@@ -4,13 +4,12 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
 public class DrawingView extends View {
-    
+
     //drawing style
     private Paint paint;
     //what to draw (writing into bitmap)
@@ -30,12 +29,10 @@ public class DrawingView extends View {
     }
 
     private void initializeDrawing() {
-      //  path = new Path();
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
         //paint.setStrokeJoin(Paint.Join.ROUND);
-        charcoalTool = new CharcoalTool(radius);
     }
 
     @Override
@@ -107,7 +104,6 @@ public class DrawingView extends View {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, paint);
-        //canvas.drawPath(path, paint);
     }
 
     public Paint getPaint() {
@@ -116,6 +112,7 @@ public class DrawingView extends View {
 
     private void printCircleWithLocation(float pointX, float pointY)
     {
+        charcoalTool = new CharcoalTool(radius);
         bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), pointX, pointY, paint);
     }
 
