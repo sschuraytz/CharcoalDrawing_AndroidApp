@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -16,11 +17,20 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        hideSystemUI();
+        try
+        { hideSystemUI();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+                setContentView(R.layout.activity_main);
+
+
         drawingView = (DrawingView) findViewById(R.id.canvas);
         setUpSlider();
+        } catch (Exception e)
+    {
+        Log.e("TAG", "onCreate", e);
+        throw e;
+    }
     }
 
     public void setUpSlider()

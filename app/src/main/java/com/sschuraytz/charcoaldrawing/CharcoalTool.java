@@ -3,8 +3,11 @@ package com.sschuraytz.charcoaldrawing;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.widget.Toast;
 
 import java.util.Random;
+
+import static java.security.AccessController.getContext;
 
 public class CharcoalTool{
 
@@ -14,17 +17,18 @@ public class CharcoalTool{
     private Random rand = new Random();
     private int radius;
 
-    public CharcoalTool() {
+    public CharcoalTool(int value) {
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStrokeWidth(10);
+        paint.setStrokeWidth(5);
+        radius = 10;
         createCircleWithNoLocation();
     }
 
     private void createCircleWithNoLocation()
     {
-        printTexturedCircle(50, 50);
+        printTexturedCircle();
     }
 
     private void printTexturedCircleBorder(float pointX, float pointY, int maxMagnitude)
@@ -44,12 +48,14 @@ public class CharcoalTool{
         }
     }
 
-    private void printTexturedCircle(float pointX, float pointY)
+    private void printTexturedCircle()
     {
         int angle;
         int magnitude;
-        //int maxMagnitude = radius * 3;
-        int maxMagnitude = 50;
+        int maxMagnitude = radius * 3;
+        //int maxMagnitude = 50; //25 with stroke width 5 looked nice
+        float pointX = 50;
+        float pointY = 50;
         float horizontalShift;
         float verticalShift;
         for (int i = 0; i < 20; i++)

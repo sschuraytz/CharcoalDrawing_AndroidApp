@@ -9,13 +9,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.util.Random;
-
-
 public class DrawingView extends View {
-
-    //drawing primitive
-    private Path path;
+    
     //drawing style
     private Paint paint;
     //what to draw (writing into bitmap)
@@ -23,11 +18,10 @@ public class DrawingView extends View {
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
 
-    private Random rand = new Random();
-    private int radius;
+    public int radius;
     private float previousX;
     private float previousY;
-    private CharcoalTool charcoalTool = new CharcoalTool();
+    private CharcoalTool charcoalTool;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -36,11 +30,12 @@ public class DrawingView extends View {
     }
 
     private void initializeDrawing() {
-        path = new Path();
+      //  path = new Path();
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
         //paint.setStrokeJoin(Paint.Join.ROUND);
+        charcoalTool = new CharcoalTool(radius);
     }
 
     @Override
@@ -51,20 +46,20 @@ public class DrawingView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 //TODO: need to be able to adjust circle size and opacity in this class
+                //really, I want to set the opacity in charcoal, since that's where the values are known
+                //but the paint here is overriding any colors, how can I insert the circle as more of an image
+                //with pre-set colors?
                 printCircleWithLocation(pointX, pointY);
-                path.moveTo(pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
                 printCircleWithLocation(pointX, pointY);
-                //drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
+                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
-                //bitmapCanvas.drawPath(path, paint);
-                path.reset();
                 break;
             default:
                 return false;
@@ -94,12 +89,12 @@ public class DrawingView extends View {
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            path.addCircle(x1 + xIncrement, y1 + yIncrement, 1, Path.Direction.CCW);
+            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), x1 + xIncrement, y1 + yIncrement, paint);
         }
 
         if (times <= 0)
         {
-            path.addCircle(x1, y1, 1, Path.Direction.CCW);
+            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), x1, y1, paint);
         }
     }
 
