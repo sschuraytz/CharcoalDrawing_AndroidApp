@@ -21,8 +21,8 @@ public class CharcoalTool{
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStrokeWidth(5);
-        radius = 10;
+        paint.setStrokeWidth(3);
+        radius = 35;
         createCircleWithNoLocation();
     }
 
@@ -35,15 +35,15 @@ public class CharcoalTool{
     {
         float horizontalShift;
         float verticalShift;
-        for (int angle = 0; angle < 360; angle+=20)
+        for (int angle = 0; angle < 360; angle+=(radius/4))
         {
             horizontalShift = (float) (maxMagnitude * Math.cos(angle));
             verticalShift = (float) (maxMagnitude * Math.sin(angle));
-            paint.setAlpha(255 - maxMagnitude);
+            paint.setAlpha(255 - maxMagnitude*2);
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
             if ( angle % 3 == 0)
             {
-                angle+=20;
+                angle+=(radius/2);
             }
         }
     }
@@ -52,20 +52,19 @@ public class CharcoalTool{
     {
         int angle;
         int magnitude;
-        int maxMagnitude = radius * 2;
-        //int maxMagnitude = 50; //25 with stroke width 5 looked nice
-        float pointX = 50;
-        float pointY = 50;
+        int maxMagnitude = radius;
+        float pointX = radius;
+        float pointY = radius;
         float horizontalShift;
         float verticalShift;
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < radius*2; i++)
         {
             angle = rand.nextInt(360);
-            magnitude = rand.nextInt(maxMagnitude);
+            //lower bound to avoid having too many dots in circle center which creates dark center line
+            magnitude = rand.nextInt(maxMagnitude - (maxMagnitude/5)) + (maxMagnitude/5);
             horizontalShift = (float) (magnitude * Math.cos(angle));
             verticalShift = (float) (magnitude * Math.sin(angle));
-            paint.setAlpha(255 - magnitude);
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
         printTexturedCircleBorder(pointX, pointY, maxMagnitude);
@@ -81,4 +80,12 @@ public class CharcoalTool{
         radius = value;
         createCircleWithNoLocation();
     }
+
+    public int getRadius()
+    {
+        return radius;
+    }
+
+    //TODO: change max and min width (seekbar)
+    //TODO: make shape more circular so end of line is smooth, but not too circular that dot looks weird
 }

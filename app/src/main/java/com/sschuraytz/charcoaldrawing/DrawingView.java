@@ -42,10 +42,6 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                //TODO: need to be able to adjust circle size and opacity in this class
-                //really, I want to set the opacity in charcoal, since that's where the values are known
-                //but the paint here is overriding any colors, how can I insert the circle as more of an image
-                //with pre-set colors?
                 printCircleWithLocation(pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
@@ -86,12 +82,18 @@ public class DrawingView extends View {
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), x1 + xIncrement, y1 + yIncrement, paint);
+            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
+                    x1 + xIncrement - charcoalTool.getRadius(),
+                    y1 + yIncrement - charcoalTool.getRadius(),
+                    paint);
         }
 
         if (times <= 0)
         {
-            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), x1, y1, paint);
+            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
+                    x1 - charcoalTool.getRadius(),
+                    y1 - charcoalTool.getRadius(),
+                    paint);
         }
     }
 
@@ -112,7 +114,10 @@ public class DrawingView extends View {
 
     private void printCircleWithLocation(float pointX, float pointY)
     {
-        bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), pointX, pointY, paint);
+        bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
+                pointX - charcoalTool.getRadius(),
+                pointY - charcoalTool.getRadius(),
+                paint);
     }
 
     public void setRadius(int value)
