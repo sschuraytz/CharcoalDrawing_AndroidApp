@@ -2,7 +2,10 @@ package com.sschuraytz.charcoaldrawing;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+
 import java.util.Random;
 
 
@@ -14,12 +17,12 @@ public class CharcoalTool{
     private Random rand = new Random();
     private int radius;
 
-    public CharcoalTool(int value) {
+    public CharcoalTool() {
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(5);
-        radius = value;
+        radius = 10;
         createCircleWithNoLocation();
     }
 
@@ -49,12 +52,13 @@ public class CharcoalTool{
     {
         int angle;
         int magnitude;
-        int maxMagnitude = radius;
+        int maxMagnitude = radius * 2;
         //int maxMagnitude = 50; //25 with stroke width 5 looked nice
         float pointX = 50;
         float pointY = 50;
         float horizontalShift;
         float verticalShift;
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (int i = 0; i < 20; i++)
         {
             angle = rand.nextInt(360);
@@ -70,5 +74,11 @@ public class CharcoalTool{
     public Bitmap getBitmap()
     {
         return bitmap;
+    }
+
+    public void setRadius(int value)
+    {
+        radius = value;
+        createCircleWithNoLocation();
     }
 }

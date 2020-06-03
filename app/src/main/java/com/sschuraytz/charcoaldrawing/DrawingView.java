@@ -17,7 +17,6 @@ public class DrawingView extends View {
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
 
-    public int radius;
     private float previousX;
     private float previousY;
     private CharcoalTool charcoalTool;
@@ -25,6 +24,7 @@ public class DrawingView extends View {
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        charcoalTool = new CharcoalTool();
         initializeDrawing();
     }
 
@@ -112,12 +112,11 @@ public class DrawingView extends View {
 
     private void printCircleWithLocation(float pointX, float pointY)
     {
-        charcoalTool = new CharcoalTool(radius);
         bitmapCanvas.drawBitmap(charcoalTool.getBitmap(), pointX, pointY, paint);
     }
 
     public void setRadius(int value)
     {
-        radius = value;
+        charcoalTool.setRadius(value);
     }
 }
