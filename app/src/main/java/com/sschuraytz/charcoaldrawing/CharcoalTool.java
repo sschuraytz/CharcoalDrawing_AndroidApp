@@ -36,11 +36,14 @@ public class CharcoalTool{
     {
         float horizontalShift;
         float verticalShift;
-        for (int angle = 0; angle < 360; angle+=(radius+1))
+        paint.setAlpha(255 - maxMagnitude*2);
+
+        //small increment value for large radius so shape is more circular --> end of line more smooth
+        float incrementer = radius > 80 ?(0.125f*radius) : radius + 1;
+        for (int angle = 0; angle < 360; angle+=incrementer)
         {
             horizontalShift = (float) (maxMagnitude * Math.cos(angle));
             verticalShift = (float) (maxMagnitude * Math.sin(angle));
-            paint.setAlpha(255 - maxMagnitude*2);
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
     }
@@ -83,6 +86,4 @@ public class CharcoalTool{
         return radius;
     }
 
-    //TODO: change max and min width (seekbar)
-    //TODO: make shape more circular so end of line is smooth, but not too circular that dot looks weird
 }

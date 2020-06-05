@@ -78,7 +78,9 @@ public class DrawingView extends View {
         float slope = (dx == 0) ? 0 : dy/dx;
 
         float times = distance / RADIUS - 1;
-        for (float i = 0; i < times; i++)
+        //ensure thin line has more dots since it doesn't have much overlap
+        float incrementer = charcoalTool.getRadius() > 5 ? 1 : 0.5f;
+        for (float i = 0; i < times; i+=incrementer)
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;

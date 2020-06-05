@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 drawingView.setRadius(drawingThickness.getProgress());
-                Log.d("progress", "" + drawingThickness.getProgress());
             }
 
             @Override
