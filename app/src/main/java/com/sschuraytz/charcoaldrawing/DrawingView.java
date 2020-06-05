@@ -4,33 +4,31 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-
 public class DrawingView extends View {
 
-    //drawing primitive
-    private Path path;
     //drawing style
     private Paint paint;
     //what to draw (writing into bitmap)
     private Canvas bitmapCanvas;
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
+
     private float previousX;
     private float previousY;
+    private CharcoalTool charcoalTool;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        charcoalTool = new CharcoalTool();
         initializeDrawing();
     }
 
     private void initializeDrawing() {
-        path = new Path();
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
@@ -44,18 +42,17 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                path.moveTo(pointX, pointY);
+                printCircleWithLocation(pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
+                printCircleWithLocation(pointX, pointY);
                 drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
-                bitmapCanvas.drawPath(path, paint);
-                path.reset();
                 break;
             default:
                 return false;
@@ -81,32 +78,48 @@ public class DrawingView extends View {
         float slope = (dx == 0) ? 0 : dy/dx;
 
         float times = distance / RADIUS - 1;
-        for (float i = 0; i < times; i++)
+        //ensure thin line has more dots since it doesn't have much overlap
+        float incrementer = charcoalTool.getRadius() > 5 ? 1 : 0.5f;
+        for (float i = 0; i < times; i+=incrementer)
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            path.addCircle(x1 + xIncrement, y1 + yIncrement, 1, Path.Direction.CCW);
+            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
+                    x1 + xIncrement - charcoalTool.getRadius(),
+                    y1 + yIncrement - charcoalTool.getRadius(),
+                    paint);
         }
 
         if (times <= 0)
         {
-            path.addCircle(x1, y1, 1, Path.Direction.CCW);
+            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
+                    x1 - charcoalTool.getRadius(),
+                    y1 - charcoalTool.getRadius(),
+                    paint);
         }
     }
 
     @Override
-    protected void onSizeChanged(int height, int width, int previousHeight, int previousWidth) {
-        bitmap = Bitmap.createBitmap(height, width, Bitmap.Config.ARGB_8888);
+    protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
+        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         bitmapCanvas = new Canvas(bitmap);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, paint);
-        canvas.drawPath(path, paint);
     }
 
-    public Paint getPaint() {
-        return paint;
+    private void printCircleWithLocation(float pointX, float pointY)
+    {
+        bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
+                pointX - charcoalTool.getRadius(),
+                pointY - charcoalTool.getRadius(),
+                paint);
+    }
+
+    public void setRadius(int value)
+    {
+        charcoalTool.setRadius(value);
     }
 }

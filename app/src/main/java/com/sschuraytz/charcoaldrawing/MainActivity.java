@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.SeekBar;
@@ -26,12 +27,12 @@ public class MainActivity extends AppCompatActivity {
     public void setUpSlider()
     {
         drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
-        drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
+        drawingView.setRadius(drawingThickness.getProgress());
         drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
+                drawingView.setRadius(drawingThickness.getProgress());
             }
 
             @Override
