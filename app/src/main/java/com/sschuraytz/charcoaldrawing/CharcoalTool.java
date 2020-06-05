@@ -24,11 +24,6 @@ public class CharcoalTool{
         //should allow user to modify
         paint.setStrokeWidth(3);
         radius = 35;
-        createCircleWithNoLocation();
-    }
-
-    private void createCircleWithNoLocation()
-    {
         printTexturedCircle();
     }
 
@@ -78,7 +73,7 @@ public class CharcoalTool{
     public void setRadius(int value)
     {
         radius = value;
-        createCircleWithNoLocation();
+        printTexturedCircle();
     }
 
     public int getRadius()
