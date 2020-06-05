@@ -21,6 +21,7 @@ public class CharcoalTool{
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        //should allow user to modify
         paint.setStrokeWidth(3);
         radius = 35;
         createCircleWithNoLocation();
@@ -35,16 +36,12 @@ public class CharcoalTool{
     {
         float horizontalShift;
         float verticalShift;
-        for (int angle = 0; angle < 360; angle+=(radius/4))
+        for (int angle = 0; angle < 360; angle+=(radius+1))
         {
             horizontalShift = (float) (maxMagnitude * Math.cos(angle));
             verticalShift = (float) (maxMagnitude * Math.sin(angle));
             paint.setAlpha(255 - maxMagnitude*2);
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
-            if ( angle % 3 == 0)
-            {
-                angle+=(radius/2);
-            }
         }
     }
 

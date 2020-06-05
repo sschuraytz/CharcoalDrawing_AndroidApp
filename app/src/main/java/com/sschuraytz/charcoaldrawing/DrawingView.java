@@ -108,10 +108,6 @@ public class DrawingView extends View {
         canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
-    public Paint getPaint() {
-        return paint;
-    }
-
     private void printCircleWithLocation(float pointX, float pointY)
     {
         bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),

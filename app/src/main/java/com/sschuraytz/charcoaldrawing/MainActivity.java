@@ -17,33 +17,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        try
-        { hideSystemUI();
+        hideSystemUI();
         super.onCreate(savedInstanceState);
-
-                setContentView(R.layout.activity_main);
-
-
+        setContentView(R.layout.activity_main);
         drawingView = (DrawingView) findViewById(R.id.canvas);
         setUpSlider();
-        } catch (Exception e)
-    {
-        Log.e("TAG", "onCreate", e);
-        throw e;
-    }
     }
 
     public void setUpSlider()
     {
         drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
-        drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
         drawingView.setRadius(drawingThickness.getProgress());
         drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
                 drawingView.setRadius(drawingThickness.getProgress());
+                Log.d("progress", "" + drawingThickness.getProgress());
             }
 
             @Override
