@@ -20,11 +20,14 @@ public class DrawingView extends View {
     private float previousX;
     private float previousY;
     private CharcoalTool charcoalTool;
+    private EraseTool eraseTool;
+    private boolean isEraseMode;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
+        eraseTool = new EraseTool();
         initializeDrawing();
     }
 
@@ -42,13 +45,26 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                printCircleWithLocation(pointX, pointY);
+                if (isEraseMode)
+                {
+                    printEraseWithLocation(pointX, pointY);
+                }
+                else {
+                    printCircleWithLocation(pointX, pointY);
+                }
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                printCircleWithLocation(pointX, pointY);
-                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
+                if (isEraseMode)
+                {
+                    printEraseWithLocation(pointX, pointY);
+                    eraseContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
+                }
+                else {
+                    printCircleWithLocation(pointX, pointY);
+                    drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
+                }
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -99,6 +115,36 @@ public class DrawingView extends View {
         }
     }
 
+    private void eraseContinuouslyBetweenPoints(float x1, float y1, float x2, float y2)
+    {
+        final float RADIUS = 10.0f;
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float distance = (float)Math.sqrt(dx * dx + dy * dy);
+        float slope = (dx == 0) ? 0 : dy/dx;
+
+        float times = distance / RADIUS - 1;
+        //ensure thin line has more dots since it doesn't have much overlap
+        float incrementer = eraseTool.getRadius() > 5 ? 1 : 0.5f;
+        for (float i = 0; i < times; i+=incrementer)
+        {
+            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
+            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
+            bitmapCanvas.drawBitmap(eraseTool.getBitmap(),
+                    x1 + xIncrement - eraseTool.getRadius(),
+                    y1 + yIncrement - eraseTool.getRadius(),
+                    paint);
+        }
+
+        if (times <= 0)
+        {
+            bitmapCanvas.drawBitmap(eraseTool.getBitmap(),
+                    x1 - eraseTool.getRadius(),
+                    y1 - eraseTool.getRadius(),
+                    paint);
+        }
+    }
+
     @Override
     protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -118,8 +164,21 @@ public class DrawingView extends View {
                 paint);
     }
 
+    private void printEraseWithLocation(float pointX, float pointY)
+    {
+        bitmapCanvas.drawBitmap(eraseTool.getBitmap(),
+                pointX - eraseTool.getRadius(),
+                pointY - eraseTool.getRadius(),
+                paint);
+    }
+
     public void setRadius(int value)
     {
         charcoalTool.setRadius(value);
+        eraseTool.setRadius(value);
+    }
+
+    public void setEraseMode(boolean isOn) {
+        isEraseMode = isOn;
     }
 }

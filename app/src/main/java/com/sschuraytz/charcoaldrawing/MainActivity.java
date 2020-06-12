@@ -7,6 +7,7 @@ import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -14,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
+    private ImageButton eraseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         drawingView = (DrawingView) findViewById(R.id.canvas);
         setUpSlider();
+        setUpErase();
     }
 
     public void setUpSlider()
@@ -70,5 +73,15 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_FULLSCREEN  //hide status bar
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+    public void setUpErase()
+    {
+        eraseButton = (ImageButton) findViewById(R.id.eraseButton);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drawingView.setEraseMode(true);
+            }
+        });
     }
 }
