@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         drawingView = (DrawingView) findViewById(R.id.canvas);
         setUpSlider();
+        setUpDraw();
         setUpErase();
     }
 
@@ -75,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
+    public void setUpDraw()
+    {
+        eraseButton = (ImageButton) findViewById(R.id.drawButton);
+        eraseButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drawingView.setEraseMode(false);
+            }
+        });
+    }
     public void setUpErase()
     {
         eraseButton = (ImageButton) findViewById(R.id.eraseButton);
