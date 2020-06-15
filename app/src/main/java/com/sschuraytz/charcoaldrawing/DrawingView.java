@@ -22,6 +22,7 @@ public class DrawingView extends View {
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private boolean isEraseMode;
+    private Tool currentTool;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -35,6 +36,7 @@ public class DrawingView extends View {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
+        currentTool = charcoalTool;
         //paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
@@ -45,27 +47,13 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (isEraseMode)
-                {
-                    printCircleWithLocation(pointX, pointY, eraseTool);
-                }
-                else
-                    {
-                    printCircleWithLocation(pointX, pointY, charcoalTool);
-                }
+                printCircleWithLocation(pointX, pointY, currentTool);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (isEraseMode)
-                {
-                    printCircleWithLocation(pointX, pointY, eraseTool);
-                    drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, eraseTool);
-                }
-                else {
-                    printCircleWithLocation(pointX, pointY, charcoalTool);
-                    drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, charcoalTool);
-                }
+                printCircleWithLocation(pointX, pointY, currentTool);
+                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, currentTool);
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -141,7 +129,11 @@ public class DrawingView extends View {
         eraseTool.setRadius(value);
     }
 
-    public void setEraseMode(boolean isOn) {
-        isEraseMode = isOn;
+    public void setEraseMode() {
+        currentTool = eraseTool;
+    }
+
+    public void setDrawingMode() {
+        currentTool = charcoalTool;
     }
 }

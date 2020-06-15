@@ -14,7 +14,7 @@ public class Tool{
     private Canvas canvas;
     private Bitmap bitmap;
     private Paint paint;
-    private Random rand = new Random();
+    private static final Random rand = new Random();
     private int radius;
 
     public Tool(int color) {

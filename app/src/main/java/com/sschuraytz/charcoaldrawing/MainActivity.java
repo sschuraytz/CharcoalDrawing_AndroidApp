@@ -15,6 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
+    private ImageButton drawButton;
     private ImageButton eraseButton;
 
     @Override
@@ -78,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpDraw()
     {
-        eraseButton = (ImageButton) findViewById(R.id.drawButton);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
+        drawButton = (ImageButton) findViewById(R.id.drawButton);
+        drawButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                drawingView.setEraseMode(false);
+                drawingView.setDrawingMode();
             }
         });
     }
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         eraseButton = (ImageButton) findViewById(R.id.eraseButton);
         eraseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                drawingView.setEraseMode(true);
+                drawingView.setEraseMode();
             }
         });
     }
