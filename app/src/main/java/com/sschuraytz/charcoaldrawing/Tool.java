@@ -44,7 +44,7 @@ public class Tool{
         }
     }
 
-    private void printTexturedCircle()
+    protected void printTexturedCircle(int density)
     {
         int angle;
         int magnitude;
@@ -54,16 +54,23 @@ public class Tool{
         float horizontalShift;
         float verticalShift;
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        for (int i = 0; i < radius*2; i++)
+        paint.setAlpha(255);
+        for (int i = 0; i < radius*2*density; i++)
         {
             angle = rand.nextInt(360);
             //lower bound to avoid having too many dots in circle center which creates dark center line
-            magnitude = rand.nextInt(maxMagnitude - (maxMagnitude/5)) + (maxMagnitude/5);
+            magnitude = rand.nextInt(maxMagnitude - (maxMagnitude/6)) + (maxMagnitude/6);
             horizontalShift = (float) (magnitude * Math.cos(angle));
             verticalShift = (float) (magnitude * Math.sin(angle));
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
+
         printTexturedCircleBorder(pointX, pointY, maxMagnitude);
+    }
+
+    protected void printTexturedCircle()
+    {
+        printTexturedCircle(1);
     }
 
     public Bitmap getBitmap()
