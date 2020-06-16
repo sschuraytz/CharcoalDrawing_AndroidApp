@@ -15,9 +15,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
-    private ImageButton drawButton;
-    private ImageButton eraseButton;
-    private ImageButton smudgeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpDraw()
     {
-        drawButton = (ImageButton) findViewById(R.id.drawButton);
+        ImageButton drawButton = (ImageButton) findViewById(R.id.drawButton);
         drawButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.setDrawingMode();
@@ -90,16 +87,17 @@ public class MainActivity extends AppCompatActivity {
     }
     public void setUpErase()
     {
-        eraseButton = (ImageButton) findViewById(R.id.eraseButton);
+        ImageButton eraseButton = (ImageButton) findViewById(R.id.eraseButton);
         eraseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.setEraseMode();
             }
         });
     }
+
     public void setUpSmudge()
     {
-        smudgeButton = (ImageButton) findViewById(R.id.smudgeButton);
+        ImageButton smudgeButton = (ImageButton) findViewById(R.id.smudgeButton);
         smudgeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.setSmudgeMode();
