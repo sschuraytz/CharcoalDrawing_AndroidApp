@@ -21,7 +21,7 @@ public class DrawingView extends View {
     private float previousY;
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
-    private boolean isEraseMode;
+    private SmudgeTool smudgeTool;
     private Tool currentTool;
 
     //AttributeSet = XML attributes, need since inflating from XML
@@ -29,6 +29,7 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
+        smudgeTool = new SmudgeTool();
         initializeDrawing();
     }
 
@@ -135,5 +136,9 @@ public class DrawingView extends View {
 
     public void setDrawingMode() {
         currentTool = charcoalTool;
+    }
+
+    public void setSmudgeMode() {
+        currentTool = smudgeTool;
     }
 }

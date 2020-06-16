@@ -42,4 +42,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/drawButton" />
 
+    <ImageButton
+        android:id="@+id/smudgeButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_fingerprint_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/eraseButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

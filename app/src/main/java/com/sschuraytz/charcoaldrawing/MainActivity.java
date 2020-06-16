@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawingView drawingView;
     private ImageButton drawButton;
     private ImageButton eraseButton;
+    private ImageButton smudgeButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setUpSlider();
         setUpDraw();
         setUpErase();
+        setUpSmudge();
     }
 
     public void setUpSlider()
@@ -92,6 +94,15 @@ public class MainActivity extends AppCompatActivity {
         eraseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.setEraseMode();
+            }
+        });
+    }
+    public void setUpSmudge()
+    {
+        smudgeButton = (ImageButton) findViewById(R.id.smudgeButton);
+        smudgeButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drawingView.setSmudgeMode();
             }
         });
     }
