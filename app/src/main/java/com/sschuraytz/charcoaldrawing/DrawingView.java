@@ -21,7 +21,6 @@ public class DrawingView extends View {
     private float previousY;
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
-    private boolean isEraseMode;
     private Tool currentTool;
 
     //AttributeSet = XML attributes, need since inflating from XML
