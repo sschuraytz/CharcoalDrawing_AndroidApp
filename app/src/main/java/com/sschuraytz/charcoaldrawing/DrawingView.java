@@ -20,11 +20,14 @@ public class DrawingView extends View {
     private float previousX;
     private float previousY;
     private CharcoalTool charcoalTool;
+    private EraseTool eraseTool;
+    private Tool currentTool;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
+        eraseTool = new EraseTool();
         initializeDrawing();
     }
 
@@ -32,6 +35,7 @@ public class DrawingView extends View {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
+        currentTool = charcoalTool;
         //paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
@@ -42,13 +46,13 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                printCircleWithLocation(pointX, pointY);
+                printCircleWithLocation(pointX, pointY, currentTool);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                printCircleWithLocation(pointX, pointY);
-                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY);
+                printCircleWithLocation(pointX, pointY, currentTool);
+                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, currentTool);
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -69,7 +73,7 @@ public class DrawingView extends View {
      * @param x2
      * @param y2
      */
-    private void drawContinuouslyBetweenPoints(float x1, float y1, float x2, float y2)
+    private void drawContinuouslyBetweenPoints(float x1, float y1, float x2, float y2, Tool tool)
     {
         final float RADIUS = 10.0f;
         float dx = x2 - x1;
@@ -79,22 +83,22 @@ public class DrawingView extends View {
 
         float times = distance / RADIUS - 1;
         //ensure thin line has more dots since it doesn't have much overlap
-        float incrementer = charcoalTool.getRadius() > 5 ? 1 : 0.5f;
+        float incrementer = tool.getRadius() > 5 ? 1 : 0.5f;
         for (float i = 0; i < times; i+=incrementer)
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
-                    x1 + xIncrement - charcoalTool.getRadius(),
-                    y1 + yIncrement - charcoalTool.getRadius(),
+            bitmapCanvas.drawBitmap(tool.getBitmap(),
+                    x1 + xIncrement - tool.getRadius(),
+                    y1 + yIncrement - tool.getRadius(),
                     paint);
         }
 
         if (times <= 0)
         {
-            bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
-                    x1 - charcoalTool.getRadius(),
-                    y1 - charcoalTool.getRadius(),
+            bitmapCanvas.drawBitmap(tool.getBitmap(),
+                    x1 - tool.getRadius(),
+                    y1 - tool.getRadius(),
                     paint);
         }
     }
@@ -110,16 +114,25 @@ public class DrawingView extends View {
         canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
-    private void printCircleWithLocation(float pointX, float pointY)
+    private void printCircleWithLocation(float pointX, float pointY, Tool tool)
     {
-        bitmapCanvas.drawBitmap(charcoalTool.getBitmap(),
-                pointX - charcoalTool.getRadius(),
-                pointY - charcoalTool.getRadius(),
+        bitmapCanvas.drawBitmap(tool.getBitmap(),
+                pointX - tool.getRadius(),
+                pointY - tool.getRadius(),
                 paint);
     }
 
     public void setRadius(int value)
     {
         charcoalTool.setRadius(value);
+        eraseTool.setRadius(value);
+    }
+
+    public void setEraseMode() {
+        currentTool = eraseTool;
+    }
+
+    public void setDrawingMode() {
+        currentTool = charcoalTool;
     }
 }
