@@ -6,7 +6,7 @@ import android.graphics.Color;
 public class EraseTool extends Tool{
 
     public EraseTool() {
-        super(0xFAFAFA);
+        super(Color.argb(0, 250,250, 250));
     }
 
     @Override

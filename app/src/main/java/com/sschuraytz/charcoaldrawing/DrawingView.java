@@ -3,8 +3,14 @@ package com.sschuraytz.charcoaldrawing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -23,6 +29,7 @@ public class DrawingView extends View {
     private EraseTool eraseTool;
     private SmudgeTool smudgeTool;
     private Tool currentTool;
+    private static final float BLUR_RADIUS = 25f;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -48,7 +55,13 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                printCircleWithLocation(pointX, pointY, currentTool);
+                if (currentTool.equals(smudgeTool))
+                {
+
+                }
+                else {
+                    printCircleWithLocation(pointX, pointY, currentTool);
+                }
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -140,5 +153,50 @@ public class DrawingView extends View {
 
     public void setSmudgeMode() {
         currentTool = smudgeTool;
+        bitmapCanvas.drawBitmap(blur(bitmap), 0, 0, paint);
+    }
+
+    /* https://stackoverflow.com/questions/16237195/working-with-pixels-in-android */
+    public void accessBitmapPixels() {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        int pixel;
+
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++) {
+                pixel = bitmap.getPixel(x, y);
+
+                int A = Color.alpha(pixel);
+                int R = Color.red(pixel);
+                int G = Color.green(pixel);
+                int B = Color.blue(pixel);
+               // if (R > 0) {
+                    Log.d("pixel values: ", "x:" + x + " y:" + y + " A:" + A + " R: " + R);
+               // }
+            }
+        }
+    }
+
+    /* https://stackoverflow.com/questions/46331103/blurring-part-of-the-image */
+    public Bitmap blur(Bitmap image) {
+        if (null == image)
+        {
+            return null;
+        }
+
+        Bitmap outputBitmap = Bitmap.createBitmap(image);
+        //final RenderScript renderScript = RenderScript.create(this.getContext());
+        final RenderScript renderScript = RenderScript.create(this.getContext());
+        Allocation tmpIn = Allocation.createFromBitmap(renderScript, image);
+        Allocation tmpOut = Allocation.createFromBitmap(renderScript, outputBitmap);
+
+        //Intrinsic Gaussian blur filter
+        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
+        theIntrinsic.setRadius(BLUR_RADIUS);
+        theIntrinsic.setInput(tmpIn);
+        theIntrinsic.forEach(tmpOut);
+        tmpOut.copyTo(outputBitmap);
+        return outputBitmap;
     }
 }

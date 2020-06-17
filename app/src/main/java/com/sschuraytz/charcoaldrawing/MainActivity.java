@@ -2,11 +2,17 @@ package com.sschuraytz.charcoaldrawing;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.renderscript.Allocation;
+import android.renderscript.Element;
+import android.renderscript.RenderScript;
+import android.renderscript.ScriptIntrinsicBlur;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
@@ -101,7 +107,10 @@ public class MainActivity extends AppCompatActivity {
         smudgeButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.setSmudgeMode();
+
+                //drawingView.setLayerType(layerType, )
             }
         });
     }
+
 }
