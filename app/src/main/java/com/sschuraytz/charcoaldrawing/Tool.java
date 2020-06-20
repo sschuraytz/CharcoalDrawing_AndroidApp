@@ -11,11 +11,11 @@ import java.util.Random;
 
 public class Tool{
 
-    private Canvas canvas;
-    private Bitmap bitmap;
-    private Paint paint;
-    private static final Random rand = new Random();
-    private int radius;
+    protected Canvas canvas;
+    protected Bitmap bitmap;
+    protected Paint paint;
+    public static final Random rand = new Random();
+    protected int radius;
 
     public Tool(int color) {
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);

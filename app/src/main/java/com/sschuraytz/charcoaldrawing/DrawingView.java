@@ -66,7 +66,7 @@ public class DrawingView extends View {
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                printCircleWithLocation(pointX, pointY, currentTool);
+                //printCircleWithLocation(pointX, pointY, currentTool);
                 drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, currentTool);
                 previousX = pointX;
                 previousY = pointY;
