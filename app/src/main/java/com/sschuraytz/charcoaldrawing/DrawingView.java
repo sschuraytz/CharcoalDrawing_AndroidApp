@@ -29,7 +29,6 @@ public class DrawingView extends View {
     private EraseTool eraseTool;
     private SmudgeTool smudgeTool;
     private Tool currentTool;
-    private static final float BLUR_RADIUS = 25f;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -55,19 +54,12 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (currentTool.equals(smudgeTool))
-                {
-
-                }
-                else {
-                    printCircleWithLocation(pointX, pointY, currentTool);
-                }
+                currentTool.printToCanvas(bitmapCanvas, pointX, pointY, paint);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                //printCircleWithLocation(pointX, pointY, currentTool);
-                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, currentTool);
+                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -81,43 +73,6 @@ public class DrawingView extends View {
         return true;
     }
 
-    /**
-     * Adapted from https://stackoverflow.com/a/34142336/2700520
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     */
-    private void drawContinuouslyBetweenPoints(float x1, float y1, float x2, float y2, Tool tool)
-    {
-        final float RADIUS = 10.0f;
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float distance = (float)Math.sqrt(dx * dx + dy * dy);
-        float slope = (dx == 0) ? 0 : dy/dx;
-
-        float times = distance / RADIUS - 1;
-        //ensure thin line has more dots since it doesn't have much overlap
-        float incrementer = tool.getRadius() > 5 ? 1 : 0.5f;
-        for (float i = 0; i < times; i+=incrementer)
-        {
-            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
-            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(tool.getBitmap(),
-                    x1 + xIncrement - tool.getRadius(),
-                    y1 + yIncrement - tool.getRadius(),
-                    paint);
-        }
-
-        if (times <= 0)
-        {
-            bitmapCanvas.drawBitmap(tool.getBitmap(),
-                    x1 - tool.getRadius(),
-                    y1 - tool.getRadius(),
-                    paint);
-        }
-    }
-
     @Override
     protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
         bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
@@ -127,14 +82,6 @@ public class DrawingView extends View {
     @Override
     public void onDraw(Canvas canvas) {
         canvas.drawBitmap(bitmap, 0, 0, paint);
-    }
-
-    private void printCircleWithLocation(float pointX, float pointY, Tool tool)
-    {
-        bitmapCanvas.drawBitmap(tool.getBitmap(),
-                pointX - tool.getRadius(),
-                pointY - tool.getRadius(),
-                paint);
     }
 
     public void setRadius(int value)

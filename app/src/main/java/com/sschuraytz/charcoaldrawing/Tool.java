@@ -21,7 +21,6 @@ public class Tool{
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        //should allow user to modify
         paint.setStrokeWidth(3);
         radius = 35;
         paint.setColor(color);
@@ -73,20 +72,54 @@ public class Tool{
         printTexturedCircle(1);
     }
 
-    public Bitmap getBitmap()
-    {
-        return bitmap;
-    }
-
     public void setRadius(int value)
     {
         radius = value;
         printTexturedCircle();
     }
 
-    public int getRadius()
+    /**
+     * Adapted from https://stackoverflow.com/a/34142336/2700520
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2)
     {
-        return radius;
+        final float RADIUS = 10.0f;
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float distance = (float)Math.sqrt(dx * dx + dy * dy);
+        float slope = (dx == 0) ? 0 : dy/dx;
+
+        float times = distance / RADIUS - 1;
+        //ensure thin line has more dots since it doesn't have much overlap
+        float incrementer = radius > 5 ? 1 : 0.5f;
+        for (float i = 0; i < times; i+=incrementer)
+        {
+            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
+            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
+            bitmapCanvas.drawBitmap(bitmap,
+                    x1 + xIncrement - radius,
+                    y1 + yIncrement - radius,
+                    paint);
+        }
+
+        if (times <= 0)
+        {
+            bitmapCanvas.drawBitmap(bitmap,
+                    x1 - radius,
+                    y1 - radius,
+                    paint);
+        }
     }
 
+    protected void printToCanvas(Canvas bitmapCanvas, float pointX, float pointY, Paint paint)
+    {
+        bitmapCanvas.drawBitmap(bitmap,
+                pointX - radius,
+                pointY - radius,
+                paint);
+    }
 }
