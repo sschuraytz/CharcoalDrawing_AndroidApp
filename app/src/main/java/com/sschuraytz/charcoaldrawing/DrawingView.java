@@ -153,50 +153,5 @@ public class DrawingView extends View {
 
     public void setSmudgeMode() {
         currentTool = smudgeTool;
-        bitmapCanvas.drawBitmap(blur(bitmap), 0, 0, paint);
-    }
-
-    /* https://stackoverflow.com/questions/16237195/working-with-pixels-in-android */
-    public void accessBitmapPixels() {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-        int pixel;
-
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++) {
-                pixel = bitmap.getPixel(x, y);
-
-                int A = Color.alpha(pixel);
-                int R = Color.red(pixel);
-                int G = Color.green(pixel);
-                int B = Color.blue(pixel);
-               // if (R > 0) {
-                    Log.d("pixel values: ", "x:" + x + " y:" + y + " A:" + A + " R: " + R);
-               // }
-            }
-        }
-    }
-
-    /* https://stackoverflow.com/questions/46331103/blurring-part-of-the-image */
-    public Bitmap blur(Bitmap image) {
-        if (null == image)
-        {
-            return null;
-        }
-
-        Bitmap outputBitmap = Bitmap.createBitmap(image);
-        //final RenderScript renderScript = RenderScript.create(this.getContext());
-        final RenderScript renderScript = RenderScript.create(this.getContext());
-        Allocation tmpIn = Allocation.createFromBitmap(renderScript, image);
-        Allocation tmpOut = Allocation.createFromBitmap(renderScript, outputBitmap);
-
-        //Intrinsic Gaussian blur filter
-        ScriptIntrinsicBlur theIntrinsic = ScriptIntrinsicBlur.create(renderScript, Element.U8_4(renderScript));
-        theIntrinsic.setRadius(BLUR_RADIUS);
-        theIntrinsic.setInput(tmpIn);
-        theIntrinsic.forEach(tmpOut);
-        tmpOut.copyTo(outputBitmap);
-        return outputBitmap;
     }
 }
