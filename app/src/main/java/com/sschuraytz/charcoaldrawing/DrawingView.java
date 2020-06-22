@@ -54,12 +54,13 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                currentTool.printToCanvas(bitmapCanvas, pointX, pointY, paint);
+               currentTool.printToCanvas(bitmapCanvas, pointX, pointY, paint);
+//                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, pointX, pointY, paint);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, previousX, previousY);
+                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, previousX, previousY, paint);
                 previousX = pointX;
                 previousY = pointY;
                 break;

@@ -85,7 +85,7 @@ public class Tool{
      * @param x2
      * @param y2
      */
-    protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2)
+    protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2, Paint paint)
     {
         final float RADIUS = 10.0f;
         float dx = x2 - x1;
