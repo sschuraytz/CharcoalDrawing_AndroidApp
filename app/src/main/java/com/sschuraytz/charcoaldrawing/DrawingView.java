@@ -3,10 +3,14 @@ package com.sschuraytz.charcoaldrawing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
+
+import java.util.Stack;
 
 public class DrawingView extends View {
 
@@ -16,6 +20,12 @@ public class DrawingView extends View {
     private Canvas bitmapCanvas;
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
+
+    private Stack<Bitmap> currentStack = new Stack<>();
+    private Stack<Bitmap> undoneStack = new Stack<>();
+
+/*    private Stack<Bitmap> undoStack = new Stack<>();
+    private Stack<Bitmap> redoStack = new Stack<>();*/
 
     private float previousX;
     private float previousY;
@@ -36,6 +46,7 @@ public class DrawingView extends View {
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
         currentTool = charcoalTool;
+        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         //paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
@@ -46,62 +57,31 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                printCircleWithLocation(pointX, pointY, currentTool);
+                undoneStack.clear();
+               // bitmap.eraseColor(Color.TRANSPARENT);
+                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
+                //currentStack.push(bitmap);
                 break;
             case MotionEvent.ACTION_MOVE:
-                printCircleWithLocation(pointX, pointY, currentTool);
-                drawContinuouslyBetweenPoints(pointX, pointY, previousX, previousY, currentTool);
+                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
+                //undoStack.push(bitmap);
+                currentStack.push(bitmap);
+                invalidate();
                 break;
             default:
                 return false;
         }
         //a change invalidated view layout --> onDraw method executes
-        invalidate();
+        //invalidate();
         return true;
     }
 
-    /**
-     * Adapted from https://stackoverflow.com/a/34142336/2700520
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     */
-    private void drawContinuouslyBetweenPoints(float x1, float y1, float x2, float y2, Tool tool)
-    {
-        final float RADIUS = 10.0f;
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float distance = (float)Math.sqrt(dx * dx + dy * dy);
-        float slope = (dx == 0) ? 0 : dy/dx;
-
-        float times = distance / RADIUS - 1;
-        //ensure thin line has more dots since it doesn't have much overlap
-        float incrementer = tool.getRadius() > 5 ? 1 : 0.5f;
-        for (float i = 0; i < times; i+=incrementer)
-        {
-            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
-            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(tool.getBitmap(),
-                    x1 + xIncrement - tool.getRadius(),
-                    y1 + yIncrement - tool.getRadius(),
-                    paint);
-        }
-
-        if (times <= 0)
-        {
-            bitmapCanvas.drawBitmap(tool.getBitmap(),
-                    x1 - tool.getRadius(),
-                    y1 - tool.getRadius(),
-                    paint);
-        }
-    }
 
     @Override
     protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
@@ -111,15 +91,11 @@ public class DrawingView extends View {
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, 0, 0, paint);
-    }
-
-    private void printCircleWithLocation(float pointX, float pointY, Tool tool)
-    {
-        bitmapCanvas.drawBitmap(tool.getBitmap(),
-                pointX - tool.getRadius(),
-                pointY - tool.getRadius(),
-                paint);
+        if (!currentStack.empty()) {
+            Bitmap top = currentStack.peek();
+            canvas.drawBitmap(top, 0, 0, paint);
+        }
+       // canvas.drawBitmap(bitmap, 0, 0, paint);
     }
 
     public void setRadius(int value)
@@ -135,4 +111,40 @@ public class DrawingView extends View {
     public void setDrawingMode() {
         currentTool = charcoalTool;
     }
+
+    protected void undo() {
+        if (!currentStack.empty()) {
+            undoneStack.push(currentStack.pop());
+            invalidate();
+        }
+    }
+
+    protected void redo() {
+        if (!undoneStack.empty()) {
+            currentStack.push(undoneStack.pop());
+            invalidate();
+        }
+    }
+
+/*    protected void undo() {
+        if (!undoStack.empty()) {
+            redoStack.push(bitmap.copy(bitmap.getConfig(), bitmap.isMutable()));
+            Bitmap newBitmap = undoStack.pop();
+*//*            paint.setColor(Color.RED);
+            currentTool.getBitmap()
+            canvas.drawLine(0, 0, 0, 0, paint);*//*
+
+           // bitmapCanvas.drawBitmap(newBitmap, 50, 50, paint);
+            invalidate();
+            //  Toast.makeText(, "" + bitmap.describeContents() , Toast.LENGTH_LONG).show();
+        }
+    }
+
+    protected void redo() {
+        if (!redoStack.empty()) {
+            bitmapCanvas.drawBitmap(redoStack.pop(), 0, 0, paint);
+            //invalidate();
+        }
+    }*/
+
 }

@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
     private DrawingView drawingView;
     private ImageButton drawButton;
     private ImageButton eraseButton;
+    private ImageButton undoButton;
+    private ImageButton redoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
         setUpSlider();
         setUpDraw();
         setUpErase();
+        setUpUndo();
+        setUpRedo();
     }
 
     public void setUpSlider()
@@ -92,6 +96,26 @@ public class MainActivity extends AppCompatActivity {
         eraseButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.setEraseMode();
+            }
+        });
+    }
+
+    public void setUpUndo()
+    {
+        undoButton = (ImageButton) findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drawingView.undo();
+            }
+        });
+    }
+
+    public void setUpRedo()
+    {
+        redoButton = (ImageButton) findViewById(R.id.redoButton);
+        redoButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                drawingView.redo();
             }
         });
     }
