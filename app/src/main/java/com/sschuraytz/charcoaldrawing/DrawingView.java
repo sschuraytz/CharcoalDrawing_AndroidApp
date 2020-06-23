@@ -10,6 +10,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class DrawingView extends View {
@@ -24,14 +25,12 @@ public class DrawingView extends View {
     private Stack<Bitmap> currentStack = new Stack<>();
     private Stack<Bitmap> undoneStack = new Stack<>();
 
-/*    private Stack<Bitmap> undoStack = new Stack<>();
-    private Stack<Bitmap> redoStack = new Stack<>();*/
-
     private float previousX;
     private float previousY;
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private Tool currentTool;
+    private boolean firstDraw = true;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -57,8 +56,6 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                undoneStack.clear();
-               // bitmap.eraseColor(Color.TRANSPARENT);
                 currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
@@ -72,13 +69,13 @@ public class DrawingView extends View {
             case MotionEvent.ACTION_UP:
                 //undoStack.push(bitmap);
                 currentStack.push(bitmap);
-                invalidate();
+                firstDraw = false;      //don't want to check this on every touch event. is there another place to put it?
                 break;
             default:
                 return false;
         }
         //a change invalidated view layout --> onDraw method executes
-        //invalidate();
+        invalidate();
         return true;
     }
 
@@ -95,7 +92,9 @@ public class DrawingView extends View {
             Bitmap top = currentStack.peek();
             canvas.drawBitmap(top, 0, 0, paint);
         }
-       // canvas.drawBitmap(bitmap, 0, 0, paint);
+        else if (firstDraw) {
+            canvas.drawBitmap(bitmap, 0, 0, paint);
+        }
     }
 
     public void setRadius(int value)
@@ -125,26 +124,4 @@ public class DrawingView extends View {
             invalidate();
         }
     }
-
-/*    protected void undo() {
-        if (!undoStack.empty()) {
-            redoStack.push(bitmap.copy(bitmap.getConfig(), bitmap.isMutable()));
-            Bitmap newBitmap = undoStack.pop();
-*//*            paint.setColor(Color.RED);
-            currentTool.getBitmap()
-            canvas.drawLine(0, 0, 0, 0, paint);*//*
-
-           // bitmapCanvas.drawBitmap(newBitmap, 50, 50, paint);
-            invalidate();
-            //  Toast.makeText(, "" + bitmap.describeContents() , Toast.LENGTH_LONG).show();
-        }
-    }
-
-    protected void redo() {
-        if (!redoStack.empty()) {
-            bitmapCanvas.drawBitmap(redoStack.pop(), 0, 0, paint);
-            //invalidate();
-        }
-    }*/
-
 }
