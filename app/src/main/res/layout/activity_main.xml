@@ -47,7 +47,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="?android:attr/selectableItemBackground"
-        android:visibility="gone"
+        android:visibility="visible"
         android:src="@drawable/ic_undo_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/eraseButton" />

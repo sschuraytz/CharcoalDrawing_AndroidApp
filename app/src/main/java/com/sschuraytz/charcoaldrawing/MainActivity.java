@@ -99,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
     public void setUpRedo()
     {
         drawingView.redoButton = (ImageButton) findViewById(R.id.redoButton);
-        drawingView.redoButton.setOnClickListener((View v) -> {
+        /*drawingView.redoButton.setOnClickListener((View v) -> {
                 drawingView.redo();
-        });
+        });*/
     }
 
 }

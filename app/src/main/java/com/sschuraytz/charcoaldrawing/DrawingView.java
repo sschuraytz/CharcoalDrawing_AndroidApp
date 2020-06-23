@@ -13,24 +13,14 @@ import java.util.Stack;
 
 public class DrawingView extends View {
 
-    //drawing style
     private Paint paint;
-    //what to draw (writing into bitmap)
-    private Canvas bitmapCanvas;
-    //hold pixels where canvas will be drawn
-    private Bitmap bitmap;
-    protected ImageButton undoButton;
-    protected ImageButton redoButton;
-
-    protected Stack<Bitmap> currentStack = new Stack<>();
-    private Stack<Bitmap> undoneStack = new Stack<>();
+    private UndoRedo undoRedo = new UndoRedo();
 
     private float previousX;
     private float previousY;
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private Tool currentTool;
-    private boolean firstDraw = true;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -45,7 +35,6 @@ public class DrawingView extends View {
         //make line strokes instead of painting area
         paint.setStyle(Paint.Style.STROKE);
         currentTool = charcoalTool;
-        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
         //paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
@@ -56,21 +45,17 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, pointX, pointY);
+                undoRedo.addBitmap();
+                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
-                //currentStack.push(bitmap);
                 break;
             case MotionEvent.ACTION_MOVE:
-                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, previousX, previousY);
+                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
-                //undoStack.push(bitmap);
-                firstDraw = false;      //don't want to check this on every touch event. is there another place to put it?
-                currentStack.push(bitmap);
-                setUndoVisibility();
                 break;
             default:
                 return false;
@@ -81,21 +66,14 @@ public class DrawingView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
-        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmapCanvas = new Canvas(bitmap);
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        undoRedo.onSizeChanged(w, h);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        if (!currentStack.empty()) {
-            Bitmap top = currentStack.peek();
-            canvas.drawBitmap(top, 0, 0, paint);
-        }
-        //ensures drawing is displayed as soon as user clicks, even though nothing has been added to the stack yet
-        else if (firstDraw) {
-            canvas.drawBitmap(bitmap, 0, 0, paint);
-        }
+        canvas.drawBitmap(undoRedo.getCurrentBitmap(), 0, 0, paint);
     }
 
     public void setRadius(int value)
@@ -113,39 +91,7 @@ public class DrawingView extends View {
     }
 
     protected void undo() {
-        if (!currentStack.empty()) {
-            currentStack.pop();
-            //undoneStack.push(currentStack.pop());
-            setRedoVisibility();
-            invalidate();
-        }
-    }
-
-    protected void redo() {
-        if (!undoneStack.empty()) {
-            currentStack.push(undoneStack.pop());
-            invalidate();
-        }
-    }
-
-    public void setUndoVisibility()
-    {
-        if (!currentStack.isEmpty()) {
-            undoButton.setVisibility(View.VISIBLE);
-        }
-        else {
-            //not working - maybe stacks are not properly clearing?
-            undoButton.setVisibility(View.GONE);
-        }
-    }
-
-    public void setRedoVisibility()
-    {
-        if (!undoneStack.isEmpty()) {
-            redoButton.setVisibility(View.VISIBLE);
-        }
-        else {
-            redoButton.setVisibility(View.GONE);
-        }
+        undoRedo.undo();
+        invalidate();
     }
 }
