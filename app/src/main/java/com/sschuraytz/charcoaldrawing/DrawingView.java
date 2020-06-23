@@ -114,7 +114,8 @@ public class DrawingView extends View {
 
     protected void undo() {
         if (!currentStack.empty()) {
-            undoneStack.push(currentStack.pop());
+            currentStack.pop();
+            //undoneStack.push(currentStack.pop());
             setRedoVisibility();
             invalidate();
         }

@@ -82,39 +82,25 @@ public class MainActivity extends AppCompatActivity {
     public void setUpDraw()
     {
         drawButton = (ImageButton) findViewById(R.id.drawButton);
-        drawButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawingView.setDrawingMode();
-            }
-        });
+        drawButton.setOnClickListener(v -> drawingView.setDrawingMode());
     }
     public void setUpErase()
     {
         eraseButton = (ImageButton) findViewById(R.id.eraseButton);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawingView.setEraseMode();
-            }
-        });
+        eraseButton.setOnClickListener( v -> drawingView.setEraseMode());
     }
 
     public void setUpUndo()
     {
         drawingView.undoButton = (ImageButton) findViewById(R.id.undoButton);
-        drawingView.undoButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawingView.undo();
-            }
-        });
+        drawingView.undoButton.setOnClickListener(v -> drawingView.undo());
     }
 
     public void setUpRedo()
     {
         drawingView.redoButton = (ImageButton) findViewById(R.id.redoButton);
-        drawingView.redoButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
+        drawingView.redoButton.setOnClickListener((View v) -> {
                 drawingView.redo();
-            }
         });
     }
 
