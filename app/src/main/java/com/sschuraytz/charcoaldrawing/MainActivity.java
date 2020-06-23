@@ -17,8 +17,6 @@ public class MainActivity extends AppCompatActivity {
     private DrawingView drawingView;
     private ImageButton drawButton;
     private ImageButton eraseButton;
-    private ImageButton undoButton;
-    private ImageButton redoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpUndo()
     {
-        undoButton = (ImageButton) findViewById(R.id.undoButton);
-        undoButton.setOnClickListener(new View.OnClickListener() {
+        drawingView.undoButton = (ImageButton) findViewById(R.id.undoButton);
+        drawingView.undoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.undo();
             }
@@ -112,11 +110,12 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpRedo()
     {
-        redoButton = (ImageButton) findViewById(R.id.redoButton);
-        redoButton.setOnClickListener(new View.OnClickListener() {
+        drawingView.redoButton = (ImageButton) findViewById(R.id.redoButton);
+        drawingView.redoButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 drawingView.redo();
             }
         });
     }
+
 }

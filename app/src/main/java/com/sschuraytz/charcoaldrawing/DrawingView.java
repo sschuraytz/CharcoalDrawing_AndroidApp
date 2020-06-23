@@ -3,14 +3,12 @@ package com.sschuraytz.charcoaldrawing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class DrawingView extends View {
@@ -21,8 +19,10 @@ public class DrawingView extends View {
     private Canvas bitmapCanvas;
     //hold pixels where canvas will be drawn
     private Bitmap bitmap;
+    protected ImageButton undoButton;
+    protected ImageButton redoButton;
 
-    private Stack<Bitmap> currentStack = new Stack<>();
+    protected Stack<Bitmap> currentStack = new Stack<>();
     private Stack<Bitmap> undoneStack = new Stack<>();
 
     private float previousX;
@@ -68,8 +68,9 @@ public class DrawingView extends View {
                 break;
             case MotionEvent.ACTION_UP:
                 //undoStack.push(bitmap);
-                currentStack.push(bitmap);
                 firstDraw = false;      //don't want to check this on every touch event. is there another place to put it?
+                currentStack.push(bitmap);
+                setUndoVisibility();
                 break;
             default:
                 return false;
@@ -78,7 +79,6 @@ public class DrawingView extends View {
         invalidate();
         return true;
     }
-
 
     @Override
     protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
@@ -92,6 +92,7 @@ public class DrawingView extends View {
             Bitmap top = currentStack.peek();
             canvas.drawBitmap(top, 0, 0, paint);
         }
+        //ensures drawing is displayed as soon as user clicks, even though nothing has been added to the stack yet
         else if (firstDraw) {
             canvas.drawBitmap(bitmap, 0, 0, paint);
         }
@@ -114,6 +115,7 @@ public class DrawingView extends View {
     protected void undo() {
         if (!currentStack.empty()) {
             undoneStack.push(currentStack.pop());
+            setRedoVisibility();
             invalidate();
         }
     }
@@ -122,6 +124,27 @@ public class DrawingView extends View {
         if (!undoneStack.empty()) {
             currentStack.push(undoneStack.pop());
             invalidate();
+        }
+    }
+
+    public void setUndoVisibility()
+    {
+        if (!currentStack.isEmpty()) {
+            undoButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            //not working - maybe stacks are not properly clearing?
+            undoButton.setVisibility(View.GONE);
+        }
+    }
+
+    public void setRedoVisibility()
+    {
+        if (!undoneStack.isEmpty()) {
+            redoButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            redoButton.setVisibility(View.GONE);
         }
     }
 }
