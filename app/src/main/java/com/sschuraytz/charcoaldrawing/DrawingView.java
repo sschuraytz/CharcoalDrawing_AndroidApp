@@ -14,7 +14,7 @@ import java.util.Stack;
 public class DrawingView extends View {
 
     private Paint paint;
-    private UndoRedo undoRedo = new UndoRedo();
+    protected UndoRedo undoRedo = new UndoRedo();
 
     private float previousX;
     private float previousY;

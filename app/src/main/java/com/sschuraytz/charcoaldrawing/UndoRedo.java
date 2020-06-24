@@ -44,4 +44,7 @@ public class UndoRedo {
         return bitmapCanvas;
     }
 
+    public int getCurrentStackSize() {
+        return currentStack.size();
+    }
 }

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
@@ -17,18 +18,27 @@ public class MainActivity extends AppCompatActivity {
     private DrawingView drawingView;
     private ImageButton drawButton;
     private ImageButton eraseButton;
+    private ImageButton undoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        drawingView = (DrawingView) findViewById(R.id.canvas);
+        setUpDrawingView();
         setUpSlider();
         setUpDraw();
         setUpErase();
         setUpUndo();
-        setUpRedo();
+    }
+
+    public void setUpDrawingView()
+    {
+        drawingView = (DrawingView) findViewById(R.id.canvas);
+        drawingView.setOnTouchListener((v, event) -> {
+            updateUndoVisibility();
+            return false;
+        });
     }
 
     public void setUpSlider()
@@ -92,16 +102,20 @@ public class MainActivity extends AppCompatActivity {
 
     public void setUpUndo()
     {
-        drawingView.undoButton = (ImageButton) findViewById(R.id.undoButton);
-        drawingView.undoButton.setOnClickListener(v -> drawingView.undo());
+        undoButton = (ImageButton) findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(v -> {
+            drawingView.undo();
+            updateUndoVisibility();
+        });
     }
 
-    public void setUpRedo()
+    public void updateUndoVisibility()
     {
-        drawingView.redoButton = (ImageButton) findViewById(R.id.redoButton);
-        /*drawingView.redoButton.setOnClickListener((View v) -> {
-                drawingView.redo();
-        });*/
+        if (drawingView.undoRedo.getCurrentStackSize() > 1) {
+            undoButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            undoButton.setVisibility(View.GONE);
+        }
     }
-
 }
