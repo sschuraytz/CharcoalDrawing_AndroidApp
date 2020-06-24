@@ -57,7 +57,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="?android:attr/selectableItemBackground"
-        android:visibility="visible"
+        android:visibility="gone"
         android:src="@drawable/ic_redo_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/undoButton" />

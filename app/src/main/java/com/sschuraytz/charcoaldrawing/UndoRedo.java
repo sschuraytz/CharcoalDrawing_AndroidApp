@@ -28,6 +28,8 @@ public class UndoRedo {
         Bitmap newBitmap = Bitmap.createBitmap(currentTop, 0, 0, currentTop.getWidth(), currentTop.getHeight());
         currentStack.push(newBitmap);
         bitmapCanvas = new Canvas(newBitmap);
+        //after undo, if draw new line, can no longer redo
+        undoneStack.clear();
     }
 
     public Bitmap getCurrentBitmap() {
@@ -53,5 +55,9 @@ public class UndoRedo {
 
     public int getCurrentStackSize() {
         return currentStack.size();
+    }
+
+    public int getUndoneStackSize() {
+        return undoneStack.size();
     }
 }

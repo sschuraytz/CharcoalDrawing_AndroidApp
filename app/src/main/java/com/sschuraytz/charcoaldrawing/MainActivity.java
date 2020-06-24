@@ -1,6 +1,8 @@
 package com.sschuraytz.charcoaldrawing;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Layout;
@@ -32,11 +34,13 @@ public class MainActivity extends AppCompatActivity {
         setUpRedo();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void setUpDrawingView()
     {
         drawingView = (DrawingView) findViewById(R.id.canvas);
         drawingView.setOnTouchListener((v, event) -> {
-            updateUndoVisibility();
+            updateVisibility(drawingView.undoRedo.getCurrentStackSize() - 1, undoButton);
+            updateVisibility(drawingView.undoRedo.getUndoneStackSize(), redoButton);
             return false;
         });
     }
@@ -105,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
         undoButton = (ImageButton) findViewById(R.id.undoButton);
         undoButton.setOnClickListener(v -> {
             drawingView.undo();
-            updateUndoVisibility();
+            updateVisibility(drawingView.undoRedo.getCurrentStackSize() - 1, undoButton);
+            updateVisibility(drawingView.undoRedo.getUndoneStackSize(), redoButton);
         });
     }
 
@@ -114,17 +119,18 @@ public class MainActivity extends AppCompatActivity {
         redoButton = (ImageButton) findViewById(R.id.redoButton);
         redoButton.setOnClickListener(v -> {
             drawingView.redo();
-            updateUndoVisibility();
+            updateVisibility(drawingView.undoRedo.getCurrentStackSize() - 1, undoButton);
+            updateVisibility(drawingView.undoRedo.getUndoneStackSize(), redoButton);
         });
     }
 
-    public void updateUndoVisibility()
+    public void updateVisibility(int size, ImageButton button)
     {
-        if (drawingView.undoRedo.getCurrentStackSize() > 1) {
-            undoButton.setVisibility(View.VISIBLE);
+        if (size > 0) {
+            button.setVisibility(View.VISIBLE);
         }
         else {
-            undoButton.setVisibility(View.GONE);
+            button.setVisibility(View.GONE);
         }
     }
 }
