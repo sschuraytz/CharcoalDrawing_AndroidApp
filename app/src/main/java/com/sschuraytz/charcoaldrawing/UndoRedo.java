@@ -8,6 +8,7 @@ import java.util.Stack;
 public class UndoRedo {
 
     private Stack<Bitmap> currentStack = new Stack<>();
+    private Stack<Bitmap> undoneStack = new Stack<>();
     private Canvas bitmapCanvas;
 
     public UndoRedo() {
@@ -35,8 +36,14 @@ public class UndoRedo {
 
     public void undo() {
         if (currentStack.size() > 1) {
-            currentStack.pop();
+            undoneStack.push(currentStack.pop());
             bitmapCanvas = new Canvas(currentStack.peek());
+        }
+    }
+
+    public void redo() {
+        if (undoneStack.size() > 0 ) {
+            currentStack.push(undoneStack.pop());
         }
     }
 

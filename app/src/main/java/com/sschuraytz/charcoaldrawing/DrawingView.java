@@ -16,11 +16,12 @@ public class DrawingView extends View {
     private Paint paint;
     protected UndoRedo undoRedo = new UndoRedo();
 
-    private float previousX;
-    private float previousY;
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private Tool currentTool;
+
+    private float previousX;
+    private float previousY;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -65,10 +66,11 @@ public class DrawingView extends View {
         return true;
     }
 
+    //called on create
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        undoRedo.onSizeChanged(w, h);
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        undoRedo.onSizeChanged(width, height);
     }
 
     @Override
@@ -92,6 +94,11 @@ public class DrawingView extends View {
 
     protected void undo() {
         undoRedo.undo();
+        invalidate();
+    }
+
+    protected void redo() {
+        undoRedo.redo();
         invalidate();
     }
 }
