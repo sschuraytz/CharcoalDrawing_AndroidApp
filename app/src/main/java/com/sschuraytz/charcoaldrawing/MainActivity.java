@@ -14,7 +14,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
@@ -34,15 +34,9 @@ public class MainActivity extends AppCompatActivity {
         setUpRedo();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     public void setUpDrawingView()
     {
         drawingView = (DrawingView) findViewById(R.id.canvas);
-        drawingView.setOnTouchListener((v, event) -> {
-            updateVisibility(drawingView.undoRedo.getCurrentStackSize() - 1, undoButton);
-            updateVisibility(drawingView.undoRedo.getUndoneStackSize(), redoButton);
-            return false;
-        });
     }
 
     public void setUpSlider()
@@ -109,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
         undoButton = (ImageButton) findViewById(R.id.undoButton);
         undoButton.setOnClickListener(v -> {
             drawingView.undo();
-            updateVisibility(drawingView.undoRedo.getCurrentStackSize() - 1, undoButton);
-            updateVisibility(drawingView.undoRedo.getUndoneStackSize(), redoButton);
         });
     }
 
@@ -119,18 +111,26 @@ public class MainActivity extends AppCompatActivity {
         redoButton = (ImageButton) findViewById(R.id.redoButton);
         redoButton.setOnClickListener(v -> {
             drawingView.redo();
-            updateVisibility(drawingView.undoRedo.getCurrentStackSize() - 1, undoButton);
-            updateVisibility(drawingView.undoRedo.getUndoneStackSize(), redoButton);
         });
     }
 
-    public void updateVisibility(int size, ImageButton button)
+    public void updateVisibility(boolean isAvailable, ImageButton button)
     {
-        if (size > 0) {
+        if (isAvailable) {
             button.setVisibility(View.VISIBLE);
         }
         else {
             button.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onUndoAvailable(boolean isAvailable) {
+        updateVisibility(isAvailable, undoButton);
+    }
+
+    @Override
+    public void onRedoAvailable(boolean isAvailable) {
+        updateVisibility(isAvailable, redoButton);
     }
 }
