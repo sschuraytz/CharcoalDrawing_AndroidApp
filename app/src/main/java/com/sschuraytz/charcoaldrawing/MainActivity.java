@@ -1,18 +1,11 @@
 package com.sschuraytz.charcoaldrawing;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
@@ -27,6 +20,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpDrawingView();
+        drawingView.undoRedo.setListener(this);
         setUpSlider();
         setUpDraw();
         setUpErase();
