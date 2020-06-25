@@ -8,4 +8,9 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- This theme extends our no-title version of the default theme to use a splash background-->
+    <style name="AppTheme.SplashScreenTheme">
+        <item name="android:background">@drawable/splash_background</item>
+    </style>
+
 </resources>
