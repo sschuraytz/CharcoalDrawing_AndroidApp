@@ -1,37 +1,36 @@
 package com.sschuraytz.charcoaldrawing;
 
 import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
-import android.text.Layout;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
+    private ImageButton undoButton;
+    private ImageButton redoButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        drawingView = (DrawingView) findViewById(R.id.canvas);
+        setUpDrawingView();
         setUpSlider();
         setUpDraw();
         setUpErase();
         setUpSmudge();
+        setUpUndo();
+        setUpRedo();
+    }
+
+    public void setUpDrawingView()
+    {
+        drawingView = (DrawingView) findViewById(R.id.canvas);
+        drawingView.undoRedo.setListener(this);
     }
 
     public void setUpSlider()
@@ -85,19 +84,27 @@ public class MainActivity extends AppCompatActivity {
     public void setUpDraw()
     {
         ImageButton drawButton = (ImageButton) findViewById(R.id.drawButton);
-        drawButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawingView.setDrawingMode();
-            }
-        });
+        drawButton.setOnClickListener(v -> drawingView.setDrawingMode());
     }
     public void setUpErase()
     {
         ImageButton eraseButton = (ImageButton) findViewById(R.id.eraseButton);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawingView.setEraseMode();
-            }
+        eraseButton.setOnClickListener(v -> drawingView.setEraseMode());
+    }
+
+    public void setUpUndo()
+    {
+        undoButton = (ImageButton) findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(v -> {
+            drawingView.undo();
+        });
+    }
+
+    public void setUpRedo()
+    {
+        redoButton = (ImageButton) findViewById(R.id.redoButton);
+        redoButton.setOnClickListener(v -> {
+            drawingView.redo();
         });
     }
 
@@ -113,4 +120,24 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    public void updateVisibility(boolean isAvailable, ImageButton button)
+    {
+        if (isAvailable) {
+            button.setVisibility(View.VISIBLE);
+        }
+        else {
+            button.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onUndoAvailable(boolean isAvailable) {
+        updateVisibility(isAvailable, undoButton);
+    }
+
+    @Override
+    public void onRedoAvailable(boolean isAvailable) {
+        updateVisibility(isAvailable, redoButton);
+    }
 }

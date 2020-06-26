@@ -16,19 +16,16 @@ import android.view.View;
 
 public class DrawingView extends View {
 
-    //drawing style
     private Paint paint;
-    //what to draw (writing into bitmap)
-    private Canvas bitmapCanvas;
-    //hold pixels where canvas will be drawn
-    private Bitmap bitmap;
+    protected UndoRedo undoRedo = new UndoRedo();
 
-    private float previousX;
-    private float previousY;
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private SmudgeTool smudgeTool;
     private Tool currentTool;
+
+    private float previousX;
+    private float previousY;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -54,13 +51,13 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-               currentTool.printToCanvas(bitmapCanvas, pointX, pointY, paint);
-//                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, pointX, pointY, paint);
+                undoRedo.addBitmap();
+                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                currentTool.drawContinuouslyBetweenPoints(bitmapCanvas, pointX, pointY, previousX, previousY, paint);
+                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -74,15 +71,16 @@ public class DrawingView extends View {
         return true;
     }
 
+    //called on create
     @Override
-    protected void onSizeChanged(int width, int height, int previousHeight, int previousWidth) {
-        bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-        bitmapCanvas = new Canvas(bitmap);
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        undoRedo.onSizeChanged(width, height);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, 0, 0, paint);
+        canvas.drawBitmap(undoRedo.getCurrentBitmap(), 0, 0, paint);
     }
 
     public void setRadius(int value)
@@ -101,5 +99,14 @@ public class DrawingView extends View {
 
     public void setSmudgeMode() {
         currentTool = smudgeTool;
+    }
+
+    protected void undo() {
+        undoRedo.undo();
+        invalidate();
+    }
+    protected void redo() {
+        undoRedo.redo();
+        invalidate();
     }
 }
