@@ -8,7 +8,12 @@ import java.util.Stack;
 public class UndoRedo {
 
     private Stack<Bitmap> currentStack = new Stack<>();
+    private Stack<Bitmap> undoneStack = new Stack<>();
     private Canvas bitmapCanvas;
+    private UndoRedoListener undoRedoListener = new UndoRedoListener() {
+        public void onUndoAvailable(boolean isAvailable) { }
+        public void onRedoAvailable(boolean isAvailable) { }
+    };
 
     public UndoRedo() {
         onSizeChanged(200, 200);
@@ -27,6 +32,10 @@ public class UndoRedo {
         Bitmap newBitmap = Bitmap.createBitmap(currentTop, 0, 0, currentTop.getWidth(), currentTop.getHeight());
         currentStack.push(newBitmap);
         bitmapCanvas = new Canvas(newBitmap);
+        undoRedoListener.onUndoAvailable(currentStack.size() > 1);
+        //after undo, if draw new line, can no longer redo
+        undoneStack.clear();
+        undoRedoListener.onRedoAvailable(false);
     }
 
     public Bitmap getCurrentBitmap() {
@@ -35,8 +44,18 @@ public class UndoRedo {
 
     public void undo() {
         if (currentStack.size() > 1) {
-            currentStack.pop();
+            undoneStack.push(currentStack.pop());
             bitmapCanvas = new Canvas(currentStack.peek());
+            undoRedoListener.onUndoAvailable(currentStack.size() > 1);
+            undoRedoListener.onRedoAvailable(undoneStack.size() > 0);
+        }
+    }
+
+    public void redo() {
+        if (undoneStack.size() > 0 ) {
+            currentStack.push(undoneStack.pop());
+            undoRedoListener.onUndoAvailable(currentStack.size() > 1);
+            undoRedoListener.onRedoAvailable(undoneStack.size() > 0);
         }
     }
 
@@ -44,7 +63,7 @@ public class UndoRedo {
         return bitmapCanvas;
     }
 
-    public int getCurrentStackSize() {
-        return currentStack.size();
+    public void setListener(UndoRedoListener undoRedoListener) {
+        this.undoRedoListener = undoRedoListener;
     }
 }
