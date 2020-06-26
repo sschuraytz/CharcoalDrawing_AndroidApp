@@ -50,4 +50,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/eraseButton" />
 
+    <ImageButton
+        android:id="@+id/undoButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
+        android:src="@drawable/ic_undo_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/smudgeButton" />
+
+    <ImageButton
+        android:id="@+id/redoButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
+        android:src="@drawable/ic_redo_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/undoButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,17 +5,22 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.widget.Toast;
 
 import java.util.Random;
+import java.util.Stack;
 
 
 public class Tool{
 
-    protected Canvas canvas;
-    protected Bitmap bitmap;
-    protected Paint paint;
-    public static final Random rand = new Random();
-    protected int radius;
+    private Canvas canvas;
+    private Bitmap bitmap;
+    private Paint paint;
+    private static final Random rand = new Random();
+    private int radius;
+
 
     public Tool(int color) {
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
@@ -25,6 +30,43 @@ public class Tool{
         radius = 35;
         paint.setColor(color);
         printTexturedCircle();
+    }
+
+    /**
+     * Adapted from https://stackoverflow.com/a/34142336/2700520
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     */
+    protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2)
+    {
+        final float RADIUS = 10.0f;
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        float distance = (float)Math.sqrt(dx * dx + dy * dy);
+        float slope = (dx == 0) ? 0 : dy/dx;
+
+        float times = distance / RADIUS - 1;
+        //ensure thin line has more dots since it doesn't have much overlap
+        float incrementer = getRadius() > 5 ? 1 : 0.5f;
+        for (float i = 0; i < times; i+=incrementer)
+        {
+            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
+            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
+            bitmapCanvas.drawBitmap(bitmap,
+                    x1 + xIncrement - getRadius(),
+                    y1 + yIncrement - getRadius(),
+                    paint);
+        }
+
+        if (times <= 0)
+        {
+            bitmapCanvas.drawBitmap(bitmap,
+                    x1 - getRadius(),
+                    y1 - getRadius(),
+                    paint);
+        }
     }
 
     private void printTexturedCircleBorder(float pointX, float pointY, int maxMagnitude)
@@ -78,48 +120,9 @@ public class Tool{
         printTexturedCircle();
     }
 
-    /**
-     * Adapted from https://stackoverflow.com/a/34142336/2700520
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     */
-    protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2, Paint paint)
+    public int getRadius()
     {
-        final float RADIUS = 10.0f;
-        float dx = x2 - x1;
-        float dy = y2 - y1;
-        float distance = (float)Math.sqrt(dx * dx + dy * dy);
-        float slope = (dx == 0) ? 0 : dy/dx;
-
-        float times = distance / RADIUS - 1;
-        //ensure thin line has more dots since it doesn't have much overlap
-        float incrementer = radius > 5 ? 1 : 0.5f;
-        for (float i = 0; i < times; i+=incrementer)
-        {
-            float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
-            float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(bitmap,
-                    x1 + xIncrement - radius,
-                    y1 + yIncrement - radius,
-                    paint);
-        }
-
-        if (times <= 0)
-        {
-            bitmapCanvas.drawBitmap(bitmap,
-                    x1 - radius,
-                    y1 - radius,
-                    paint);
-        }
+        return radius;
     }
 
-    protected void printToCanvas(Canvas bitmapCanvas, float pointX, float pointY, Paint paint)
-    {
-        bitmapCanvas.drawBitmap(bitmap,
-                pointX - radius,
-                pointY - radius,
-                paint);
-    }
 }
