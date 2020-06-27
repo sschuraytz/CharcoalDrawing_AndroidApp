@@ -2,7 +2,9 @@ package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,7 +12,7 @@ import android.view.View;
 public class DrawingView extends View {
 
     private Paint paint;
-    protected UndoRedo undoRedo = new UndoRedo();
+    protected UndoRedo undoRedo;
 
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
@@ -24,6 +26,7 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
+        undoRedo = new UndoRedo();
         initializeDrawing();
     }
 
@@ -97,4 +100,11 @@ public class DrawingView extends View {
         undoRedo.redo();
         invalidate();
     }
+
+    public void createNewCanvas() {
+        undoRedo.getBitmapCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        undoRedo.resetButtonsForNewCanvas();
+        setDrawingMode();
+    }
+
 }

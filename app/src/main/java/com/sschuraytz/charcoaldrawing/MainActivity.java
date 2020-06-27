@@ -1,6 +1,5 @@
 package com.sschuraytz.charcoaldrawing;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageButton;
@@ -22,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpDrawingView();
-        drawingView.undoRedo.setListener(this);
+        setUpOptionForNewCanvas();
         setUpSlider();
         setUpDraw();
         setUpErase();
@@ -33,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     public void setUpDrawingView()
     {
         drawingView = (DrawingView) findViewById(R.id.canvas);
-        setUpOptionForNewCanvas();
+        drawingView.undoRedo.setListener(this);
     }
 
     public void setUpSlider()
@@ -60,20 +59,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     public void setUpOptionForNewCanvas()
     {
         newButton = (ImageButton) findViewById(R.id.newCanvasButton);
-        newButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clearCanvas();
-            }
-        });
-    }
-
-    public void clearCanvas()
-    {
-      /*  drawingView.getBitmapCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        drawingView.getPaint().setColor(Color.BLACK);
-        drawingView.getPaint().setXfermode(null);
-       */
+        newButton.setOnClickListener(v -> drawingView.createNewCanvas());
     }
 
     @Override
@@ -117,17 +103,13 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     public void setUpUndo()
     {
         undoButton = (ImageButton) findViewById(R.id.undoButton);
-        undoButton.setOnClickListener(v -> {
-            drawingView.undo();
-        });
+        undoButton.setOnClickListener(v -> drawingView.undo());
     }
 
     public void setUpRedo()
     {
         redoButton = (ImageButton) findViewById(R.id.redoButton);
-        redoButton.setOnClickListener(v -> {
-            drawingView.redo();
-        });
+        redoButton.setOnClickListener(v -> drawingView.redo());
     }
 
     public void updateVisibility(boolean isAvailable, ImageButton button)
@@ -136,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
             button.setVisibility(View.VISIBLE);
         }
         else {
-            button.setVisibility(View.GONE);
+            button.setVisibility(View.INVISIBLE);
         }
     }
 
