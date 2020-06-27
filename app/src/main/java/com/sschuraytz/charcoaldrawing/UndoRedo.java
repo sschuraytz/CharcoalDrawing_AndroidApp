@@ -59,6 +59,16 @@ public class UndoRedo {
         }
     }
 
+    public void resetButtonsForNewCanvas() {
+        //should be able to call onSizeChanged, but then, it's not drawing a/t
+        while (currentStack.size() > 1) {
+            currentStack.pop();
+        }
+        undoneStack.clear();
+        undoRedoListener.onUndoAvailable(false);
+        undoRedoListener.onRedoAvailable(false);
+    }
+
     public Canvas getBitmapCanvas() {
         return bitmapCanvas;
     }
