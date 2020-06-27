@@ -1,46 +1,50 @@
 package com.sschuraytz.charcoaldrawing;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
 import android.os.Bundle;
-import android.text.Layout;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
+    private ImageButton undoButton;
+    private ImageButton redoButton;
     private ImageButton newButton;
-    private ImageButton eraseButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        drawingView = (DrawingView) findViewById(R.id.canvas);
+        setUpDrawingView();
+        drawingView.undoRedo.setListener(this);
         setUpSlider();
-        setUpOptionForNewCanvas();
+        setUpDraw();
         setUpErase();
+        setUpUndo();
+        setUpRedo();
+    }
+
+    public void setUpDrawingView()
+    {
+        drawingView = (DrawingView) findViewById(R.id.canvas);
+        setUpOptionForNewCanvas();
     }
 
     public void setUpSlider()
     {
         drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
-        drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
+        drawingView.setRadius(drawingThickness.getProgress());
         drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                drawingView.getPaint().setStrokeWidth(drawingThickness.getProgress());
+                drawingView.setRadius(drawingThickness.getProgress());
             }
 
             @Override
@@ -66,26 +70,83 @@ public class MainActivity extends AppCompatActivity {
 
     public void clearCanvas()
     {
-        drawingView.getBitmapCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+      /*  drawingView.getBitmapCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         drawingView.getPaint().setColor(Color.BLACK);
         drawingView.getPaint().setXfermode(null);
-        drawingView.setEraseMode(false);
+       */
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        hideSystemUI();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
+    public void hideSystemUI()
+    {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN  //hide status bar
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
+    public void setUpDraw()
+    {
+        ImageButton drawButton = (ImageButton) findViewById(R.id.drawButton);
+        drawButton.setOnClickListener(v -> drawingView.setDrawingMode());
+    }
     public void setUpErase()
     {
-        eraseButton = (ImageButton) findViewById(R.id.eraseButton);
-        eraseButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                startEraseMode();
-            }
+        ImageButton eraseButton = (ImageButton) findViewById(R.id.eraseButton);
+        eraseButton.setOnClickListener(v -> drawingView.setEraseMode());
+    }
+
+    public void setUpUndo()
+    {
+        undoButton = (ImageButton) findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(v -> {
+            drawingView.undo();
         });
     }
 
-    public void startEraseMode()
+    public void setUpRedo()
     {
-        drawingView.setEraseMode(true);
-        drawingView.getPaint().setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        redoButton = (ImageButton) findViewById(R.id.redoButton);
+        redoButton.setOnClickListener(v -> {
+            drawingView.redo();
+        });
     }
 
+    public void updateVisibility(boolean isAvailable, ImageButton button)
+    {
+        if (isAvailable) {
+            button.setVisibility(View.VISIBLE);
+        }
+        else {
+            button.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    public void onUndoAvailable(boolean isAvailable) {
+        updateVisibility(isAvailable, undoButton);
+    }
+
+    @Override
+    public void onRedoAvailable(boolean isAvailable) {
+        updateVisibility(isAvailable, redoButton);
+    }
 }

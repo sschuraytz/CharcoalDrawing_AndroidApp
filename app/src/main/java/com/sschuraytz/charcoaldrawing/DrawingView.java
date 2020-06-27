@@ -1,43 +1,38 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-
 public class DrawingView extends View {
 
-    //drawing primitive
-    private Path path;
-    //drawing style
-    private Paint backgroundPaint;
-    //drawing style
     private Paint paint;
-    //what to draw (writing into bitmap)
-    private Canvas bitmapCanvas;
-    //hold pixels where canvas will be drawn
-    private Bitmap bitmap;
+    protected UndoRedo undoRedo = new UndoRedo();
 
-    private boolean isEraseMode;
+    private CharcoalTool charcoalTool;
+    private EraseTool eraseTool;
+    private Tool currentTool;
 
+    private float previousX;
+    private float previousY;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
         super(context, attributes);
+        charcoalTool = new CharcoalTool();
+        eraseTool = new EraseTool();
         initializeDrawing();
     }
 
     private void initializeDrawing() {
-        path = new Path();
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         //make line strokes instead of painting area
-        setPaint();
-
+        paint.setStyle(Paint.Style.STROKE);
+        currentTool = charcoalTool;
+        //paint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     @Override
@@ -47,22 +42,17 @@ public class DrawingView extends View {
 
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                path.moveTo(pointX, pointY);
+                undoRedo.addBitmap();
+                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
+                previousX = pointX;
+                previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                path.lineTo(pointX, pointY);
-                if (isEraseMode)
-                {
-                    bitmapCanvas.drawPath(path, paint);
-                    path.reset();
-                    path.moveTo(pointX, pointY);
-                }
+                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
+                previousX = pointX;
+                previousY = pointY;
                 break;
             case MotionEvent.ACTION_UP:
-                if (!isEraseMode) {
-                    bitmapCanvas.drawPath(path, paint);
-                    path.reset();
-                }
                 break;
             default:
                 return false;
@@ -72,46 +62,39 @@ public class DrawingView extends View {
         return true;
     }
 
+    //called on create
     @Override
-    protected void onSizeChanged(int height, int width, int previousHeight, int previousWidth) {
-        bitmap = Bitmap.createBitmap(height, width, Bitmap.Config.ARGB_8888);
-        bitmapCanvas = new Canvas(bitmap);
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        undoRedo.onSizeChanged(width, height);
     }
 
     @Override
     public void onDraw(Canvas canvas) {
-        canvas.drawBitmap(bitmap, 0, 0, backgroundPaint);
-        canvas.drawPath(path, paint);
-        //this is the place to experiment with different charcoal textures, I think
+        canvas.drawBitmap(undoRedo.getCurrentBitmap(), 0, 0, paint);
     }
 
-    public Path getPath() {
-        return path;
+    public void setRadius(int value)
+    {
+        charcoalTool.setRadius(value);
+        eraseTool.setRadius(value);
     }
 
-    private void setPaint() {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeJoin(Paint.Join.ROUND);
+    public void setEraseMode() {
+        currentTool = eraseTool;
     }
 
-    public Paint getPaint() {
-        return paint;
+    public void setDrawingMode() {
+        currentTool = charcoalTool;
     }
 
-    public Paint getBackgroundPaint() {
-        return backgroundPaint;
+    protected void undo() {
+        undoRedo.undo();
+        invalidate();
     }
 
-    public Canvas getBitmapCanvas() {
-        return bitmapCanvas;
-    }
-
-    public boolean getEraseMode() {
-        return isEraseMode;
-    }
-
-    public void setEraseMode(boolean isOn) {
-        isEraseMode = isOn;
+    protected void redo() {
+        undoRedo.redo();
+        invalidate();
     }
 }

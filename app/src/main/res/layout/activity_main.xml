@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -19,32 +19,56 @@
         android:id="@+id/thicknessSlider"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_marginHorizontal="30dp"
         android:max="100"
-        android:paddingBottom="20dp"
+        android:paddingBottom="60dp"
+        android:layout_alignParentBottom="true"
         android:progress="35"
-        app:layout_constraintBottom_toTopOf="@id/newCanvasButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <ImageButton
         android:id="@+id/newCanvasButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
         android:src="@drawable/ic_add_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageButton
-        android:id="@+id/eraseButton"
+        android:id="@+id/drawButton"
         android:layout_width="60dp"
         android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_add_foreground"
+        android:src="@drawable/ic_draw_foreground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/newCanvasButton" />
 
+    <ImageButton
+        android:id="@+id/eraseButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/ic_erase_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/drawButton" />
+
+    <ImageButton
+        android:id="@+id/undoButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
+        android:src="@drawable/ic_undo_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/eraseButton" />
+
+    <ImageButton
+        android:id="@+id/redoButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:visibility="gone"
+        android:src="@drawable/ic_redo_foreground"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/undoButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
