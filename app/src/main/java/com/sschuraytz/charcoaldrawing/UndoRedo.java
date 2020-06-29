@@ -16,12 +16,13 @@ public class UndoRedo {
     };
 
     public UndoRedo() {
-        onSizeChanged(200, 200);
+        onSizeChanged(1, 1);
     }
 
     //ensure we always have a bitmap to display
     protected void onSizeChanged(int width, int height) {
         currentStack.clear();
+        undoneStack.clear();
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         currentStack.push(bitmap);
         bitmapCanvas = new Canvas(bitmap);
@@ -33,7 +34,7 @@ public class UndoRedo {
         currentStack.push(newBitmap);
         bitmapCanvas = new Canvas(newBitmap);
         undoRedoListener.onUndoAvailable(currentStack.size() > 1);
-        //after undo, if draw new line, can no longer redo
+        //after undo, if draw new line, do not let user redo
         undoneStack.clear();
         undoRedoListener.onRedoAvailable(false);
     }
@@ -57,6 +58,14 @@ public class UndoRedo {
             undoRedoListener.onUndoAvailable(currentStack.size() > 1);
             undoRedoListener.onRedoAvailable(undoneStack.size() > 0);
         }
+    }
+
+    public void createNewCanvas() {
+        int width = getCurrentBitmap().getWidth();
+        int height = getCurrentBitmap().getHeight();
+        onSizeChanged(width, height);
+        undoRedoListener.onUndoAvailable(false);
+        undoRedoListener.onRedoAvailable(false);
     }
 
     public Canvas getBitmapCanvas() {

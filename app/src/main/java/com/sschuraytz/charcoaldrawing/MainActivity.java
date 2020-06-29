@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     private DrawingView drawingView;
     private ImageButton undoButton;
     private ImageButton redoButton;
+    private ImageButton newButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpDrawingView();
-        drawingView.undoRedo.setListener(this);
+        setUpOptionForNewCanvas();
         setUpSlider();
         setUpDraw();
         setUpErase();
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     public void setUpDrawingView()
     {
         drawingView = (DrawingView) findViewById(R.id.canvas);
+        drawingView.undoRedo.setListener(this);
     }
 
     public void setUpSlider()
@@ -52,6 +54,12 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
             public void onStopTrackingTouch(SeekBar seekBar) {
             }
         });
+    }
+
+    public void setUpOptionForNewCanvas()
+    {
+        newButton = (ImageButton) findViewById(R.id.newCanvasButton);
+        newButton.setOnClickListener(v -> drawingView.createNewCanvas());
     }
 
     @Override
@@ -95,17 +103,13 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     public void setUpUndo()
     {
         undoButton = (ImageButton) findViewById(R.id.undoButton);
-        undoButton.setOnClickListener(v -> {
-            drawingView.undo();
-        });
+        undoButton.setOnClickListener(v -> drawingView.undo());
     }
 
     public void setUpRedo()
     {
         redoButton = (ImageButton) findViewById(R.id.redoButton);
-        redoButton.setOnClickListener(v -> {
-            drawingView.redo();
-        });
+        redoButton.setOnClickListener(v -> drawingView.redo());
     }
 
     public void updateVisibility(boolean isAvailable, ImageButton button)
@@ -114,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
             button.setVisibility(View.VISIBLE);
         }
         else {
-            button.setVisibility(View.GONE);
+            button.setVisibility(View.INVISIBLE);
         }
     }
 

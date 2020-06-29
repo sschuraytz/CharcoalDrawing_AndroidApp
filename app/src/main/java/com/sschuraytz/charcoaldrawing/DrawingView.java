@@ -1,9 +1,10 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -96,6 +97,12 @@ public class DrawingView extends View {
 
     protected void redo() {
         undoRedo.redo();
+        invalidate();
+    }
+
+    public void createNewCanvas() {
+        undoRedo.createNewCanvas();
+        initializeDrawing();
         invalidate();
     }
 }
