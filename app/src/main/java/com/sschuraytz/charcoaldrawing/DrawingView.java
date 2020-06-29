@@ -12,7 +12,7 @@ import android.view.View;
 public class DrawingView extends View {
 
     private Paint paint;
-    protected UndoRedo undoRedo;
+    protected UndoRedo undoRedo = new UndoRedo();
 
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
@@ -26,7 +26,7 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
-        undoRedo = new UndoRedo();
+        //undoRedo = new UndoRedo();
         initializeDrawing();
     }
 
@@ -102,9 +102,13 @@ public class DrawingView extends View {
     }
 
     public void createNewCanvas() {
-        undoRedo.getBitmapCanvas().drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        undoRedo.resetButtonsForNewCanvas();
+
+        this.undoRedo = new UndoRedo();
+        //this.onSizeChanged(200, 200, 200, 200);
+        undoRedo.createNewCanvas();
+        invalidate();
         setDrawingMode();
+
     }
 
 }
