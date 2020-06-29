@@ -26,7 +26,6 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
-        //undoRedo = new UndoRedo();
         initializeDrawing();
     }
 
@@ -102,13 +101,8 @@ public class DrawingView extends View {
     }
 
     public void createNewCanvas() {
-
-        this.undoRedo = new UndoRedo();
-        //this.onSizeChanged(200, 200, 200, 200);
         undoRedo.createNewCanvas();
+        initializeDrawing();
         invalidate();
-        setDrawingMode();
-
     }
-
 }
