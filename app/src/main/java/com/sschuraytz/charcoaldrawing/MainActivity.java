@@ -1,11 +1,20 @@
 package com.sschuraytz.charcoaldrawing;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
@@ -14,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     private ImageButton undoButton;
     private ImageButton redoButton;
     private ImageButton newButton;
+    private RecognitionListener recognitionListener;
+    private SpeechRecognizer speechRecognizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +38,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         setUpErase();
         setUpUndo();
         setUpRedo();
+        setUpSpeechRecognizer();
+        setUpRecognitionListener();
     }
 
     public void setUpDrawingView()
@@ -106,11 +119,11 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         undoButton.setOnClickListener(v -> drawingView.undo());
     }
 
-    public void setUpRedo()
+/*    public void setUpRedo()
     {
         redoButton = (ImageButton) findViewById(R.id.redoButton);
         redoButton.setOnClickListener(v -> drawingView.redo());
-    }
+    }*/
 
     public void updateVisibility(boolean isAvailable, ImageButton button)
     {
@@ -130,5 +143,83 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     @Override
     public void onRedoAvailable(boolean isAvailable) {
         updateVisibility(isAvailable, redoButton);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+   /* public void checkVoicePermissions () {
+        if (ContextCompat.checkSelfPermission(
+                this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            perform();
+        } else if (shouldShowRequestPermissionRationale()) {
+            showInContextUI();
+        } else {
+            requestPermissions(this,
+                    new String[] { Manifest.permission.RECORD_AUDIO},
+                    Define.)
+        }
+    }*/
+
+    public void setUpSpeechRecognizer() {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+    }
+
+    public void setUpRecognitionListener() {
+        recognitionListener = new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle params) {
+
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+
+            }
+
+            @Override
+            public void onRmsChanged(float rmsdB) {
+
+            }
+
+            @Override
+            public void onBufferReceived(byte[] buffer) {
+
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+
+            }
+
+            @Override
+            public void onError(int error) {
+
+            }
+
+            @Override
+            public void onResults(Bundle results) {
+
+            }
+
+            @Override
+            public void onPartialResults(Bundle partialResults) {
+
+            }
+
+            @Override
+            public void onEvent(int eventType, Bundle params) {
+
+            }
+        };
+    }
+    public void setUpRedo()
+    {
+        speechRecognizer.setRecognitionListener(recognitionListener);
+        redoButton = (ImageButton) findViewById(R.id.redoButton);
+        redoButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+            speechRecognizer.startListening(intent);
+        });
     }
 }
