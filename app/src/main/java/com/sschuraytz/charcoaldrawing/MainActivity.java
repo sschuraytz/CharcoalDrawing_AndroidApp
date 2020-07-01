@@ -1,6 +1,8 @@
 package com.sschuraytz.charcoaldrawing;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -9,8 +11,13 @@ import android.speech.SpeechRecognizer;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
@@ -19,11 +26,13 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     private ImageButton undoButton;
     private ImageButton redoButton;
     private ImageButton newButton;
-   // private RecognitionListener recognitionListener;
-   // private SpeechRecognizer speechRecognizer;
+    private RecognitionListener recognitionListener;
+    private SpeechRecognizer speechRecognizer;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        checkVoicePermissions();
         hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -34,8 +43,9 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         setUpErase();
         setUpUndo();
         setUpRedo();
-        //setUpSpeechRecognizer();
-        //setUpRecognitionListener();
+        setUpFAB();
+        setUpSpeechRecognizer();
+        setUpRecognitionListener();
     }
 
     public void setUpDrawingView()
@@ -141,25 +151,25 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         updateVisibility(isAvailable, redoButton);
     }
 
-   // @RequiresApi(api = Build.VERSION_CODES.M)
-   /* public void checkVoicePermissions () {
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            perform();
-        } else if (shouldShowRequestPermissionRationale()) {
-            showInContextUI();
+            //perform();
         } else {
-            requestPermissions(this,
-                    new String[] { Manifest.permission.RECORD_AUDIO},
-                    Define.)
+           requestPermissions(
+               new String[] { Manifest.permission.RECORD_AUDIO},
+                1
+           );
         }
-    }*/
+    }
 
-/*    public void setUpSpeechRecognizer() {
+    public void setUpSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-    }*/
+        speechRecognizer.setRecognitionListener(recognitionListener);
+    }
 
-   /* public void setUpRecognitionListener() {
+    public void setUpRecognitionListener() {
         recognitionListener = new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
@@ -206,16 +216,22 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
 
             }
         };
-    }*/
-/*    public void setUpRedo()
+    }
+    public void listenToUserCommand()
     {
-        speechRecognizer.setRecognitionListener(recognitionListener);
-        redoButton = (ImageButton) findViewById(R.id.redoButton);
-        redoButton.setOnClickListener(v -> {
-            Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-            intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-            speechRecognizer.startListening(intent);
+        //intent = simple message to transfer data btwn activities
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+      //  intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
+        speechRecognizer.startListening(intent);
+    }
+
+    public void setUpFAB() {
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            Toast.makeText(getApplicationContext(), "listening", Toast.LENGTH_LONG).show();
+            listenToUserCommand();
         });
-    }*/
+    }
 }
