@@ -1,8 +1,6 @@
 package com.sschuraytz.charcoaldrawing;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -12,9 +10,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity implements UndoRedoListener {
 
@@ -145,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         updateVisibility(isAvailable, redoButton);
     }
 
-  //  @RequiresApi(api = Build.VERSION_CODES.M)
+   // @RequiresApi(api = Build.VERSION_CODES.M)
    /* public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
