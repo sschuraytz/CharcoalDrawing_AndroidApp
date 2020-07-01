@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     private ImageButton undoButton;
     private ImageButton redoButton;
     private ImageButton newButton;
-    private RecognitionListener recognitionListener;
-    private SpeechRecognizer speechRecognizer;
+   // private RecognitionListener recognitionListener;
+   // private SpeechRecognizer speechRecognizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         setUpErase();
         setUpUndo();
         setUpRedo();
-        setUpSpeechRecognizer();
-        setUpRecognitionListener();
+        //setUpSpeechRecognizer();
+        //setUpRecognitionListener();
     }
 
     public void setUpDrawingView()
@@ -119,11 +119,11 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         undoButton.setOnClickListener(v -> drawingView.undo());
     }
 
-/*    public void setUpRedo()
+    public void setUpRedo()
     {
         redoButton = (ImageButton) findViewById(R.id.redoButton);
         redoButton.setOnClickListener(v -> drawingView.redo());
-    }*/
+    }
 
     public void updateVisibility(boolean isAvailable, ImageButton button)
     {
@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         updateVisibility(isAvailable, redoButton);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+  //  @RequiresApi(api = Build.VERSION_CODES.M)
    /* public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
                 this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
@@ -159,11 +159,11 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         }
     }*/
 
-    public void setUpSpeechRecognizer() {
+/*    public void setUpSpeechRecognizer() {
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-    }
+    }*/
 
-    public void setUpRecognitionListener() {
+   /* public void setUpRecognitionListener() {
         recognitionListener = new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
@@ -210,8 +210,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
 
             }
         };
-    }
-    public void setUpRedo()
+    }*/
+/*    public void setUpRedo()
     {
         speechRecognizer.setRecognitionListener(recognitionListener);
         redoButton = (ImageButton) findViewById(R.id.redoButton);
@@ -221,5 +221,5 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
             intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
             speechRecognizer.startListening(intent);
         });
-    }
+    }*/
 }
