@@ -3,6 +3,10 @@ package com.sschuraytz.charcoaldrawing;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
@@ -31,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     private ImageButton newButton;
     private RecognitionListener recognitionListener;
     private SpeechRecognizer speechRecognizer;
+    private FloatingActionButton fab;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -195,12 +200,12 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
 
             @Override
             public void onEndOfSpeech() {
-
+                fab.setImageResource(R.drawable.ic_mic_foreground);
             }
 
             @Override
             public void onError(int error) {
-
+                fab.setImageResource(R.drawable.ic_mic_foreground);
             }
 
             //Is there a way to make it more flexible so if user doesn't say exact word it still works?
@@ -249,8 +254,11 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
             }
         };
     }
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void listenToUserCommand()
     {
+        //show user that mic is active
+        fab.setColorFilter(Color.RED);
         //intent = simple message to transfer data btwn activities
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
@@ -261,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void setUpFAB() {
-        FloatingActionButton fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
             checkVoicePermissions();
             listenToUserCommand();
