@@ -203,10 +203,39 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
 
             }
 
+            //Is there a way to make it more flexible so if user doesn't say exact word it still works?
             @Override
             public void onResults(Bundle results) {
                 ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                Toast.makeText(getApplicationContext(), data.get(0), Toast.LENGTH_LONG).show();
+                assert data != null;
+                String result = data.get(0);
+                if (result.equalsIgnoreCase("charcoal")) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    drawingView.setDrawingMode();
+                }
+                else if (result.equalsIgnoreCase("eraser")) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    drawingView.setEraseMode();
+                }
+                else if (result.equalsIgnoreCase("undo")) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    drawingView.undo();
+                }
+                else if (result.equalsIgnoreCase("redo")) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    drawingView.redo();
+                }
+                else if (result.equalsIgnoreCase("new")) {
+                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                    drawingView.createNewCanvas();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "no such command", Toast.LENGTH_SHORT).show();
+                }
+                //smudge
+                //save
+                //help
+                //slider/radius - check if contains digit, if so, adjust slider
             }
 
             @Override
