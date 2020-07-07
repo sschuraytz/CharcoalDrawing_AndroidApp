@@ -8,12 +8,15 @@ import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.ArrayList;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,8 +47,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         setUpUndo();
         setUpRedo();
         setUpFAB();
-        setUpSpeechRecognizer();
         setUpRecognitionListener();
+        setUpSpeechRecognizer();
     }
 
     public void setUpDrawingView()
@@ -173,12 +176,11 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         recognitionListener = new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-
+                Toast.makeText(getApplicationContext(), "listening", Toast.LENGTH_LONG).show();
             }
 
             @Override
             public void onBeginningOfSpeech() {
-
             }
 
             @Override
@@ -203,7 +205,8 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
 
             @Override
             public void onResults(Bundle results) {
-
+                ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                Toast.makeText(getApplicationContext(), data.get(0), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -227,10 +230,11 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         speechRecognizer.startListening(intent);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void setUpFAB() {
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            Toast.makeText(getApplicationContext(), "listening", Toast.LENGTH_LONG).show();
+            checkVoicePermissions();
             listenToUserCommand();
         });
     }
