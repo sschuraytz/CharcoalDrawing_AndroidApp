@@ -26,25 +26,25 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-public class MainActivity extends AppCompatActivity implements UndoRedoListener {
+@RequiresApi(api = Build.VERSION_CODES.M)
+public class MainActivity extends AppCompatActivity
+        implements UndoRedoListener, VoiceListener {
 
     private SeekBar drawingThickness;
     private DrawingView drawingView;
     private ImageButton undoButton;
     private ImageButton redoButton;
     private ImageButton newButton;
-    private RecognitionListener recognitionListener;
-    private SpeechRecognizer speechRecognizer;
     private FloatingActionButton fab;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        checkVoicePermissions();
         hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpDrawingView();
+        drawingView.voiceCommands.setListener(this);
         setUpOptionForNewCanvas();
         setUpSlider();
         setUpDraw();
@@ -52,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
         setUpUndo();
         setUpRedo();
         setUpFAB();
-        setUpRecognitionListener();
-        setUpSpeechRecognizer();
     }
 
     public void setUpDrawingView()
@@ -160,123 +158,38 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public void checkVoicePermissions () {
-        if (ContextCompat.checkSelfPermission(
-                this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            //perform();
-        } else {
-           requestPermissions(
-               new String[] { Manifest.permission.RECORD_AUDIO},
-                1
-           );
-        }
-    }
-
-    public void setUpSpeechRecognizer() {
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
-        speechRecognizer.setRecognitionListener(recognitionListener);
-    }
-
-    public void setUpRecognitionListener() {
-        recognitionListener = new RecognitionListener() {
-            @Override
-            public void onReadyForSpeech(Bundle params) {
-                Toast.makeText(getApplicationContext(), "listening", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onBeginningOfSpeech() {
-            }
-
-            @Override
-            public void onRmsChanged(float rmsdB) {
-
-            }
-
-            @Override
-            public void onBufferReceived(byte[] buffer) {
-
-            }
-
-            @Override
-            public void onEndOfSpeech() {
-                fab.setImageResource(R.drawable.ic_mic_foreground);
-            }
-
-            @Override
-            public void onError(int error) {
-                fab.setImageResource(R.drawable.ic_mic_foreground);
-            }
-
-            //Is there a way to make it more flexible so if user doesn't say exact word it still works?
-            @Override
-            public void onResults(Bundle results) {
-                ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                if (data != null) {
-                    String result = data.get(0);
-                    switch (result) {
-                        case "charcoal":
-                        case "draw":
-                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                            drawingView.setDrawingMode();
-                            break;
-                        case "eraser":
-                        case "erase":
-                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                            drawingView.setEraseMode();
-                            break;
-                        case "undo":
-                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                            drawingView.undo();
-                            break;
-                        case "redo":
-                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                            drawingView.redo();
-                            break;
-                        case "new":
-                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                            drawingView.createNewCanvas();
-                            break;
-                        default:
-                            Toast.makeText(getApplicationContext(), "no such command", Toast.LENGTH_SHORT).show();
-                    }
-                    //smudge
-                    //save
-                    //help
-                    //slider/radius - check if contains digit, if so, adjust slider
-                }
-            }
-
-            @Override
-            public void onPartialResults(Bundle partialResults) {
-
-            }
-
-            @Override
-            public void onEvent(int eventType, Bundle params) {
-
-            }
-        };
-    }
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void listenToUserCommand()
-    {
-        //show user that mic is active
-        fab.setColorFilter(Color.RED);
-        //intent = simple message to transfer data btwn activities
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-      //  intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
-        speechRecognizer.startListening(intent);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void setUpFAB() {
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            checkVoicePermissions();
-            listenToUserCommand();
+            drawingView.voiceCommands.checkVoicePermissions();
+            drawingView.voiceCommands.listenToUserCommand();
+            //show user that mic is active
+            fab.setColorFilter(Color.RED);
         });
     }
+
+    public void updateFABUI() {
+        fab.setImageResource(R.drawable.ic_mic_foreground);
+    }
+
+    public void charcoalCommand() {
+        drawingView.setDrawingMode();
+    }
+
+    public void eraserCommand() {
+        drawingView.setEraseMode();
+    }
+
+    public void undoCommand() {
+        drawingView.undo();
+    }
+
+    public void redoCommand() {
+        drawingView.redo();
+    }
+
+    public void createNewCanvasCommand() {
+        drawingView.createNewCanvas();
+    }
+
 }

@@ -5,14 +5,19 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.RequiresApi;
+
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class DrawingView extends View {
 
     private Paint paint;
     protected UndoRedo undoRedo = new UndoRedo();
+    protected VoiceCommands voiceCommands;
 
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
@@ -26,6 +31,7 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
+        voiceCommands = new VoiceCommands(this.getContext());
         initializeDrawing();
     }
 
