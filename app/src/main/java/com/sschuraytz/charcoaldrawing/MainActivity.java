@@ -212,35 +212,39 @@ public class MainActivity extends AppCompatActivity implements UndoRedoListener 
             @Override
             public void onResults(Bundle results) {
                 ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
-                assert data != null;
-                String result = data.get(0);
-                if (result.equalsIgnoreCase("charcoal")) {
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                    drawingView.setDrawingMode();
+                if (data != null) {
+                    String result = data.get(0);
+                    switch (result) {
+                        case "charcoal":
+                        case "draw":
+                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                            drawingView.setDrawingMode();
+                            break;
+                        case "eraser":
+                        case "erase":
+                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                            drawingView.setEraseMode();
+                            break;
+                        case "undo":
+                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                            drawingView.undo();
+                            break;
+                        case "redo":
+                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                            drawingView.redo();
+                            break;
+                        case "new":
+                            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+                            drawingView.createNewCanvas();
+                            break;
+                        default:
+                            Toast.makeText(getApplicationContext(), "no such command", Toast.LENGTH_SHORT).show();
+                    }
+                    //smudge
+                    //save
+                    //help
+                    //slider/radius - check if contains digit, if so, adjust slider
                 }
-                else if (result.equalsIgnoreCase("eraser")) {
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                    drawingView.setEraseMode();
-                }
-                else if (result.equalsIgnoreCase("undo")) {
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                    drawingView.undo();
-                }
-                else if (result.equalsIgnoreCase("redo")) {
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                    drawingView.redo();
-                }
-                else if (result.equalsIgnoreCase("new")) {
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
-                    drawingView.createNewCanvas();
-                }
-                else {
-                    Toast.makeText(getApplicationContext(), "no such command", Toast.LENGTH_SHORT).show();
-                }
-                //smudge
-                //save
-                //help
-                //slider/radius - check if contains digit, if so, adjust slider
             }
 
             @Override
