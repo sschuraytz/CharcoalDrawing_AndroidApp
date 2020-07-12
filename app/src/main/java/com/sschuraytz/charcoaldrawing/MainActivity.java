@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
 
     public void setUpDrawingView()
     {
-        drawingView = (DrawingView) findViewById(R.id.canvas);
+        drawingView = findViewById(R.id.canvas);
         drawingView.undoRedo.setListener(this);
     }
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity
 
     public void setUpSlider()
     {
-        drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
+        drawingThickness = findViewById(R.id.thicknessSlider);
         drawingView.setRadius(drawingThickness.getProgress());
         drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity
 
     public void setUpOptionForNewCanvas()
     {
-        newButton = (ImageButton) findViewById(R.id.newCanvasButton);
+        newButton = findViewById(R.id.newCanvasButton);
         newButton.setOnClickListener(v -> drawingView.createNewCanvas());
     }
 
@@ -107,24 +107,24 @@ public class MainActivity extends AppCompatActivity
 
     public void setUpDraw()
     {
-        ImageButton drawButton = (ImageButton) findViewById(R.id.drawButton);
+        ImageButton drawButton = findViewById(R.id.drawButton);
         drawButton.setOnClickListener(v -> drawingView.setDrawingMode());
     }
     public void setUpErase()
     {
-        ImageButton eraseButton = (ImageButton) findViewById(R.id.eraseButton);
+        ImageButton eraseButton = findViewById(R.id.eraseButton);
         eraseButton.setOnClickListener(v -> drawingView.setEraseMode());
     }
 
     public void setUpUndo()
     {
-        undoButton = (ImageButton) findViewById(R.id.undoButton);
+        undoButton = findViewById(R.id.undoButton);
         undoButton.setOnClickListener(v -> drawingView.undo());
     }
 
     public void setUpRedo()
     {
-        redoButton = (ImageButton) findViewById(R.id.redoButton);
+        redoButton = findViewById(R.id.redoButton);
         redoButton.setOnClickListener(v -> drawingView.redo());
     }
 
@@ -182,5 +182,7 @@ public class MainActivity extends AppCompatActivity
     public void createNewCanvasCommand() {
         drawingView.createNewCanvas();
     }
+
+    public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
 
 }
