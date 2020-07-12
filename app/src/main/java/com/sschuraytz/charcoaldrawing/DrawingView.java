@@ -17,7 +17,7 @@ public class DrawingView extends View {
 
     private Paint paint;
     protected UndoRedo undoRedo = new UndoRedo();
-    protected VoiceCommands voiceCommands;
+
 
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
@@ -31,7 +31,6 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
-        voiceCommands = new VoiceCommands(this.getContext());
         initializeDrawing();
     }
 

@@ -1,6 +1,7 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,13 +15,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 
-//I extended AppCompatActivity so I could access application context for Toast. Is that okay?
-public class VoiceCommands extends AppCompatActivity {
-    private Context context;
+public class VoiceCommands {
+    private Activity context;
     private RecognitionListener recognitionListener;
     private SpeechRecognizer speechRecognizer;
     private VoiceListener voiceListener = new VoiceListener() {
@@ -56,7 +56,7 @@ public class VoiceCommands extends AppCompatActivity {
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public VoiceCommands(Context baseContext) {
+    public VoiceCommands(Activity baseContext) {
         context = baseContext;
         checkVoicePermissions();
         setUpRecognitionListener();
@@ -72,7 +72,7 @@ public class VoiceCommands extends AppCompatActivity {
         recognitionListener = new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-                Toast.makeText(context, "listening", Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "listening", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -161,14 +161,13 @@ public class VoiceCommands extends AppCompatActivity {
         speechRecognizer.startListening(intent);
     }
 
-    //TODO: confirm that this is still working properly
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
-                context.getApplicationContext(), Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-            //perform();
+                context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
         } else {
-            requestPermissions(
+            ActivityCompat.requestPermissions(
+                    context,
                     new String[] { Manifest.permission.RECORD_AUDIO},
                     1
             );
@@ -178,4 +177,5 @@ public class VoiceCommands extends AppCompatActivity {
     public void setListener(VoiceListener voiceListener) {
         this.voiceListener = voiceListener;
     }
+
 }

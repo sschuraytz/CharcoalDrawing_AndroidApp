@@ -1,30 +1,16 @@
 package com.sschuraytz.charcoaldrawing;
 
-import android.Manifest;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.speech.RecognitionListener;
-import android.speech.RecognizerIntent;
-import android.speech.SpeechRecognizer;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.ArrayList;
-
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity
@@ -36,7 +22,7 @@ public class MainActivity extends AppCompatActivity
     private ImageButton redoButton;
     private ImageButton newButton;
     private FloatingActionButton fab;
-
+    private VoiceCommands voiceCommands;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +30,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpDrawingView();
-        drawingView.voiceCommands.setListener(this);
+        setUpVoiceCommands();
         setUpOptionForNewCanvas();
         setUpSlider();
         setUpDraw();
@@ -58,6 +44,11 @@ public class MainActivity extends AppCompatActivity
     {
         drawingView = (DrawingView) findViewById(R.id.canvas);
         drawingView.undoRedo.setListener(this);
+    }
+
+    public void setUpVoiceCommands() {
+        voiceCommands = new VoiceCommands(this);
+        voiceCommands.setListener(this);
     }
 
     public void setUpSlider()
@@ -161,8 +152,8 @@ public class MainActivity extends AppCompatActivity
     public void setUpFAB() {
         fab = findViewById(R.id.fab);
         fab.setOnClickListener(v -> {
-            drawingView.voiceCommands.checkVoicePermissions();
-            drawingView.voiceCommands.listenToUserCommand();
+            voiceCommands.checkVoicePermissions();
+            voiceCommands.listenToUserCommand();
             //show user that mic is active
             fab.setColorFilter(Color.RED);
         });
