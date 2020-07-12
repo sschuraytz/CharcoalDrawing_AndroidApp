@@ -183,4 +183,6 @@ public class MainActivity extends AppCompatActivity
         drawingView.createNewCanvas();
     }
 
+    public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
+
 }

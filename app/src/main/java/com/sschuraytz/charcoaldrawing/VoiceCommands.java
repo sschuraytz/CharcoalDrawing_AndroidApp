@@ -53,6 +53,11 @@ public class VoiceCommands {
         public void createNewCanvasCommand() {
 
         }
+
+        @Override
+        public void updateDrawingThickness(int num) {
+
+        }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -130,13 +135,32 @@ public class VoiceCommands {
                             voiceListener.createNewCanvasCommand();
                             break;
                         default:
-                            Toast.makeText(context, "no such command", Toast.LENGTH_SHORT).show();
+                            // slider/radius
+                            if (isNumber(result)) {
+                                if (Integer.parseInt(result) < 0 || Integer.parseInt(result) > 100) {
+                                    Toast.makeText(context, "Width must be between 0 and 100", Toast.LENGTH_SHORT).show();
+                                }
+                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                                voiceListener.updateDrawingThickness(Integer.parseInt(result));
+                            }
+                            else {
+                                Toast.makeText(context, "no such command", Toast.LENGTH_SHORT).show();
+                            }
                     }
                     //smudge
                     //save
                     //help
-                    //slider/radius - check if contains digit, if so, adjust slider
                 }
+            }
+
+            public boolean isNumber(String str) {
+                char[] chars = str.toCharArray();
+                for (char ch : chars) {
+                    if (!Character.isDigit(ch)) {
+                        return false;
+                    }
+                }
+                return true;
             }
 
             @Override

@@ -8,5 +8,6 @@ public interface VoiceListener {
     void undoCommand();
     void redoCommand();
     void createNewCanvasCommand();
+    void updateDrawingThickness(int radius);
 
 }
