@@ -2,7 +2,6 @@ package com.sschuraytz.charcoaldrawing;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -56,6 +55,11 @@ public class VoiceCommands {
 
         @Override
         public void updateDrawingThickness(int num) {
+
+        }
+
+        @Override
+        public void help() {
 
         }
     };
@@ -134,6 +138,9 @@ public class VoiceCommands {
                             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                             voiceListener.createNewCanvasCommand();
                             break;
+                        case "help":
+                            voiceListener.help();
+                            break;
                         default:
                             // slider/radius
                             if (isNumber(result)) {
@@ -190,8 +197,7 @@ public class VoiceCommands {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
-                context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-        } else {
+                context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     context,
                     new String[] { Manifest.permission.RECORD_AUDIO},

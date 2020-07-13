@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">CharcoalDrawing</string>
+    <string name="newCanvas">new</string>
+    <string name="new_canvas_description">creates new blank canvas</string>
+    <string name="charcoal">charcoal</string>
+    <string name="charcoal_description">set drawing mode to charcoal</string>
 </resources>
