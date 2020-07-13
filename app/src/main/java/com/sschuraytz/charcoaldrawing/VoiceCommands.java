@@ -12,6 +12,7 @@ import android.speech.SpeechRecognizer;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -113,7 +114,8 @@ public class VoiceCommands {
             public void onResults(Bundle results) {
                 ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (data != null) {
-                    String result = data.get(0);
+                    // only save first word from user command
+                    String result = Arrays.asList(data.get(0).split(" ")).get(0);
                     switch (result) {
                         case "charcoal":
                         case "draw":
@@ -189,6 +191,8 @@ public class VoiceCommands {
         //intent = simple message to transfer data btwn activities
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+        // info about next attribute say it's best not to modify the value
+        //intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10);
         //  intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         speechRecognizer.startListening(intent);
