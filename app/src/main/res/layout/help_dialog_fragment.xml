@@ -20,7 +20,6 @@
             android:gravity="center_horizontal"
             android:paddingHorizontal="10dp"
             android:paddingVertical="5dp"
-            android:radius="16dp"
             android:text="@string/newCanvas"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -30,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="25dp"
             android:text="@string/new_canvas_description"
             app:layout_constraintLeft_toRightOf="@+id/newCanvasCommand"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,10 +53,111 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:text="@string/charcoal_description"
             app:layout_constraintLeft_toRightOf="@+id/charcoalCommand"
-            app:layout_constraintTop_toBottomOf="@+id/newCanvasCommand" />
+            app:layout_constraintTop_toBottomOf="@+id/newCanvasCommand"
+            android:layout_gravity="center_vertical"/>
 
+        <TextView
+            android:id="@+id/eraserCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/eraser"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/charcoalCommand" />
+
+        <TextView
+            android:id="@+id/eraserDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/eraser_description"
+            app:layout_constraintLeft_toRightOf="@+id/eraserCommand"
+            app:layout_constraintTop_toBottomOf="@+id/charcoalCommand"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/undoCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/undo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eraserCommand" />
+
+        <TextView
+            android:id="@+id/undoDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/undo_description"
+            app:layout_constraintLeft_toRightOf="@+id/undoCommand"
+            app:layout_constraintTop_toBottomOf="@+id/eraserCommand"
+            android:layout_gravity="center_vertical"/>
+
+
+        <TextView
+            android:id="@+id/redoCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/redo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/undoCommand" />
+
+        <TextView
+            android:id="@+id/redoDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/redo_description"
+            app:layout_constraintLeft_toRightOf="@+id/redoCommand"
+            app:layout_constraintTop_toBottomOf="@+id/undoCommand"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/helpCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/help"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/redoCommand" />
+
+        <TextView
+            android:id="@+id/helpDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/help_description"
+            app:layout_constraintLeft_toRightOf="@+id/helpCommand"
+            app:layout_constraintTop_toBottomOf="@+id/redoCommand"
+            android:layout_gravity="center_vertical"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

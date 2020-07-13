@@ -3,5 +3,13 @@
     <string name="newCanvas">new</string>
     <string name="new_canvas_description">creates new blank canvas</string>
     <string name="charcoal">charcoal</string>
-    <string name="charcoal_description">set drawing mode to charcoal</string>
+    <string name="charcoal_description">enable charcoal drawing</string>
+    <string name="eraser">eraser</string>
+    <string name="eraser_description">switch to eraser mode</string>
+    <string name="undo">undo</string>
+    <string name="undo_description">undo previous drawing stroke</string>
+    <string name="redo">redo</string>
+    <string name="redo_description">redo previous drawing stroke</string>
+    <string name="help">help</string>
+    <string name="help_description">display voice command menu</string>
 </resources>
