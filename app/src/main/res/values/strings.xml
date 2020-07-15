@@ -12,4 +12,6 @@
     <string name="redo_description">redo previous drawing stroke</string>
     <string name="help">help</string>
     <string name="help_description">display voice command menu</string>
+    <string name="thickness">1-100</string>
+    <string name="thickness_description">set drawing tool width</string>
 </resources>
