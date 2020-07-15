@@ -11,6 +11,8 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.widget.Toast;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -145,7 +147,7 @@ public class VoiceCommands {
                             break;
                         default:
                             // slider/radius
-                            if (isNumber(result)) {
+                            if (StringUtils.isNumeric(result)) {
                                 if (Integer.parseInt(result) < 0 || Integer.parseInt(result) > 100) {
                                     Toast.makeText(context, "Width must be between 0 and 100", Toast.LENGTH_SHORT).show();
                                 }
@@ -162,16 +164,6 @@ public class VoiceCommands {
                     //save
                     //help
                 }
-            }
-
-            public boolean isNumber(String str) {
-                char[] chars = str.toCharArray();
-                for (char ch : chars) {
-                    if (!Character.isDigit(ch)) {
-                        return false;
-                    }
-                }
-                return true;
             }
 
             @Override
