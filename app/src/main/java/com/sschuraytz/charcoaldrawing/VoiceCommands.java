@@ -42,13 +42,13 @@ public class VoiceCommands {
         }
 
         @Override
-        public void undoCommand() {
-
+        public boolean undoCommand() {
+            return false;
         }
 
         @Override
-        public void redoCommand() {
-
+        public boolean redoCommand() {
+            return false;
         }
 
         @Override
@@ -135,12 +135,20 @@ public class VoiceCommands {
                             voiceListener.eraserCommand();
                             break;
                         case "undo":
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-                            voiceListener.undoCommand();
+                            if (voiceListener.undoCommand()) {
+                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(context, "nothing to undo", Toast.LENGTH_SHORT).show();
+                            }
                             break;
                         case "redo":
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-                            voiceListener.redoCommand();
+                            if (voiceListener.redoCommand()) {
+                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            }
+                            else {
+                                Toast.makeText(context, "nothing to redo", Toast.LENGTH_SHORT).show();
+                            }
                             break;
                         case "help":
                             voiceListener.help();

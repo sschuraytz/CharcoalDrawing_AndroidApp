@@ -5,8 +5,8 @@ public interface VoiceListener {
     void updateFABUI();
     void charcoalCommand();
     void eraserCommand();
-    void undoCommand();
-    void redoCommand();
+    boolean undoCommand();
+    boolean redoCommand();
     void createNewCanvasCommand();
     void updateDrawingThickness(int radius);
     void help();
