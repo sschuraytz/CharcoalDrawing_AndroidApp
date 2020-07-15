@@ -95,14 +95,16 @@ public class DrawingView extends View {
         currentTool = charcoalTool;
     }
 
-    protected void undo() {
-        undoRedo.undo();
+    protected boolean undo() {
+        boolean isAvailable = undoRedo.undo();
         invalidate();
+        return isAvailable;
     }
 
-    protected void redo() {
-        undoRedo.redo();
+    protected boolean redo() {
+        boolean isAvailable = undoRedo.redo();
         invalidate();
+        return isAvailable;
     }
 
     public void createNewCanvas() {
