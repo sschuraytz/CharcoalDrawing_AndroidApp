@@ -146,12 +146,13 @@ public class VoiceCommands {
                         default:
                             // slider/radius
                             if (StringUtils.isNumeric(result)) {
-                                if (Integer.parseInt(result) < 0 || Integer.parseInt(result) > 100) {
-                                    Toast.makeText(context, "Width must be between 0 and 100", Toast.LENGTH_SHORT).show();
+                                int numericResult = Integer.parseInt(result);
+                                if (numericResult <= 0 || numericResult > 100) {
+                                    Toast.makeText(context, "Width must be between 1 and 100", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
                                     Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-                                    voiceListener.updateDrawingThickness(Integer.parseInt(result));
+                                    voiceListener.updateDrawingThickness(numericResult);
                                 }
                             }
                             else {
