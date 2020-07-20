@@ -112,4 +112,8 @@ public class DrawingView extends View {
         initializeDrawing();
         invalidate();
     }
+
+    public void save() {
+
+    }
 }
