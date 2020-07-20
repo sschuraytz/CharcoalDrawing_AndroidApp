@@ -100,5 +100,6 @@ public class MainActivity extends AppCompatActivity
     public void help() {
         HelpDialogFragment helpDialog = new HelpDialogFragment();
         helpDialog.show(getSupportFragmentManager(), "help");
-    };
+    }
+
 }

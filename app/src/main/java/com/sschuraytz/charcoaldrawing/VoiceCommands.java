@@ -119,11 +119,6 @@ public class VoiceCommands {
                     // only save first word from user command
                     String result = Arrays.asList(data.get(0).split(" ")).get(0);
                     switch (result) {
-                        case "new":
-                        case "new canvas":
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
-                            voiceListener.createNewCanvasCommand();
-                            break;
                         case "charcoal":
                         case "draw":
                             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
@@ -152,6 +147,11 @@ public class VoiceCommands {
                             break;
                         case "help":
                             voiceListener.help();
+                            break;
+                        case "new":
+                        case "new canvas":
+                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            voiceListener.createNewCanvasCommand();
                             break;
                         default:
                             // slider/radius
@@ -215,5 +215,4 @@ public class VoiceCommands {
     public void setListener(VoiceListener voiceListener) {
         this.voiceListener = voiceListener;
     }
-
 }
