@@ -14,6 +14,7 @@ import android.widget.Toast;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
@@ -57,6 +58,11 @@ public class VoiceCommands {
 
         @Override
         public void updateDrawingThickness(int num) {
+
+        }
+
+        @Override
+        public void help() {
 
         }
     };
@@ -110,7 +116,8 @@ public class VoiceCommands {
             public void onResults(Bundle results) {
                 ArrayList<String> data = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
                 if (data != null) {
-                    String result = data.get(0);
+                    // only save first word from user command
+                    String result = Arrays.asList(data.get(0).split(" ")).get(0);
                     switch (result) {
                         case "charcoal":
                         case "draw":
@@ -137,6 +144,9 @@ public class VoiceCommands {
                             else {
                                 Toast.makeText(context, "nothing to redo", Toast.LENGTH_SHORT).show();
                             }
+                            break;
+                        case "help":
+                            voiceListener.help();
                             break;
                         case "new":
                         case "new canvas":
@@ -182,6 +192,9 @@ public class VoiceCommands {
         //intent = simple message to transfer data btwn activities
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
+        // info about next attribute say it's best not to modify the value
+        // also, I'm  not sure it's making a difference
+        //intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10);
         //  intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         speechRecognizer.startListening(intent);
@@ -190,8 +203,7 @@ public class VoiceCommands {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
-                context, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
-        } else {
+                context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
                     context,
                     new String[] { Manifest.permission.RECORD_AUDIO},
@@ -203,5 +215,4 @@ public class VoiceCommands {
     public void setListener(VoiceListener voiceListener) {
         this.voiceListener = voiceListener;
     }
-
 }

@@ -97,4 +97,9 @@ public class MainActivity extends AppCompatActivity
 
     public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
 
+    public void help() {
+        HelpDialogFragment helpDialog = new HelpDialogFragment();
+        helpDialog.show(getSupportFragmentManager(), "help");
+    }
+
 }
