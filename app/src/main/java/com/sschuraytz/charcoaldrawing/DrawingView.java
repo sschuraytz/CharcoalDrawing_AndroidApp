@@ -1,26 +1,30 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
 
-import java.util.Stack;
+import androidx.annotation.RequiresApi;
 
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class DrawingView extends View {
 
     private Paint paint;
     protected UndoRedo undoRedo = new UndoRedo();
 
-    private float previousX;
-    private float previousY;
+
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private Tool currentTool;
+
+    private float previousX;
+    private float previousY;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -65,10 +69,11 @@ public class DrawingView extends View {
         return true;
     }
 
+    //called on create
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        undoRedo.onSizeChanged(w, h);
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        undoRedo.onSizeChanged(width, height);
     }
 
     @Override
@@ -90,8 +95,25 @@ public class DrawingView extends View {
         currentTool = charcoalTool;
     }
 
-    protected void undo() {
-        undoRedo.undo();
+    protected boolean undo() {
+        boolean isAvailable = undoRedo.undo();
         invalidate();
+        return isAvailable;
+    }
+
+    protected boolean redo() {
+        boolean isAvailable = undoRedo.redo();
+        invalidate();
+        return isAvailable;
+    }
+
+    public void createNewCanvas() {
+        undoRedo.createNewCanvas();
+        initializeDrawing();
+        invalidate();
+    }
+
+    public void save() {
+
     }
 }

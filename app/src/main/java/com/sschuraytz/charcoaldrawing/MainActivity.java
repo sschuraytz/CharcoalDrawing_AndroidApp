@@ -1,65 +1,36 @@
 package com.sschuraytz.charcoaldrawing;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.content.Context;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageButton;
-import android.widget.SeekBar;
-import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-    private SeekBar drawingThickness;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+
+@RequiresApi(api = Build.VERSION_CODES.M)
+public class MainActivity extends AppCompatActivity
+        implements VoiceListener {
+
     private DrawingView drawingView;
-    private ImageButton drawButton;
-    private ImageButton eraseButton;
-    private ImageButton undoButton;
+    private FloatingActionButton fab;
+    private VoiceCommands voiceCommands;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setUpDrawingView();
-        setUpSlider();
-        setUpDraw();
-        setUpErase();
-        setUpUndo();
+        drawingView = findViewById(R.id.canvas);
+        setUpVoiceCommands();
+        setUpFAB();
     }
 
-    public void setUpDrawingView()
-    {
-        drawingView = (DrawingView) findViewById(R.id.canvas);
-        drawingView.setOnTouchListener((v, event) -> {
-            updateUndoVisibility();
-            return false;
-        });
-    }
-
-    public void setUpSlider()
-    {
-        drawingThickness = (SeekBar) findViewById(R.id.thicknessSlider);
-        drawingView.setRadius(drawingThickness.getProgress());
-        drawingThickness.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                drawingView.setRadius(drawingThickness.getProgress());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
+    public void setUpVoiceCommands() {
+        voiceCommands = new VoiceCommands(this);
+        voiceCommands.setListener(this);
     }
 
     @Override
@@ -89,33 +60,46 @@ public class MainActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
 
-    public void setUpDraw()
-    {
-        drawButton = (ImageButton) findViewById(R.id.drawButton);
-        drawButton.setOnClickListener(v -> drawingView.setDrawingMode());
-    }
-    public void setUpErase()
-    {
-        eraseButton = (ImageButton) findViewById(R.id.eraseButton);
-        eraseButton.setOnClickListener( v -> drawingView.setEraseMode());
-    }
-
-    public void setUpUndo()
-    {
-        undoButton = (ImageButton) findViewById(R.id.undoButton);
-        undoButton.setOnClickListener(v -> {
-            drawingView.undo();
-            updateUndoVisibility();
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void setUpFAB() {
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(v -> {
+            voiceCommands.checkVoicePermissions();
+            voiceCommands.listenToUserCommand();
+            //show user that mic is active
+            fab.setColorFilter(Color.RED);
         });
     }
 
-    public void updateUndoVisibility()
-    {
-        if (drawingView.undoRedo.getCurrentStackSize() > 1) {
-            undoButton.setVisibility(View.VISIBLE);
-        }
-        else {
-            undoButton.setVisibility(View.GONE);
-        }
+    public void updateFABUI() {
+        fab.setImageResource(R.drawable.ic_mic_foreground);
     }
+
+    public void charcoalCommand() {
+        drawingView.setDrawingMode();
+    }
+
+    public void eraserCommand() {
+        drawingView.setEraseMode();
+    }
+
+    public boolean undoCommand() {
+        return drawingView.undo();
+    }
+
+    public boolean redoCommand() {
+        return drawingView.redo();
+    }
+
+    public void createNewCanvasCommand() {
+        drawingView.createNewCanvas();
+    }
+
+    public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
+
+    public void help() {
+        HelpDialogFragment helpDialog = new HelpDialogFragment();
+        helpDialog.show(getSupportFragmentManager(), "help");
+    }
+
 }
