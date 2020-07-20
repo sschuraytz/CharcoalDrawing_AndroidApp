@@ -156,8 +156,7 @@ public class VoiceCommands {
                             }
                             break;
                         case "save":
-                            //TODO: print whatever the user said so I can identify why this is sometimes not being recognized
-                            //and can then add in those other options
+                        case "safe":   //speech recognizer sometimes interprets "save" as "safe"
                             voiceListener.saveDrawing();
                             break;
                         case "help":
@@ -180,8 +179,6 @@ public class VoiceCommands {
                             }
                     }
                     //smudge
-                    //save
-                    //help
                 }
             }
 

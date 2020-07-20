@@ -14,5 +14,5 @@
     <string name="help_description">display voice command menu</string>
     <string name="thickness">1-100</string>
     <string name="thickness_description">set drawing tool width</string>
-    <string name="drawing_name_hint">name of drawing</string>
+    <string name="drawing_name_hint">Name of drawing</string>
 </resources>

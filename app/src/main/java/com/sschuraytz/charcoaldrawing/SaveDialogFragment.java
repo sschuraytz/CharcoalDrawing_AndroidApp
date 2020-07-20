@@ -14,12 +14,11 @@ public class SaveDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-        alertDialogBuilder.setTitle("SAVE");
+        alertDialogBuilder.setTitle("SAVE AS:");
         alertDialogBuilder.setView(R.layout.save_dialog_fragment);
         //drawing title
         //artist name
         //drawing description
-        alertDialogBuilder.setMessage("Save As:");
         alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {

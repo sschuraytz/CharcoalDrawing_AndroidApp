@@ -16,6 +16,7 @@
             android:layout_height="match_parent"
             android:hint="@string/drawing_name_hint"
             android:autofillHints="drawingName"
+            android:layout_marginHorizontal="20dp"
             android:inputType="text">
         </EditText>
 
