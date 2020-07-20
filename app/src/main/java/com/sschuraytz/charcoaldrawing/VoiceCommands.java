@@ -161,7 +161,6 @@ public class VoiceCommands {
                             break;
                         case "help":
                             voiceListener.help();
-                            break;
                         default:
                             // slider/radius
                             if (StringUtils.isNumeric(result)) {
@@ -222,5 +221,4 @@ public class VoiceCommands {
     public void setListener(VoiceListener voiceListener) {
         this.voiceListener = voiceListener;
     }
-
 }
