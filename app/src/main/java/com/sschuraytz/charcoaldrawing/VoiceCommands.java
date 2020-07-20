@@ -62,6 +62,11 @@ public class VoiceCommands {
         }
 
         @Override
+        public void saveDrawing() {
+            
+        }
+
+        @Override
         public void help() {
 
         }
@@ -149,6 +154,11 @@ public class VoiceCommands {
                             else {
                                 Toast.makeText(context, "nothing to redo", Toast.LENGTH_SHORT).show();
                             }
+                            break;
+                        case "save":
+                            //TODO: print whatever the user said so I can identify why this is sometimes not being recognized
+                            //and can then add in those other options
+                            voiceListener.saveDrawing();
                             break;
                         case "help":
                             voiceListener.help();

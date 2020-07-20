@@ -97,6 +97,11 @@ public class MainActivity extends AppCompatActivity
 
     public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
 
+    public void saveDrawing() {
+        SaveDialogFragment saveDialog = new SaveDialogFragment();
+        saveDialog.show(getSupportFragmentManager(), "save");
+        // drawingView.save();
+    }
     public void help() {
         HelpDialogFragment helpDialog = new HelpDialogFragment();
         helpDialog.show(getSupportFragmentManager(), "help");
