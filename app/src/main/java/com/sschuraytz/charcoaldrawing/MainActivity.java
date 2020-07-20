@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity
     public void saveDrawing() {
         SaveDialogFragment saveDialog = new SaveDialogFragment();
         saveDialog.show(getSupportFragmentManager(), "save");
+        saveDialog.setCancelable(false);
         //could allow user to choose jpeg or png
         saveDrawing.saveBitmap(getApplicationContext(), drawingView.undoRedo.getCurrentBitmap(), Bitmap.CompressFormat.JPEG,"image/jpeg", "user input");
         // drawingView.save();
