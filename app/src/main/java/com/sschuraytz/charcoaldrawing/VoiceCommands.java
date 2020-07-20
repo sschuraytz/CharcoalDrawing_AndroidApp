@@ -63,7 +63,7 @@ public class VoiceCommands {
 
         @Override
         public void saveDrawing() {
-            
+
         }
 
         @Override
