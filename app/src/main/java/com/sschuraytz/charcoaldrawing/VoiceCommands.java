@@ -65,6 +65,16 @@ public class VoiceCommands {
         public void help() {
 
         }
+
+        @Override
+        public void lighter() {
+
+        }
+
+        @Override
+        public void darker() {
+
+        }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -149,9 +159,21 @@ public class VoiceCommands {
                             voiceListener.help();
                             break;
                         case "new":
-                        case "new canvas":
+                        case "clear":
+                            //if new, need to prompt user to save current drawing first
                             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                             voiceListener.createNewCanvasCommand();
+                            break;
+                        case "lighter":
+                        case "later":
+                        case "liker":
+                            // butter, spider
+                            Toast.makeText(context, "lighter", Toast.LENGTH_SHORT).show();
+                            voiceListener.lighter();
+                            break;
+                        case "darker":
+                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            voiceListener.darker();
                             break;
                         default:
                             // slider/radius
@@ -166,6 +188,7 @@ public class VoiceCommands {
                                 }
                             }
                             else {
+                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                                 Toast.makeText(context, "no such command", Toast.LENGTH_SHORT).show();
                             }
                     }

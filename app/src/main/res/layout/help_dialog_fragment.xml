@@ -160,6 +160,55 @@
             app:layout_constraintLeft_toRightOf="@+id/thicknessCommand"
             app:layout_constraintTop_toBottomOf="@+id/redoCommand"
             android:layout_gravity="center_vertical"/>
+        <TextView
+            android:id="@+id/lighterCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/lighter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/thicknessCommand" />
+
+        <TextView
+            android:id="@+id/lighterDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/lighter_description"
+            app:layout_constraintLeft_toRightOf="@+id/lighterCommand"
+            app:layout_constraintTop_toBottomOf="@+id/thicknessCommand"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/darkerCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/darker"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lighterCommand" />
+
+        <TextView
+            android:id="@+id/darkerDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/darker_description"
+            app:layout_constraintLeft_toRightOf="@+id/darkerCommand"
+            app:layout_constraintTop_toBottomOf="@+id/lighterCommand"
+            android:layout_gravity="center_vertical"/>
 
         <TextView
             android:id="@+id/helpCommand"
@@ -173,7 +222,7 @@
             android:paddingVertical="5dp"
             android:text="@string/help"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/thicknessCommand" />
+            app:layout_constraintTop_toBottomOf="@+id/darkerCommand" />
 
         <TextView
             android:id="@+id/helpDescription"
@@ -183,7 +232,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/help_description"
             app:layout_constraintLeft_toRightOf="@+id/helpCommand"
-            app:layout_constraintTop_toBottomOf="@+id/thicknessCommand"
+            app:layout_constraintTop_toBottomOf="@+id/darkerCommand"
             android:layout_gravity="center_vertical"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

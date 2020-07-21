@@ -113,6 +113,15 @@ public class DrawingView extends View {
         invalidate();
     }
 
+    //TODO: test usage of this command
+    public void lighter() {
+        currentTool.setOpacity(currentTool.getOpacity() - 25);
+    }
+
+    public void darker() {
+        currentTool.setOpacity(currentTool.getOpacity() + 25);
+    }
+
     public void save() {
 
     }

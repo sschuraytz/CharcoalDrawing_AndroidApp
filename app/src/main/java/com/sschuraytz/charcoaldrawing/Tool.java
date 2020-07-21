@@ -20,6 +20,7 @@ public class Tool{
     private Paint paint;
     private static final Random rand = new Random();
     private int radius;
+    private int opacity = 225;
 
 
     public Tool(int color) {
@@ -74,7 +75,8 @@ public class Tool{
     {
         float horizontalShift;
         float verticalShift;
-        paint.setAlpha(255 - maxMagnitude*2);
+        //paint.setAlpha(255 - maxMagnitude*2);
+        paint.setAlpha(opacity - maxMagnitude);
 
         //small increment value for large radius so shape is more circular --> end of line more smooth
         float incrementer = radius > 80 ?(0.125f*radius) : radius + 1;
@@ -96,7 +98,7 @@ public class Tool{
         float horizontalShift;
         float verticalShift;
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        paint.setAlpha(255);
+        //paint.setAlpha(255);
         for (int i = 0; i < radius*2*density; i++)
         {
             angle = rand.nextInt(360);
@@ -126,5 +128,13 @@ public class Tool{
         return radius;
     }
 
+    public void setOpacity(int value)
+    {
+        opacity = value;
+        printTexturedCircle();
+    }
 
+    public int getOpacity() {
+        return opacity;
+    }
 }

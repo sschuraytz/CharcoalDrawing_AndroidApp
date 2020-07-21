@@ -13,6 +13,7 @@ public class HelpDialogFragment extends DialogFragment {
 
     @NonNull
     @Override
+    //TODO: add vertical scroll bar for help menu
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle("HELP");
