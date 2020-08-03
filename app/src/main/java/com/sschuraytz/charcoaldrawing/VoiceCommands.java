@@ -167,12 +167,10 @@ public class VoiceCommands {
                         case "lighter":
                         case "later":
                         case "liker":
-                            // butter, spider
-                            Toast.makeText(context, "lighter", Toast.LENGTH_SHORT).show();
+                        case "spider":
                             voiceListener.lighter();
                             break;
                         case "darker":
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                             voiceListener.darker();
                             break;
                         default:
@@ -194,7 +192,6 @@ public class VoiceCommands {
                     }
                     //smudge
                     //save
-                    //help
                 }
             }
 

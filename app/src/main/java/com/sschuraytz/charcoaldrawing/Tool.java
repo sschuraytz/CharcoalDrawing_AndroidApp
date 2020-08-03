@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.Random;
@@ -20,7 +21,7 @@ public class Tool{
     private Paint paint;
     private static final Random rand = new Random();
     private int radius;
-    private int opacity = 225;
+    private int opacity = 205; //possible alpha range: 0-255
 
 
     public Tool(int color) {
@@ -75,9 +76,7 @@ public class Tool{
     {
         float horizontalShift;
         float verticalShift;
-        //paint.setAlpha(255 - maxMagnitude*2);
         paint.setAlpha(opacity - maxMagnitude);
-
         //small increment value for large radius so shape is more circular --> end of line more smooth
         float incrementer = radius > 80 ?(0.125f*radius) : radius + 1;
         for (int angle = 0; angle < 360; angle+=incrementer)
@@ -98,7 +97,7 @@ public class Tool{
         float horizontalShift;
         float verticalShift;
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        //paint.setAlpha(255);
+        paint.setAlpha(opacity - maxMagnitude);
         for (int i = 0; i < radius*2*density; i++)
         {
             angle = rand.nextInt(360);

@@ -9,6 +9,7 @@ import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -25,6 +26,7 @@ public class DrawingView extends View {
 
     private float previousX;
     private float previousY;
+    private final int OPACITY_INCREMENTER = 25;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -113,13 +115,25 @@ public class DrawingView extends View {
         invalidate();
     }
 
-    //TODO: test usage of this command
     public void lighter() {
-        currentTool.setOpacity(currentTool.getOpacity() - 25);
+        if (currentTool.getOpacity() >= (currentTool.getRadius() + OPACITY_INCREMENTER)) {
+            Toast.makeText(getContext(), "lighter", Toast.LENGTH_SHORT).show();
+            currentTool.setOpacity(currentTool.getOpacity() - OPACITY_INCREMENTER);
+        }
+        else {
+            Toast.makeText(getContext(), "cannot be lighter", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void darker() {
-        currentTool.setOpacity(currentTool.getOpacity() + 25);
+        //255 is max alpha
+        if (currentTool.getOpacity() - currentTool.getRadius() + OPACITY_INCREMENTER <= 255) {
+            Toast.makeText(getContext(), "darker", Toast.LENGTH_SHORT).show();
+            currentTool.setOpacity(currentTool.getOpacity() + OPACITY_INCREMENTER);
+        }
+        else {
+            Toast.makeText(getContext(), "cannot be darker", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void save() {
