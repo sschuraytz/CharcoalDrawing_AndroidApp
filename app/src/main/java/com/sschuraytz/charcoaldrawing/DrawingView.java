@@ -117,9 +117,11 @@ public class DrawingView extends View {
     }
 
     public void lighter() {
-        //since alpha of each tool is set using opacity & radius, ensure that their difference is less than max-alpha (255)
-        if (currentTool.getOpacity() >= (currentTool.getRadius() + OPACITY_INCREMENTER)) {
+        //alpha must be at least 0
+        //since alpha of each tool is set to the difference of opacity & radius, ensure opacity is at least the size of max-radius (100)
+        if (currentTool.getOpacity() >= 125) {
             showToast("lighter");
+            showToast(currentTool.getOpacity() + " ");
             currentTool.updateOpacity(-OPACITY_INCREMENTER);
         }
         else {
@@ -128,9 +130,10 @@ public class DrawingView extends View {
     }
 
     public void darker() {
-        //since alpha of each tool is set using opacity & radius, ensure that their difference is less than max-alpha (255)
-        if (currentTool.getOpacity() - currentTool.getRadius() + OPACITY_INCREMENTER <= 255) {
+        //ensure opacity will never exceed max-alpha (255)
+        if (currentTool.getOpacity() + OPACITY_INCREMENTER <= 255) {
             showToast("darker");
+            showToast(currentTool.getOpacity() + " ");
             currentTool.updateOpacity(OPACITY_INCREMENTER);
         }
         else {

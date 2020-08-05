@@ -173,6 +173,10 @@ public class VoiceCommands {
                         case "darker":
                             voiceListener.darker();
                             break;
+                        case "hundred":
+                            Toast.makeText(context, "100", Toast.LENGTH_SHORT).show();
+                            voiceListener.updateDrawingThickness(100);
+                            break;
                         default:
                             // slider/radius
                             if (StringUtils.isNumeric(result)) {
