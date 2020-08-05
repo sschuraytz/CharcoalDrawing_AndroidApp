@@ -130,7 +130,7 @@ public class DrawingView extends View {
 
     public void darker() {
         //ensure opacity will never exceed max-alpha (255)
-        if (currentTool.getOpacity() + OPACITY_INCREMENTER <= 255) {
+        if (currentTool.getOpacity() <= 255) {
             showToast("darker");
             if (currentTool.getOpacity() == 250) {
                 currentTool.incrementOpacity(5);
