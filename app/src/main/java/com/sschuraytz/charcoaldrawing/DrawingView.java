@@ -121,8 +121,7 @@ public class DrawingView extends View {
         //since alpha of each tool is set to the difference of opacity & radius, ensure opacity is at least the size of max-radius (100)
         if (currentTool.getOpacity() >= 125) {
             showToast("lighter");
-            showToast(currentTool.getOpacity() + " ");
-            currentTool.updateOpacity(-OPACITY_INCREMENTER);
+            currentTool.incrementOpacity(-OPACITY_INCREMENTER);
         }
         else {
             showToast("cannot be lighter");
@@ -133,8 +132,12 @@ public class DrawingView extends View {
         //ensure opacity will never exceed max-alpha (255)
         if (currentTool.getOpacity() + OPACITY_INCREMENTER <= 255) {
             showToast("darker");
-            showToast(currentTool.getOpacity() + " ");
-            currentTool.updateOpacity(OPACITY_INCREMENTER);
+            if (currentTool.getOpacity() == 250) {
+                currentTool.incrementOpacity(5);
+            }
+            else {
+                currentTool.incrementOpacity(OPACITY_INCREMENTER);
+            }
         }
         else {
             showToast("cannot be darker");

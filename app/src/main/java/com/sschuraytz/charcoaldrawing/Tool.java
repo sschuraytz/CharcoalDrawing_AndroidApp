@@ -128,7 +128,7 @@ public class Tool{
         return radius;
     }
 
-    public void updateOpacity(int value)
+    public void incrementOpacity(int value)
     {
         opacity += value;
         printTexturedCircle();
