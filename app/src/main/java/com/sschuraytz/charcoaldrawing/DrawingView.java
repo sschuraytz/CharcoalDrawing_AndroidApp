@@ -55,7 +55,10 @@ public class DrawingView extends View {
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
+                // avoid continuously reprinting circle (thus making it darker) if user keeps finger on same spot
+                if (pointX != previousX || pointY != previousY) {
+                    currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
+                }
                 previousX = pointX;
                 previousY = pointY;
                 break;
