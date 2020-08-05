@@ -2,9 +2,7 @@ package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -116,24 +114,29 @@ public class DrawingView extends View {
     }
 
     public void lighter() {
+        //since alpha of each tool is set using opacity & radius, ensure that their difference is less than max-alpha (255)
         if (currentTool.getOpacity() >= (currentTool.getRadius() + OPACITY_INCREMENTER)) {
-            Toast.makeText(getContext(), "lighter", Toast.LENGTH_SHORT).show();
-            currentTool.setOpacity(currentTool.getOpacity() - OPACITY_INCREMENTER);
+            showToast("lighter");
+            currentTool.updateOpacity(-OPACITY_INCREMENTER);
         }
         else {
-            Toast.makeText(getContext(), "cannot be lighter", Toast.LENGTH_SHORT).show();
+            showToast("cannot be lighter");
         }
     }
 
     public void darker() {
-        //255 is max alpha
+        //since alpha of each tool is set using opacity & radius, ensure that their difference is less than max-alpha (255)
         if (currentTool.getOpacity() - currentTool.getRadius() + OPACITY_INCREMENTER <= 255) {
-            Toast.makeText(getContext(), "darker", Toast.LENGTH_SHORT).show();
-            currentTool.setOpacity(currentTool.getOpacity() + OPACITY_INCREMENTER);
+            showToast("darker");
+            currentTool.updateOpacity(OPACITY_INCREMENTER);
         }
         else {
-            Toast.makeText(getContext(), "cannot be darker", Toast.LENGTH_SHORT).show();
+            showToast("cannot be darker");
         }
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void save() {
