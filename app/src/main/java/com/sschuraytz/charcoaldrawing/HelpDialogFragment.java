@@ -17,7 +17,7 @@ public class HelpDialogFragment extends DialogFragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         alertDialogBuilder.setTitle("HELP");
         alertDialogBuilder.setView(R.layout.help_dialog_fragment);
-        alertDialogBuilder.setMessage("This app is controlled by the following voice commands:");
+        // setMessage pushes buttons of the screen --> dialog subtitle has been moved to xml view
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
         });
         return alertDialogBuilder.create();

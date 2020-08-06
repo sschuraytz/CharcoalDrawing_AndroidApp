@@ -11,5 +11,7 @@ public interface VoiceListener {
     void updateDrawingThickness(int radius);
     void saveDrawing();
     void help();
+    void lighter();
+    void darker();
 
 }

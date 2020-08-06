@@ -70,6 +70,16 @@ public class VoiceCommands {
         public void help() {
 
         }
+
+        @Override
+        public void lighter() {
+
+        }
+
+        @Override
+        public void darker() {
+
+        }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -125,7 +135,8 @@ public class VoiceCommands {
                     String result = Arrays.asList(data.get(0).split(" ")).get(0);
                     switch (result) {
                         case "new":
-                        case "new canvas":
+                        case "clear":
+                            //if new, need to prompt user to save current drawing first
                             Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
                             voiceListener.createNewCanvasCommand();
                             break;
@@ -161,6 +172,20 @@ public class VoiceCommands {
                             break;
                         case "help":
                             voiceListener.help();
+                            break;
+                        case "lighter":
+                        case "later":
+                        case "liker":
+                        case "spider":
+                            voiceListener.lighter();
+                            break;
+                        case "darker":
+                            voiceListener.darker();
+                            break;
+                        case "hundred":
+                            Toast.makeText(context, "100", Toast.LENGTH_SHORT).show();
+                            voiceListener.updateDrawingThickness(100);
+                            break;
                         default:
                             // slider/radius
                             if (StringUtils.isNumeric(result)) {
@@ -178,6 +203,7 @@ public class VoiceCommands {
                             }
                     }
                     //smudge
+                    //save
                 }
             }
 
