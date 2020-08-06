@@ -102,4 +102,12 @@ public class MainActivity extends AppCompatActivity
         helpDialog.show(getSupportFragmentManager(), "help");
     }
 
+    public void lighter() {
+        drawingView.lighter();
+    }
+
+    public void darker() {
+        drawingView.darker();
+    }
+
 }

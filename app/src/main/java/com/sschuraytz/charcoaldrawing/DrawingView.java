@@ -2,13 +2,12 @@ package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
@@ -25,6 +24,7 @@ public class DrawingView extends View {
 
     private float previousX;
     private float previousY;
+    private final int OPACITY_INCREMENTER = 25;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -114,6 +114,38 @@ public class DrawingView extends View {
         undoRedo.createNewCanvas();
         initializeDrawing();
         invalidate();
+    }
+
+    public void lighter() {
+        //alpha must be at least 0
+        //since alpha of each tool is set to the difference of opacity & radius, ensure opacity is at least the size of max-radius (100)
+        if (currentTool.getOpacity() >= 125) {
+            showToast("lighter");
+            currentTool.incrementOpacity(-OPACITY_INCREMENTER);
+        }
+        else {
+            showToast("cannot be lighter");
+        }
+    }
+
+    public void darker() {
+        //ensure opacity will never exceed max-alpha (255)
+        if (currentTool.getOpacity() <= 255) {
+            showToast("darker");
+            if (currentTool.getOpacity() == 250) {
+                currentTool.incrementOpacity(5);
+            }
+            else {
+                currentTool.incrementOpacity(OPACITY_INCREMENTER);
+            }
+        }
+        else {
+            showToast("cannot be darker");
+        }
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     public void save() {
