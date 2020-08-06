@@ -1,6 +1,5 @@
 package com.sschuraytz.charcoaldrawing;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ public class MainActivity extends AppCompatActivity
         implements VoiceListener {
 
     private DrawingView drawingView;
-    private SaveDrawing saveDrawing;
     private FloatingActionButton fab;
     private VoiceCommands voiceCommands;
 
@@ -25,7 +23,6 @@ public class MainActivity extends AppCompatActivity
         hideSystemUI();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        saveDrawing = new SaveDrawing(getApplicationContext());
         drawingView = findViewById(R.id.canvas);
         setUpVoiceCommands();
         setUpFAB();
@@ -101,13 +98,12 @@ public class MainActivity extends AppCompatActivity
     public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
 
     public void saveDrawing() {
-        SaveDialogFragment saveDialog = new SaveDialogFragment();
+        SaveDialogFragment saveDialog = new SaveDialogFragment(getApplicationContext(), this, drawingView.undoRedo.getCurrentBitmap());
+        saveDialog.saveDrawing.checkExternalStoragePermissions();
         saveDialog.show(getSupportFragmentManager(), "save");
         saveDialog.setCancelable(false);
-        //could allow user to choose jpeg or png
-        saveDrawing.saveBitmap(getApplicationContext(), drawingView.undoRedo.getCurrentBitmap(), Bitmap.CompressFormat.JPEG,"image/jpeg", "user input");
-        // drawingView.save();
     }
+
     public void help() {
         HelpDialogFragment helpDialog = new HelpDialogFragment();
         helpDialog.show(getSupportFragmentManager(), "help");

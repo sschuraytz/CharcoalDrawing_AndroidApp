@@ -1,7 +1,9 @@
 package com.sschuraytz.charcoaldrawing;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 
@@ -10,6 +12,18 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 public class SaveDialogFragment extends DialogFragment {
+
+    SaveDrawing saveDrawing;
+    Context baseContext;
+    Activity baseActivity;
+    Bitmap bitmapToSave;
+
+    SaveDialogFragment(Context context, Activity activity, Bitmap currentBitmap) {
+        saveDrawing = new SaveDrawing(context, activity);
+        baseContext = context;
+        baseActivity = activity;
+        bitmapToSave = currentBitmap;
+    }
 
     @NonNull
     @Override
@@ -21,9 +35,10 @@ public class SaveDialogFragment extends DialogFragment {
         //drawing title
         //artist name
         //drawing description
+        //TODO: figure out how to access user EditText input so it can be used as image displayName
         alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
             //could allow user to choose jpeg or png
-            //saveDrawing.saveBitmap(getApplicationContext(), drawingView.undoRedo.getCurrentBitmap(), Bitmap.CompressFormat.JPEG,"image/jpeg", "user input");
+            saveDrawing.saveBitmap(baseContext, bitmapToSave, Bitmap.CompressFormat.PNG,"image/png", "two");
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
         });

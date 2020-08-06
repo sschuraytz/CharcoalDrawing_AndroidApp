@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat;
 
 
 public class VoiceCommands {
-    private Activity context;
+    private Activity activity;
     private RecognitionListener recognitionListener;
     private SpeechRecognizer speechRecognizer;
     private VoiceListener voiceListener = new VoiceListener() {
@@ -83,15 +83,15 @@ public class VoiceCommands {
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public VoiceCommands(Activity baseContext) {
-        context = baseContext;
+    public VoiceCommands(Activity baseActivity) {
+        activity = baseActivity;
         checkVoicePermissions();
         setUpRecognitionListener();
         setUpSpeechRecognizer();
     }
 
     public void setUpSpeechRecognizer() {
-        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(context);
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity);
         speechRecognizer.setRecognitionListener(recognitionListener);
     }
 
@@ -99,7 +99,7 @@ public class VoiceCommands {
         recognitionListener = new RecognitionListener() {
             @Override
             public void onReadyForSpeech(Bundle params) {
-                Toast.makeText(context, "listening", Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, "listening", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -137,33 +137,33 @@ public class VoiceCommands {
                         case "new":
                         case "clear":
                             //if new, need to prompt user to save current drawing first
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                             voiceListener.createNewCanvasCommand();
                             break;
                         case "charcoal":
                         case "draw":
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                             voiceListener.charcoalCommand();
                             break;
                         case "eraser":
                         case "erase":
-                            Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                             voiceListener.eraserCommand();
                             break;
                         case "undo":
                             if (voiceListener.undoCommand()) {
-                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Toast.makeText(context, "nothing to undo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "nothing to undo", Toast.LENGTH_SHORT).show();
                             }
                             break;
                         case "redo":
                             if (voiceListener.redoCommand()) {
-                                Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                Toast.makeText(context, "nothing to redo", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "nothing to redo", Toast.LENGTH_SHORT).show();
                             }
                             break;
                         case "save":
@@ -183,7 +183,7 @@ public class VoiceCommands {
                             voiceListener.darker();
                             break;
                         case "hundred":
-                            Toast.makeText(context, "100", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(activity, "100", Toast.LENGTH_SHORT).show();
                             voiceListener.updateDrawingThickness(100);
                             break;
                         default:
@@ -191,19 +191,18 @@ public class VoiceCommands {
                             if (StringUtils.isNumeric(result)) {
                                 int numericResult = Integer.parseInt(result);
                                 if (numericResult <= 0 || numericResult > 100) {
-                                    Toast.makeText(context, "Width must be between 1 and 100", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, "Width must be between 1 and 100", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
-                                    Toast.makeText(context, result, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                                     voiceListener.updateDrawingThickness(numericResult);
                                 }
                             }
                             else {
-                                Toast.makeText(context, "no such command", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(activity, "no such command", Toast.LENGTH_SHORT).show();
                             }
                     }
                     //smudge
-                    //save
                 }
             }
 
@@ -235,9 +234,9 @@ public class VoiceCommands {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void checkVoicePermissions () {
         if (ContextCompat.checkSelfPermission(
-                context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                activity, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(
-                    context,
+                    activity,
                     new String[] { Manifest.permission.RECORD_AUDIO},
                     1
             );
