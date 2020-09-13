@@ -14,13 +14,11 @@ import androidx.fragment.app.DialogFragment;
 public class SaveDialogFragment extends DialogFragment {
 
     SaveDrawing saveDrawing;
-    Context baseContext;
     Activity baseActivity;
     Bitmap bitmapToSave;
 
-    SaveDialogFragment(Context context, Activity activity, Bitmap currentBitmap) {
-        saveDrawing = new SaveDrawing(context, activity);
-        baseContext = context;
+    SaveDialogFragment(Activity activity, Bitmap currentBitmap) {
+        saveDrawing = new SaveDrawing(activity);
         baseActivity = activity;
         bitmapToSave = currentBitmap;
     }
@@ -37,8 +35,7 @@ public class SaveDialogFragment extends DialogFragment {
         //drawing description
         //TODO: figure out how to access user EditText input so it can be used as image displayName
         alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
-            //could allow user to choose jpeg or png
-            saveDrawing.saveBitmap(baseContext, bitmapToSave, Bitmap.CompressFormat.PNG,"image/png", "two");
+            saveDrawing.saveBitmap(baseActivity, bitmapToSave, Bitmap.CompressFormat.PNG,"image/png", "two");
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
         });

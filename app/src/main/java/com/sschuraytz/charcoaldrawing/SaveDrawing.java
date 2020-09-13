@@ -34,16 +34,14 @@ import androidx.core.content.ContextCompat;
 
 public class SaveDrawing {
 
-    protected Context baseContext;
     protected Activity baseActivity;
 
-    public SaveDrawing(Context context, Activity activity) {
-        baseContext = context;
+    public SaveDrawing(Activity activity) {
         baseActivity = activity;
     }
 
     //https://stackoverflow.com/questions/56904485/how-to-save-an-image-in-android-q-using-mediastore
-    public void saveBitmap(@NonNull Context context, @NonNull Bitmap bitmap,
+    public void saveBitmap(@NonNull Activity activity, @NonNull Bitmap bitmap,
                            @NonNull Bitmap.CompressFormat format, @NonNull final String mimeType,
                            @NonNull final String displayName) {
         OutputStream outStream;
@@ -61,7 +59,7 @@ public class SaveDrawing {
                 //perhaps shouldn't use this because of filesystem permissions
                 //contentValues.put(MediaStore.Images.Media.DATA, relativeLocation);
 
-                ContentResolver contentResolver = context.getContentResolver();
+                ContentResolver contentResolver = activity.getContentResolver();
                 Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                 Uri uri = contentResolver.insert(contentUri, contentValues);
 
@@ -83,9 +81,9 @@ public class SaveDrawing {
 
                 //Android only runs full media scan on reboot, to add drawing to media library immediately:
                 //pass newly created image file to media scanner service to be added to the phone gallery
-                MediaScannerConnection.scanFile(baseContext, new String[]{newImageFile.toString()},
+                MediaScannerConnection.scanFile(baseActivity, new String[]{newImageFile.toString()},
                         new String[]{newImageFile.getName()},
-                        (path1, uri) -> Toast.makeText(baseContext, newImageFile.getName() + "was saved to gallery", Toast.LENGTH_SHORT).show());
+                        (path1, uri) -> Toast.makeText(baseActivity, newImageFile.getName() + "was saved to gallery", Toast.LENGTH_SHORT).show());
             }
         } catch (IOException ioe) {
             ioe.getMessage();
@@ -140,10 +138,7 @@ public class SaveDrawing {
             return thumb;
         } catch (FileNotFoundException ex) {
             return null;
-        } catch (IOException ex) {
-            return null;
         }
-
     }*/
 
 }
