@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -26,10 +27,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.drawable.IconCompat;
+
+import com.google.android.material.snackbar.Snackbar;
 
 
 public class SaveDrawing {
@@ -40,42 +45,36 @@ public class SaveDrawing {
         baseActivity = activity;
     }
 
+    public void saveBitmap(Activity activity, Bitmap bitmap) {
+        Random rand = new Random();
+        int n = 10000;
+        n = rand.nextInt(n);
+        String fileName = "sketch" + n;
+        saveBitmap(activity, bitmap, fileName);
+    }
+
+    //https://stackoverflow.com/questions/36624756/how-to-save-bitmap-to-android-gallery
     //https://stackoverflow.com/questions/56904485/how-to-save-an-image-in-android-q-using-mediastore
-    public void saveBitmap(@NonNull Activity activity, @NonNull Bitmap bitmap,
-                           @NonNull Bitmap.CompressFormat format, @NonNull final String mimeType,
-                           @NonNull final String displayName) {
+    public void saveBitmap(@NonNull Activity activity, @NonNull Bitmap bitmap, @NonNull final String displayName) {
         OutputStream outStream;
 
         try {
-            //TODO: decide if want alternate implementations based on version
             //TODO: determine how to save image so it displays when click on thumbnail
             //TODO: determine how to save image so that it is editable (from the gallery)
                         //and open-able from "images" in settings the same way it's accessible from "shared" in settings
             //TODO: add this to app requirements?
-            if (Build.VERSION.SDK_INT >= 29) {
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, displayName);
-                contentValues.put(MediaStore.Images.Media.MIME_TYPE, mimeType);
-                //perhaps shouldn't use this because of filesystem permissions
-                //contentValues.put(MediaStore.Images.Media.DATA, relativeLocation);
-
-                ContentResolver contentResolver = activity.getContentResolver();
-                Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                Uri uri = contentResolver.insert(contentUri, contentValues);
-
-
-                outStream = contentResolver.openOutputStream(uri);
-                bitmap.compress(format, 100, outStream);
-                if (outStream != null) {
-                    outStream.close();
+            //images are currently getting saved to Settings --> Storage --> Other --> Pictures --> CharcoalDrawings
+                //and from there, if I "open with gallery", then the thumbnail is visible in the gallery
+            if (Build.VERSION.SDK_INT < 29) {
+                File outputDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/CharcoalDrawings");
+                outputDirectory.mkdirs(); //creates if doesn't exist
+                String fileName = displayName + ".png";
+                File newImageFile = new File(outputDirectory, fileName);
+                if (newImageFile.exists()) {
+                    newImageFile.delete();
                 }
-            } else {
-                String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + "Charcoal Drawings";
-                File outputDir = new File(path);
-                outputDir.mkdirs(); //creates if doesn't exist
-                File newImageFile = new File(path + File.separator + displayName + ".png");
                 FileOutputStream outputStream = new FileOutputStream(newImageFile);
-                bitmap.compress(format, 100, outputStream);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                 outputStream.flush();
                 outputStream.close();
 
@@ -83,7 +82,24 @@ public class SaveDrawing {
                 //pass newly created image file to media scanner service to be added to the phone gallery
                 MediaScannerConnection.scanFile(baseActivity, new String[]{newImageFile.toString()},
                         new String[]{newImageFile.getName()},
-                        (path1, uri) -> Toast.makeText(baseActivity, newImageFile.getName() + "was saved to gallery", Toast.LENGTH_SHORT).show());
+                        (path1, uri) -> Snackbar.make(this.baseActivity.findViewById(R.id.main_layout), newImageFile.getName() + " was saved to media gallery", Snackbar.LENGTH_LONG).show());
+            }
+            else {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, displayName);
+                contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/png");
+                //perhaps shouldn't use this because of filesystem permissions
+                //contentValues.put(MediaStore.Images.Media.DATA, relativeLocation);
+
+                ContentResolver contentResolver = activity.getContentResolver();
+                Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                Uri uri = contentResolver.insert(contentUri, contentValues);
+
+                outStream = contentResolver.openOutputStream(uri);
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                if (outStream != null) {
+                    outStream.close();
+                }
             }
         } catch (IOException ioe) {
             ioe.getMessage();
