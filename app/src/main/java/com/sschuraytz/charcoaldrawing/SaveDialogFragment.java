@@ -17,18 +17,18 @@ import java.util.Objects;
 public class SaveDialogFragment extends DialogFragment {
 
     SaveDrawing saveDrawing;
-    Activity baseActivity;
-    Bitmap bitmapToSave;
+    Activity activity;
 
-    SaveDialogFragment(Activity activity, Bitmap currentBitmap) {
-        saveDrawing = new SaveDrawing(activity);
-        baseActivity = activity;
-        bitmapToSave = currentBitmap;
-    }
+    // avoid passing args through constructor because when Android
+    // recreates the fragment, the dialog is recreated with default constructor
+    // thus, args are passed via a bundle created in saveDrawing() in MainActivity
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Bitmap bitmapToSave = getArguments().getParcelable("bitmap");
+        activity = saveDrawing.baseActivity;
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         //alertDialogBuilder.setIcon(R.drawable.ic_save_foreground);
         alertDialogBuilder.setTitle("SAVE AS:");
@@ -40,7 +40,7 @@ public class SaveDialogFragment extends DialogFragment {
         //TODO: figure out how to access user EditText input so it can be used as image displayName
         alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
             // if (drawingTitle != null)
-            saveDrawing.saveBitmap(baseActivity, bitmapToSave);
+            saveDrawing.saveBitmap(activity, bitmapToSave);
            // else { saveDrawing.saveBitmap(baseActivity, bitmapToSave, drawingTitle.toString()); }
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {

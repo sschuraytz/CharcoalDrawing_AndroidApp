@@ -98,7 +98,11 @@ public class MainActivity extends AppCompatActivity
     public void updateDrawingThickness(int radius) { drawingView.setRadius(radius); }
 
     public void saveDrawing() {
-        SaveDialogFragment saveDialog = new SaveDialogFragment(this, drawingView.undoRedo.getCurrentBitmap());
+        SaveDialogFragment saveDialog = new SaveDialogFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("bitmap", drawingView.undoRedo.getCurrentBitmap());
+        saveDialog.setArguments(bundle);
+        saveDialog.saveDrawing = new SaveDrawing(this);
         saveDialog.saveDrawing.checkExternalStoragePermissions();
         saveDialog.show(getSupportFragmentManager(), "save");
         saveDialog.setCancelable(false);
