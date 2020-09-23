@@ -6,12 +6,16 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import java.io.Console;
 import java.util.Objects;
 
 public class SaveDialogFragment extends DialogFragment {
@@ -32,16 +36,15 @@ public class SaveDialogFragment extends DialogFragment {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
         //alertDialogBuilder.setIcon(R.drawable.ic_save_foreground);
         alertDialogBuilder.setTitle("SAVE AS:");
-        alertDialogBuilder.setView(R.layout.save_dialog_fragment);
-        //EditText drawingTitle = Objects.requireNonNull(getView()).findViewById(R.id.drawing_name);
-        //drawing title
-        //artist name
-        //drawing description
-        //TODO: figure out how to access user EditText input so it can be used as image displayName
+        View alertDialogView = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.save_dialog_fragment, null);
+        alertDialogBuilder.setView(alertDialogView);
+        EditText drawingTitle = alertDialogView.findViewById(R.id.drawing_name);
         alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
-            // if (drawingTitle != null)
-            saveDrawing.saveBitmap(activity, bitmapToSave);
-           // else { saveDrawing.saveBitmap(baseActivity, bitmapToSave, drawingTitle.toString()); }
+             if (drawingTitle.getText().length() > 0) {
+                 saveDrawing.saveBitmap(activity, bitmapToSave, drawingTitle.getText().toString());
+             } else {
+                 saveDrawing.saveBitmap(activity, bitmapToSave);
+             }
         });
         alertDialogBuilder.setNegativeButton("Cancel", (dialog, which) -> {
         });

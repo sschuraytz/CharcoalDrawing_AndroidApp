@@ -46,6 +46,7 @@ public class SaveDrawing {
     }
 
     public void saveBitmap(Activity activity, Bitmap bitmap) {
+        // some apps save drawings as "Untitled"
         Random rand = new Random();
         int n = 10000;
         n = rand.nextInt(n);
