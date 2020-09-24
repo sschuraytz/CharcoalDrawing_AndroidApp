@@ -102,8 +102,6 @@ public class MainActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putParcelable("bitmap", drawingView.undoRedo.getCurrentBitmap());
         saveDialog.setArguments(bundle);
-        saveDialog.saveDrawing = new SaveDrawing(this);
-        saveDialog.saveDrawing.checkExternalStoragePermissions();
         saveDialog.show(getSupportFragmentManager(), "save");
         saveDialog.setCancelable(false);
     }

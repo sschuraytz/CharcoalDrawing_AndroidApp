@@ -20,23 +20,36 @@ import java.util.Objects;
 
 public class SaveDialogFragment extends DialogFragment {
 
-    SaveDrawing saveDrawing;
-    Activity activity;
+    private SaveDrawing saveDrawing;
 
     // avoid passing args through constructor because when Android
     // recreates the fragment, the dialog is recreated with default constructor
     // thus, args are passed via a bundle created in saveDrawing() in MainActivity
 
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        saveDrawing = new SaveDrawing(getActivity());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        saveDrawing.checkExternalStoragePermissions();
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        Activity activity = getActivity();
         Bitmap bitmapToSave = getArguments().getParcelable("bitmap");
-        activity = saveDrawing.baseActivity;
 
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(activity);
+
         //alertDialogBuilder.setIcon(R.drawable.ic_save_foreground);
         alertDialogBuilder.setTitle("SAVE AS:");
-        View alertDialogView = Objects.requireNonNull(getActivity()).getLayoutInflater().inflate(R.layout.save_dialog_fragment, null);
+        View alertDialogView = Objects.requireNonNull(activity.getLayoutInflater().inflate(R.layout.save_dialog_fragment, null));
         alertDialogBuilder.setView(alertDialogView);
         EditText drawingTitle = alertDialogView.findViewById(R.id.drawing_name);
         alertDialogBuilder.setPositiveButton("OK", (dialog, which) -> {
