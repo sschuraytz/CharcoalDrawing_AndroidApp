@@ -65,7 +65,7 @@ public class SaveDrawing {
                 // Settings --> Storage --> Other --> Pictures --> CharcoalDrawings
                 // (from there, I can open with a gallery or a few other drawing apps)
                 //also, which images are getting saved to which location?
-            //TODO: add this to app requirements?
+            // need separate implementation based on SDK since getExternalStoragePublicDirectory() was deprecated in SDK Q (29)
             if (Build.VERSION.SDK_INT < 29) {
                 File outputDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/CharcoalDrawings");
                 outputDirectory.mkdirs(); //creates if doesn't exist
@@ -83,7 +83,7 @@ public class SaveDrawing {
                 //pass newly created image file to media scanner service to be added to the phone gallery
                 MediaScannerConnection.scanFile(baseActivity, new String[]{newImageFile.toString()},
                         new String[]{newImageFile.getName()},
-                        (path1, uri) -> Snackbar.make(this.baseActivity.findViewById(R.id.main_layout), newImageFile.getName() + " was saved to media gallery", Snackbar.LENGTH_LONG).show());
+                        (path1, uri) -> confirmSave(newImageFile.getName(), "Media Gallery"));
             }
             else {
                 ContentValues contentValues = new ContentValues();
@@ -101,6 +101,7 @@ public class SaveDrawing {
                 if (outStream != null) {
                     outStream.close();
                 }
+                confirmSave(displayName + ".png", "Google Photos");
             }
         } catch (IOException ioe) {
             ioe.getMessage();
@@ -117,6 +118,10 @@ public class SaveDrawing {
             );
 
         }
+    }
+
+    public void confirmSave(String fileName, String fileLocation) {
+        Snackbar.make(this.baseActivity.findViewById(R.id.main_layout), fileName + " was saved to " +  fileLocation, Snackbar.LENGTH_LONG).show();
     }
 }
 
