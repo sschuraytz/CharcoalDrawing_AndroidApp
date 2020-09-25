@@ -60,12 +60,12 @@ public class SaveDrawing {
         OutputStream outStream;
 
         try {
-            //TODO: determine how to save image so it displays when click on thumbnail
             //TODO: determine how to save image so that it is editable (from the gallery)
-                        //and open-able from "images" in settings the same way it's accessible from "shared" in settings
+                //and open-able from Settings --> Images the same way it's accessible from
+                // Settings --> Storage --> Other --> Pictures --> CharcoalDrawings
+                // (from there, I can open with a gallery or a few other drawing apps)
+                //also, which images are getting saved to which location?
             //TODO: add this to app requirements?
-            //images are currently getting saved to Settings --> Storage --> Other --> Pictures --> CharcoalDrawings
-                //and from there, if I "open with gallery", then the thumbnail is visible in the gallery
             if (Build.VERSION.SDK_INT < 29) {
                 File outputDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/CharcoalDrawings");
                 outputDirectory.mkdirs(); //creates if doesn't exist
@@ -118,45 +118,5 @@ public class SaveDrawing {
 
         }
     }
-
-
-/*
-        long id = ContentUris.parseId(url);
-        Bitmap miniThumb = MediaStore.Images.Thumbnails.getThumbnail(contentResolver, id, MediaStore.Images.Thumbnails.MINI_KIND, null);
-        storeThumbnail(contentResolver, miniThumb, id, 50F, 50F, MediaStore.Images.Thumbnails.MICRO_KIND);
- */
-
-/*    private Bitmap storeThumbnail(
-            ContentResolver contentResolver, Bitmap bitmap, long id,
-            float width, float height, int kind) {
-        Matrix matrix = new Matrix();
-
-        float scaleX = width / bitmap.getWidth();
-        float scaleY = height / bitmap.getHeight();
-
-        matrix.setScale(scaleX, scaleY);
-
-        Bitmap thumb = Bitmap.createBitmap(bitmap, 0, 0,
-                bitmap.getWidth(),
-                bitmap.getHeight(), matrix, true);
-
-        ContentValues values = new ContentValues(4);
-        values.put(MediaStore.Images.Thumbnails.KIND, kind);
-        values.put(MediaStore.Images.Thumbnails.IMAGE_ID, id);
-        values.put(MediaStore.Images.Thumbnails.WIDTH, thumb.getWidth());
-        values.put(MediaStore.Images.Thumbnails.HEIGHT, thumb.getHeight());
-
-        Uri url = contentResolver.insert(MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, values);
-
-        try {
-            OutputStream thumbOut = contentResolver.openOutputStream(url);
-            thumb.compress(Bitmap.CompressFormat.JPEG, 100, thumbOut);
-            thumbOut.close();
-            return thumb;
-        } catch (FileNotFoundException ex) {
-            return null;
-        }
-    }*/
-
 }
 
