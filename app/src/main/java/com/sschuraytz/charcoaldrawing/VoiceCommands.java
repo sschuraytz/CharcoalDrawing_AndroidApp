@@ -80,6 +80,11 @@ public class VoiceCommands {
         public void darker() {
 
         }
+
+        @Override
+        public void openGallery() {
+
+        }
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -185,6 +190,10 @@ public class VoiceCommands {
                         case "hundred":
                             Toast.makeText(activity, "100", Toast.LENGTH_SHORT).show();
                             voiceListener.updateDrawingThickness(100);
+                            break;
+                        case "gallery":
+                            Toast.makeText(activity, "opening gallery", Toast.LENGTH_LONG).show();
+                            voiceListener.openGallery();
                             break;
                         default:
                             // slider/radius

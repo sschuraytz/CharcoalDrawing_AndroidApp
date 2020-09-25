@@ -118,4 +118,8 @@ public class MainActivity extends AppCompatActivity
     public void darker() {
         drawingView.darker();
     }
+
+    public void openGallery() {
+        setContentView(R.layout.activity_gallery);
+    }
 }

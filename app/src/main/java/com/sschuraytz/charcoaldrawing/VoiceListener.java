@@ -13,5 +13,6 @@ public interface VoiceListener {
     void help();
     void lighter();
     void darker();
+    void openGallery();
 
 }
