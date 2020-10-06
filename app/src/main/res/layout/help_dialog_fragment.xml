@@ -80,6 +80,31 @@
             android:layout_gravity="center_vertical"/>
 
         <TextView
+            android:id="@+id/smudgeCommand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/round"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp"
+            android:text="@string/smudge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/charcoalCommand" />
+
+        <TextView
+            android:id="@+id/smudgeDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/smudge_description"
+            app:layout_constraintLeft_toRightOf="@+id/smudgeCommand"
+            app:layout_constraintTop_toBottomOf="@+id/charcoalCommand"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
             android:id="@+id/eraserCommand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -91,7 +116,7 @@
             android:paddingVertical="5dp"
             android:text="@string/eraser"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/charcoalCommand" />
+            app:layout_constraintTop_toBottomOf="@+id/smudgeCommand" />
 
         <TextView
             android:id="@+id/eraserDescription"
@@ -101,7 +126,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/eraser_description"
             app:layout_constraintLeft_toRightOf="@+id/eraserCommand"
-            app:layout_constraintTop_toBottomOf="@+id/charcoalCommand"
+            app:layout_constraintTop_toBottomOf="@+id/smudgeCommand"
             android:layout_gravity="center_vertical"/>
 
         <TextView

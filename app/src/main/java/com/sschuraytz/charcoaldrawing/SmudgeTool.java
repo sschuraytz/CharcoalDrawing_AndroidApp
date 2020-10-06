@@ -40,7 +40,9 @@ public class SmudgeTool extends Tool {
         bitmap.setHeight(500);
         return Bitmap.createBitmap(bitmap, (int)0, (int)0, bitmap.getWidth() - 1, bitmap.getHeight() - 1);
         //int halfRadius = radius/2;
+       // int halfRadius = radius/2;
         //Rect src = new Rect((int)(x1), (int)pointY - halfRadius, (int)pointX + halfRadius, (int)pointY + halfRadius);
+       // Rect src = new Rect((int)(x1), (int)y1 - halfRadius, (int)x1 + halfRadius, (int)y1 + halfRadius);
     }
 
 /*    public Bitmap getSurroundingPixels(Canvas bitmapCanvas, float pointX, float pointY, Paint paint) {

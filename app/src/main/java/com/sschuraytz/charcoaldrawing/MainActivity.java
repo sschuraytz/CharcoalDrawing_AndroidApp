@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageButton;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,7 +27,6 @@ public class MainActivity extends AppCompatActivity
         drawingView = findViewById(R.id.canvas);
         setUpVoiceCommands();
         setUpFAB();
-        setUpSmudge();
     }
 
     public void setUpVoiceCommands() {
@@ -82,6 +80,10 @@ public class MainActivity extends AppCompatActivity
         drawingView.setDrawingMode();
     }
 
+    public void smudgeCommand() {
+        drawingView.setSmudgeMode();
+    }
+
     public void eraserCommand() {
         drawingView.setEraseMode();
     }
@@ -115,18 +117,6 @@ public class MainActivity extends AppCompatActivity
     public void help() {
         HelpDialogFragment helpDialog = new HelpDialogFragment();
         helpDialog.show(getSupportFragmentManager(), "help");
-    }
-
-    public void setUpSmudge()
-    {
-        ImageButton smudgeButton = (ImageButton) findViewById(R.id.smudgeButton);
-        smudgeButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                drawingView.setSmudgeMode();
-
-                //drawingView.setLayerType(layerType, )
-            }
-        });
     }
 
     public void lighter() {

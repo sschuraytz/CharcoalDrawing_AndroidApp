@@ -26,13 +26,4 @@
         android:src="@drawable/ic_mic_foreground"
         android:layout_margin="16dp" />
 
-    <ImageButton
-        android:id="@+id/smudgeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/fab"
-        app:layout_constraintRight_toRightOf="@+id/canvas"
-        android:src="@drawable/ic_add_foreground"
-        />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

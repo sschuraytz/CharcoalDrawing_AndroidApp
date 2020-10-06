@@ -37,6 +37,11 @@ public class VoiceCommands {
         }
 
         @Override
+        public void smudgeCommand() {
+
+        }
+
+        @Override
         public void eraserCommand() {
 
         }
