@@ -9,6 +9,7 @@ public interface VoiceListener {
     boolean redoCommand();
     void createNewCanvasCommand();
     void updateDrawingThickness(int radius);
+    void saveDrawing();
     void help();
     void lighter();
     void darker();

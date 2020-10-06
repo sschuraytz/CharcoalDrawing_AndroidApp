@@ -1,10 +1,12 @@
 package com.sschuraytz.charcoaldrawing;
 
 
+import android.graphics.Color;
+
 public class EraseTool extends Tool{
 
     public EraseTool() {
-        super(0xFAFAFA);
+        super(Color.WHITE);
     }
 
     @Override
