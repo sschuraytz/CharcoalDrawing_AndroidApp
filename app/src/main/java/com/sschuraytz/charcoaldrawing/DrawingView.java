@@ -1,19 +1,17 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
+
+@RequiresApi(api = Build.VERSION_CODES.M)
 public class DrawingView extends View {
 
     private Paint paint;
@@ -26,6 +24,7 @@ public class DrawingView extends View {
 
     private float previousX;
     private float previousY;
+    private final int OPACITY_INCREMENTER = 25;
 
     //AttributeSet = XML attributes, need since inflating from XML
     public DrawingView(Context context, AttributeSet attributes) {
@@ -57,7 +56,10 @@ public class DrawingView extends View {
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
-                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
+                // avoid continuously reprinting circle (thus making it darker) if user keeps finger on same spot
+                if (pointX != previousX || pointY != previousY) {
+                    currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
+                }
                 previousX = pointX;
                 previousY = pointY;
                 break;
@@ -97,16 +99,59 @@ public class DrawingView extends View {
         currentTool = charcoalTool;
     }
 
+    protected boolean undo() {
+        boolean isAvailable = undoRedo.undo();
+        invalidate();
+        return isAvailable;
+    }
+
+    protected boolean redo() {
+        boolean isAvailable = undoRedo.redo();
+        return isAvailable;
+    }
+
     public void setSmudgeMode() {
         currentTool = smudgeTool;
     }
 
-    protected void undo() {
-        undoRedo.undo();
-        invalidate();
+    public void createNewCanvas() {
+        undoRedo.createNewCanvas();
+        initializeDrawing();
     }
-    protected void redo() {
-        undoRedo.redo();
-        invalidate();
+
+    public void lighter() {
+        //alpha must be at least 0
+        //since alpha of each tool is set to the difference of opacity & radius, ensure opacity is at least the size of max-radius (100)
+        if (currentTool.getOpacity() >= 125) {
+            showToast("lighter");
+            currentTool.incrementOpacity(-OPACITY_INCREMENTER);
+        }
+        else {
+            showToast("cannot be lighter");
+        }
+    }
+
+    public void darker() {
+        //ensure opacity will never exceed max-alpha (255)
+        if (currentTool.getOpacity() <= 255) {
+            showToast("darker");
+            if (currentTool.getOpacity() == 250) {
+                currentTool.incrementOpacity(5);
+            }
+            else {
+                currentTool.incrementOpacity(OPACITY_INCREMENTER);
+            }
+        }
+        else {
+            showToast("cannot be darker");
+        }
+    }
+
+    public void showToast(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void save() {
+
     }
 }

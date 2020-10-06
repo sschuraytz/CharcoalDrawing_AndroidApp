@@ -1,3 +1,23 @@
 <resources>
-    <string name="app_name">CharcoalDrawing</string>
+    <string name="app_name">Charcoal Drawing</string>
+    <string name="newCanvas">new</string>
+    <string name="new_canvas_description">creates new blank canvas</string>
+    <string name="charcoal">charcoal</string>
+    <string name="charcoal_description">enable charcoal drawing</string>
+    <string name="eraser">eraser</string>
+    <string name="eraser_description">switch to eraser mode</string>
+    <string name="undo">undo</string>
+    <string name="undo_description">undo previous drawing stroke</string>
+    <string name="redo">redo</string>
+    <string name="redo_description">redo previous drawing stroke</string>
+    <string name="help">help</string>
+    <string name="help_description">display voice command menu</string>
+    <string name="thickness">1-100</string>
+    <string name="thickness_description">set drawing tool width</string>
+    <string name="drawing_name_hint">Name of drawing</string>
+    <string name="lighter">lighter</string>
+    <string name="lighter_description">lighten the drawing tool</string>
+    <string name="darker">darker</string>
+    <string name="darker_description">darken the drawing tool</string>
+    <string name="help_explanation">This app is controlled by the following voice commands:</string>
 </resources>

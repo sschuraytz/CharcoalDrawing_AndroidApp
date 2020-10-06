@@ -20,6 +20,7 @@ public class Tool{
     private Paint paint;
     private static final Random rand = new Random();
     private int radius;
+    private int opacity = 205; //possible alpha range: 0-255
 
 
     public Tool(int color) {
@@ -73,8 +74,8 @@ public class Tool{
     {
         float horizontalShift;
         float verticalShift;
-        paint.setAlpha(255 - maxMagnitude*2);
-
+        //make the edge of each circle lighter than the center so resulting line is lighter at the edges
+        paint.setAlpha(opacity - radius);
         //small increment value for large radius so shape is more circular --> end of line more smooth
         float incrementer = radius > 80 ?(0.125f*radius) : radius + 1;
         for (int angle = 0; angle < 360; angle+=incrementer)
@@ -89,24 +90,24 @@ public class Tool{
     {
         int angle;
         int magnitude;
-        int maxMagnitude = radius;
         float pointX = radius;
         float pointY = radius;
         float horizontalShift;
         float verticalShift;
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
-        paint.setAlpha(255);
         for (int i = 0; i < radius*2*density; i++)
         {
             angle = rand.nextInt(360);
             //lower bound to avoid having too many dots in circle center which creates dark center line
-            magnitude = rand.nextInt(maxMagnitude - (maxMagnitude/6)) + (maxMagnitude/6);
+            magnitude = rand.nextInt(radius - (radius/6)) + (radius/6);
+            //make dots closer to the edge of each circle lighter so resulting line is lighter at the edges
+            paint.setAlpha(opacity - magnitude);
             horizontalShift = (float) (magnitude * Math.cos(angle));
             verticalShift = (float) (magnitude * Math.sin(angle));
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
 
-        printTexturedCircleBorder(pointX, pointY, maxMagnitude);
+        printTexturedCircleBorder(pointX, pointY, radius);
     }
 
     protected void printTexturedCircle()
@@ -125,4 +126,13 @@ public class Tool{
         return radius;
     }
 
+    public void incrementOpacity(int value)
+    {
+        opacity += value;
+        printTexturedCircle();
+    }
+
+    public int getOpacity() {
+        return opacity;
+    }
 }
