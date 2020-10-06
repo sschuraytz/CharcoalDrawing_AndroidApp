@@ -33,6 +33,7 @@ public class SaveDialogFragment extends DialogFragment {
         saveDrawing = new SaveDrawing(getActivity());
     }
 
+    // check permissions here, b/c saveDrawing does not exist until after onCreate()
     @Override
     public void onStart() {
         super.onStart();

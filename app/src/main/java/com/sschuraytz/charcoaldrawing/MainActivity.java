@@ -99,6 +99,9 @@ public class MainActivity extends AppCompatActivity
 
     public void saveDrawing() {
         SaveDialogFragment saveDialog = new SaveDialogFragment();
+        // avoid passing args through constructor for SaveDialogFragment because when Android
+        // recreates dialog fragments, the dialog is recreated with the default constructor
+        // thus, args are passed here via a bundle
         Bundle bundle = new Bundle();
         bundle.putParcelable("bitmap", drawingView.undoRedo.getCurrentBitmap());
         saveDialog.setArguments(bundle);

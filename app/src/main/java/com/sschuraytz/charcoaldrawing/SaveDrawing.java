@@ -46,7 +46,7 @@ public class SaveDrawing {
     }
 
     public void saveBitmap(Activity activity, Bitmap bitmap) {
-        // some apps save drawings as "Untitled"
+        // some apps save drawings as "Untitled". here it's saved as sketch{randomNum}.png
         Random rand = new Random();
         int n = 10000;
         n = rand.nextInt(n);
@@ -54,8 +54,8 @@ public class SaveDrawing {
         saveBitmap(activity, bitmap, fileName);
     }
 
-    //https://stackoverflow.com/questions/36624756/how-to-save-bitmap-to-android-gallery
-    //https://stackoverflow.com/questions/56904485/how-to-save-an-image-in-android-q-using-mediastore
+    //https://stackoverflow.com/questions/36624756/how-to-save-bitmap-to-android-gallery - answer from Er Ekta Sahu
+    //https://stackoverflow.com/questions/56904485/how-to-save-an-image-in-android-q-using-mediastore - answer from PerracoLabs
     public void saveBitmap(@NonNull Activity activity, @NonNull Bitmap bitmap, @NonNull final String displayName) {
         OutputStream outStream;
 
