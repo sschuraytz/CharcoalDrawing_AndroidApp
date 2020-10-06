@@ -3,27 +3,18 @@ package com.sschuraytz.charcoaldrawing;
 import android.Manifest;
 import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
-import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -32,9 +23,6 @@ import java.util.Random;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.IconCompat;
-
-import com.google.android.material.snackbar.Snackbar;
 
 
 public class SaveDrawing {
