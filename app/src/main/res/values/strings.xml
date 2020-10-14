@@ -10,6 +10,8 @@
     <string name="undo_description">undo previous drawing stroke</string>
     <string name="redo">redo</string>
     <string name="redo_description">redo previous drawing stroke</string>
+    <string name="save">save</string>
+    <string name="save_description">save drawing to your device</string>
     <string name="help">help</string>
     <string name="help_description">display voice command menu</string>
     <string name="thickness">1-100</string>

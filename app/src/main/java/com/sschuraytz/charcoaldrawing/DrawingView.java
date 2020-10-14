@@ -148,7 +148,4 @@ public class DrawingView extends View {
         Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-    public void save() {
-
-    }
 }
