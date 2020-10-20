@@ -9,7 +9,6 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.M)
 public class MainActivity extends AppCompatActivity

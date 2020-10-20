@@ -33,6 +33,10 @@ public class Tool{
         printTexturedCircle();
     }
 
+    protected void onDown(Canvas bitmapCanvas, Bitmap inputBitmap, float x1, float y1) {
+        drawContinuouslyBetweenPoints(bitmapCanvas, x1, y1, x1, y1);
+    }
+
     /**
      * Adapted from https://stackoverflow.com/a/34142336/2700520
      * @param x1

@@ -150,6 +150,11 @@ public class VoiceCommands {
                             Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
                             voiceListener.charcoalCommand();
                             break;
+                        case "smudge":
+                        case "blend":
+                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
+                            voiceListener.smudgeCommand();
+                            break;
                         case "eraser":
                         case "erase":
                             Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
@@ -207,7 +212,6 @@ public class VoiceCommands {
                                 Toast.makeText(activity, "no such command", Toast.LENGTH_SHORT).show();
                             }
                     }
-                    //smudge
                 }
             }
 

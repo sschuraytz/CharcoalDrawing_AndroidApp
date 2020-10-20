@@ -1,6 +1,7 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
@@ -51,13 +52,15 @@ public class DrawingView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 undoRedo.addBitmap();
-                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
+               // currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
+                currentTool.onDown(undoRedo.getBitmapCanvas(), undoRedo.getCurrentBitmap(), pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
                 // avoid continuously reprinting circle (thus making it darker) if user keeps finger on same spot
                 if (pointX != previousX || pointY != previousY) {
+                    //currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
                     currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
                 }
                 previousX = pointX;
