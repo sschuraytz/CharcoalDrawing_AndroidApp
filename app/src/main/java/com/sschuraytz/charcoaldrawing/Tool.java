@@ -59,19 +59,20 @@ public class Tool{
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(bitmap,
-                    x1 + xIncrement - getRadius(),
-                    y1 + yIncrement - getRadius(),
-                    paint);
+            drawSinglePoint(bitmapCanvas, x1 + xIncrement, y1 + yIncrement);
         }
 
         if (times <= 0)
         {
-            bitmapCanvas.drawBitmap(bitmap,
-                    x1 - getRadius(),
-                    y1 - getRadius(),
-                    paint);
+            drawSinglePoint(bitmapCanvas, x1, y1);
         }
+    }
+
+    protected void drawSinglePoint(Canvas bitmapCanvas, float x, float y) {
+        bitmapCanvas.drawBitmap(bitmap,
+                x - getRadius(),
+                y - getRadius(),
+                paint);
     }
 
     private void printTexturedCircleBorder(float pointX, float pointY, int maxMagnitude)
