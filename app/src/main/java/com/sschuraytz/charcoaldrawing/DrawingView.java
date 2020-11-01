@@ -120,6 +120,7 @@ public class DrawingView extends View {
     public void createNewCanvas() {
         undoRedo.createNewCanvas();
         initializeDrawing();
+        invalidate();
     }
 
     public void lighter() {

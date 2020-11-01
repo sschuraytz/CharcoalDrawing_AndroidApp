@@ -11,8 +11,6 @@ import android.graphics.Rect;
  * something needs to hold the pixels
  * some of the pixels from the initial place of contact are dragged across the screen
  * they become lighter and more blurred
- * need to be careful that playing with the bitmap doesn't mess up "new/clear" command -
- * right now, it's causing that command to be executed on next ACTION_DOWN instead of immediately
  */
 
 public class SmudgeTool extends Tool {
