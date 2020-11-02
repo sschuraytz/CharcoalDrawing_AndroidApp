@@ -1,5 +1,9 @@
 package com.sschuraytz.charcoaldrawing;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,6 +21,7 @@ public class MainActivity extends AppCompatActivity
     private DrawingView drawingView;
     private FloatingActionButton fab;
     private VoiceCommands voiceCommands;
+    private BroadcastReceiver reciever;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,9 +33,36 @@ public class MainActivity extends AppCompatActivity
         setUpFAB();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        setUpBroadcastReceiver();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        unregisterReceiver(reciever);
+    }
+
+    /**
+     * This should allow you to execute commands to the emulator without using the voice commands.
+     * adb shell am broadcast -a android.intent.action.VOICE_COMMAND --es "command" "undo"
+     * Replace "undo" with the command you want to execute.
+     */
+    private void setUpBroadcastReceiver() {
+        reciever = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                voiceCommands.executeCommand(intent.getStringExtra("command"));
+            }
+        };
+        IntentFilter filter = new IntentFilter(Intent.ACTION_VOICE_COMMAND);
+        registerReceiver(reciever, filter);
+    }
+
     public void setUpVoiceCommands() {
-        voiceCommands = new VoiceCommands(this);
-        voiceCommands.setListener(this);
+        voiceCommands = new VoiceCommands(this, this);
     }
 
     @Override
