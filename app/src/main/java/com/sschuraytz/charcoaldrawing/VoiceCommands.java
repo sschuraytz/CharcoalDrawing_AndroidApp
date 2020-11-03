@@ -83,11 +83,12 @@ public class VoiceCommands {
     };
 
     @RequiresApi(api = Build.VERSION_CODES.M)
-    public VoiceCommands(Activity baseActivity) {
+    public VoiceCommands(Activity baseActivity, VoiceListener voiceListener) {
         activity = baseActivity;
         checkVoicePermissions();
         setUpRecognitionListener();
         setUpSpeechRecognizer();
+        setListener(voiceListener);
     }
 
     public void setUpSpeechRecognizer() {
@@ -133,76 +134,7 @@ public class VoiceCommands {
                 if (data != null) {
                     // only save first word from user command
                     String result = Arrays.asList(data.get(0).split(" ")).get(0);
-                    switch (result) {
-                        case "new":
-                        case "clear":
-                            //if new, need to prompt user to save current drawing first
-                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
-                            voiceListener.createNewCanvasCommand();
-                            break;
-                        case "charcoal":
-                        case "draw":
-                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
-                            voiceListener.charcoalCommand();
-                            break;
-                        case "eraser":
-                        case "erase":
-                            Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
-                            voiceListener.eraserCommand();
-                            break;
-                        case "undo":
-                            if (voiceListener.undoCommand()) {
-                                Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(activity, "nothing to undo", Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        case "redo":
-                            if (voiceListener.redoCommand()) {
-                                Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Toast.makeText(activity, "nothing to redo", Toast.LENGTH_SHORT).show();
-                            }
-                            break;
-                        case "save":
-                        case "safe":   //speech recognizer sometimes interprets "save" as "safe"
-                            voiceListener.saveDrawing();
-                            break;
-                        case "help":
-                            voiceListener.help();
-                            break;
-                        case "lighter":
-                        case "later":
-                        case "liker":
-                        case "spider":
-                            voiceListener.lighter();
-                            break;
-                        case "darker":
-                            voiceListener.darker();
-                            break;
-                        case "hundred":
-                            Toast.makeText(activity, "100", Toast.LENGTH_SHORT).show();
-                            voiceListener.updateDrawingThickness(100);
-                            break;
-                        default:
-                            // slider/radius
-                            if (StringUtils.isNumeric(result)) {
-                                int numericResult = Integer.parseInt(result);
-                                if (numericResult <= 0 || numericResult > 100) {
-                                    Toast.makeText(activity, "Width must be between 1 and 100", Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
-                                    voiceListener.updateDrawingThickness(numericResult);
-                                }
-                            }
-                            else {
-                                Toast.makeText(activity, "no such command", Toast.LENGTH_SHORT).show();
-                            }
-                    }
-                    //smudge
+                    executeCommand(result);
                 }
             }
 
@@ -217,6 +149,79 @@ public class VoiceCommands {
             }
         };
     }
+
+    public void executeCommand(String commandString) {
+        switch (commandString) {
+            case "new":
+            case "clear":
+                //if new, need to prompt user to save current drawing first
+                Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                voiceListener.createNewCanvasCommand();
+                break;
+            case "charcoal":
+            case "draw":
+                Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                voiceListener.charcoalCommand();
+                break;
+            case "eraser":
+            case "erase":
+                Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                voiceListener.eraserCommand();
+                break;
+            case "undo":
+                if (voiceListener.undoCommand()) {
+                    Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(activity, "nothing to undo", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case "redo":
+                if (voiceListener.redoCommand()) {
+                    Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(activity, "nothing to redo", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case "save":
+            case "safe":   //speech recognizer sometimes interprets "save" as "safe"
+                voiceListener.saveDrawing();
+                break;
+            case "help":
+                voiceListener.help();
+                break;
+            case "lighter":
+            case "later":
+            case "liker":
+            case "spider":
+                voiceListener.lighter();
+                break;
+            case "darker":
+                voiceListener.darker();
+                break;
+            case "hundred":
+                Toast.makeText(activity, "100", Toast.LENGTH_SHORT).show();
+                voiceListener.updateDrawingThickness(100);
+                break;
+            default:
+                // slider/radius
+                if (StringUtils.isNumeric(commandString)) {
+                    int numericResult = Integer.parseInt(commandString);
+                    if (numericResult <= 0 || numericResult > 100) {
+                        Toast.makeText(activity, "Width must be between 1 and 100", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                        voiceListener.updateDrawingThickness(numericResult);
+                    }
+                }
+                else {
+                    Toast.makeText(activity, "no such command", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void listenToUserCommand()
     {
