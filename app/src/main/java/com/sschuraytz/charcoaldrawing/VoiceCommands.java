@@ -170,7 +170,7 @@ public class VoiceCommands {
                 break;
             case "smudge":
             case "blend":
-                Toast.makeText(activity, result, Toast.LENGTH_SHORT).show();
+                Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
                 voiceListener.smudgeCommand();
                 break;
             case "eraser":
