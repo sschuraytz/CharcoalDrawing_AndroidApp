@@ -5,6 +5,7 @@ public interface VoiceListener {
     void updateFABUI();
     void charcoalCommand();
     void smudgeCommand();
+    void smudgeShaderCommand();
     void eraserCommand();
     boolean undoCommand();
     boolean redoCommand();

@@ -21,6 +21,7 @@ public class DrawingView extends View {
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
     private SmudgeTool smudgeTool;
+    private SmudgeToolBitmapShader smudgeShaderTool;
     private Tool currentTool;
 
     private float previousX;
@@ -33,6 +34,7 @@ public class DrawingView extends View {
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
         smudgeTool = new SmudgeTool();
+        smudgeShaderTool = new SmudgeToolBitmapShader();
         initializeDrawing();
     }
 
@@ -115,6 +117,10 @@ public class DrawingView extends View {
 
     public void setSmudgeMode() {
         currentTool = smudgeTool;
+    }
+
+    public void setSmudgeShaderMode() {
+        currentTool = smudgeShaderTool;
     }
 
     public void createNewCanvas() {

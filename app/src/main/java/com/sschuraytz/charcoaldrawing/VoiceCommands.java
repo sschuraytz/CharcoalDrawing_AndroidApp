@@ -42,6 +42,11 @@ public class VoiceCommands {
         }
 
         @Override
+        public void smudgeShaderCommand() {
+
+        }
+
+        @Override
         public void eraserCommand() {
 
         }
@@ -172,6 +177,10 @@ public class VoiceCommands {
             case "blend":
                 Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
                 voiceListener.smudgeCommand();
+                break;
+            case "smudgeshader":
+                Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
+                voiceListener.smudgeShaderCommand();
                 break;
             case "eraser":
             case "erase":

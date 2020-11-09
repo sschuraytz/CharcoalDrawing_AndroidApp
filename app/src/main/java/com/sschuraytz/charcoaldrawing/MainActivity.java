@@ -115,6 +115,10 @@ public class MainActivity extends AppCompatActivity
         drawingView.setSmudgeMode();
     }
 
+    public void smudgeShaderCommand() {
+        drawingView.setSmudgeShaderMode();
+    }
+
     public void eraserCommand() {
         drawingView.setEraseMode();
     }
