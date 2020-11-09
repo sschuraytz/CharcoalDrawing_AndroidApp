@@ -67,7 +67,7 @@ public class Tool{
             drawSinglePoint(bitmapCanvas, x1, y1);
         }
     }
-
+    //this draws an entire textured circle of dots
     protected void drawSinglePoint(Canvas bitmapCanvas, float x, float y) {
         bitmapCanvas.drawBitmap(bitmap,
                 x - getRadius(),
