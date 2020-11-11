@@ -178,7 +178,7 @@ public class VoiceCommands {
                 Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
                 voiceListener.smudgeCommand();
                 break;
-            case "smudgeshader":
+            case "blur":
                 Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
                 voiceListener.smudgeShaderCommand();
                 break;
