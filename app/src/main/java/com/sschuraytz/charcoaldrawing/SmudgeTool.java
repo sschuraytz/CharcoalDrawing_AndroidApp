@@ -29,6 +29,7 @@ public class SmudgeTool extends Tool {
     protected int localHeight;
     protected int startX;
     protected int startY;
+    protected Bitmap whiteBitmap;
 
     public SmudgeTool() {
         super(Color.argb(15, 49, 51, 53));
@@ -54,6 +55,7 @@ public class SmudgeTool extends Tool {
         localWidth = startX + radius > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius;
         localHeight = startY + radius > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius;
         croppedBitmap = Bitmap.createBitmap(inputBitmap, startX, startY, localWidth, localHeight);
+        createWhiteBitmap();
     }
 
     @Override
@@ -61,7 +63,9 @@ public class SmudgeTool extends Tool {
         if (smudgePaint.getAlpha() > 10) {
             smudgePaint.setAlpha(smudgePaint.getAlpha() - 10);
         }
-        bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
+        if (!isBitmapWhite()) {
+            bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
+        }
     }
 
     @Override
@@ -85,8 +89,24 @@ public class SmudgeTool extends Tool {
         return finalBitmap;
     }
 
+    private void createWhiteBitmap() {
+        if (whiteBitmap != null) {
+            whiteBitmap.recycle();
+        }
+        whiteBitmap = Bitmap.createBitmap(croppedBitmap);
+        whiteBitmap.eraseColor(Color.WHITE);
+    }
+
+    private boolean isBitmapWhite() {
+        boolean isWhite = false;
+        if (croppedBitmap.sameAs(whiteBitmap)) {
+            isWhite = true;
+        }
+        return isWhite;
+    }
+
     //TODO: decide if smudge tool should have a variable width
-    //TODO: don't let white canvas smudge onto charcoal material
+    //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
 
     /* saved experimentation from drawContinuouslyBetweenPoints()
 
