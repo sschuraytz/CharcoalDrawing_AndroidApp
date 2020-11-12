@@ -55,7 +55,6 @@ public class SmudgeTool extends Tool {
         localWidth = startX + radius > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius;
         localHeight = startY + radius > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius;
         croppedBitmap = Bitmap.createBitmap(inputBitmap, startX, startY, localWidth, localHeight);
-        createWhiteBitmap();
     }
 
     @Override
@@ -63,9 +62,7 @@ public class SmudgeTool extends Tool {
         if (smudgePaint.getAlpha() > 10) {
             smudgePaint.setAlpha(smudgePaint.getAlpha() - 10);
         }
-        if (!isBitmapWhite()) {
-            bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
-        }
+        bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
     }
 
     @Override
@@ -87,22 +84,6 @@ public class SmudgeTool extends Tool {
         localPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(inBitmap, finalRect, finalRect, localPaint);
         return finalBitmap;
-    }
-
-    private void createWhiteBitmap() {
-        if (whiteBitmap != null) {
-            whiteBitmap.recycle();
-        }
-        whiteBitmap = Bitmap.createBitmap(croppedBitmap);
-        whiteBitmap.eraseColor(Color.WHITE);
-    }
-
-    private boolean isBitmapWhite() {
-        boolean isWhite = false;
-        if (croppedBitmap.sameAs(whiteBitmap)) {
-            isWhite = true;
-        }
-        return isWhite;
     }
 
     //TODO: decide if smudge tool should have a variable width
