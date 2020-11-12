@@ -11,6 +11,7 @@ public class UndoRedo {
     protected Stack<Bitmap> currentStack = new Stack<>();
     private Stack<Bitmap> undoneStack = new Stack<>();
     private Canvas bitmapCanvas;
+    private final int MAX_NUM_OF_BITMAPS = 77;
 
     public UndoRedo() {
         onSizeChanged(1, 1);
@@ -30,6 +31,10 @@ public class UndoRedo {
     public void addBitmap() {
         Bitmap currentTop = currentStack.peek();
         Bitmap newBitmap = Bitmap.createBitmap(currentTop, 0, 0, currentTop.getWidth(), currentTop.getHeight());
+        // to avoid java.lang.OutOfMemoryError
+        if (currentStack.size() == MAX_NUM_OF_BITMAPS) {
+            currentStack.remove(1).recycle();
+        }
         currentStack.push(newBitmap);
         bitmapCanvas = new Canvas(newBitmap);
         //after undo, if draw new line, do not let user redo
