@@ -11,7 +11,7 @@ public class UndoRedo {
     protected Stack<Bitmap> currentStack = new Stack<>();
     private Stack<Bitmap> undoneStack = new Stack<>();
     private Canvas bitmapCanvas;
-    private final int MAX_NUM_OF_BITMAPS = 77;
+    private final int MAX_NUM_OF_BITMAPS = 20;
 
     public UndoRedo() {
         onSizeChanged(1, 1);
