@@ -61,7 +61,7 @@ public class SmudgeTool extends Tool {
     @Override
     protected void drawSinglePoint(Canvas bitmapCanvas, float x, float y) {
         if (smudgePaint.getAlpha() > 10) {
-            smudgePaint.setAlpha(smudgePaint.getAlpha() - 10);
+            smudgePaint.setAlpha(smudgePaint.getAlpha() - 5);
         }
         if (!isBitmapWhite()) {
             bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
@@ -105,7 +105,6 @@ public class SmudgeTool extends Tool {
         return isWhite;
     }
 
-    //TODO: decide if smudge tool should have a variable width
     //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
 
     /* saved experimentation from drawContinuouslyBetweenPoints()
