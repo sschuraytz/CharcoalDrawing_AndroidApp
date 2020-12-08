@@ -32,6 +32,7 @@ public class UndoRedo {
         bitmapCanvas = new Canvas(newBitmap);
         //after undo, if draw new line, do not let user redo
         undoneStack.clear();
+        bitmapCanvas.drawColor(Color.TRANSPARENT);
     }
 
     public Bitmap getCurrentBitmap() {

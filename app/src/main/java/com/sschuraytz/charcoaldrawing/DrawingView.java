@@ -3,7 +3,12 @@ package com.sschuraytz.charcoaldrawing;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.PorterDuffXfermode;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -97,7 +102,16 @@ public class DrawingView extends View {
     }
 
     public void setEraseMode() {
+//        ColorFilter filter = new PorterDuffColorFilter(Color.TRANSPARENT, PorterDuff.Mode.SRC_IN);
+//        eraseTool.getPaint().setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
         currentTool = eraseTool;
+//        currentTool.getPaint().setColorFilter(filter);
+        //TODO: utilize these paint settings which set the right color, but need to get it to only be
+        //where finger points instead of drawing big blocks of transparent color - also should move to EraseTool
+       /* Paint temp = new Paint(Paint.ANTI_ALIAS_FLAG);
+        temp.setStrokeWidth(3);
+        temp.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.CLEAR));
+        currentTool.setPaint(temp);*/
     }
 
     public void setDrawingMode() {

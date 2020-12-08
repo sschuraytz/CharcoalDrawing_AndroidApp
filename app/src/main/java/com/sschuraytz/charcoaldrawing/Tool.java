@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.widget.Toast;
@@ -17,11 +18,26 @@ public class Tool{
 
     private Canvas canvas;
     private Bitmap bitmap;
+
+    public void setPaint(Paint paint) {
+        this.paint = paint;
+    }
+    public Paint getPaint() {
+        return this.paint;
+    }
+
     private Paint paint;
     private static final Random rand = new Random();
     private int radius;
     private int opacity = 205; //possible alpha range: 0-255
 
+    public Tool (Paint paint1) {
+        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+        paint = paint1;
+        radius = 35;
+        printTexturedCircle();
+    }
 
     public Tool(int color) {
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
@@ -32,6 +48,24 @@ public class Tool{
         paint.setColor(color);
         printTexturedCircle();
     }
+
+/*    public Tool(int color) {
+        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
+        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paint.setStrokeWidth(3);
+        radius = 35;
+        //don't remember why I added this, but this seems to cause the layering to be problematic (which I think makes sense.)
+*//*        if (color == 0x00FFFFFF) {
+            paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
+        }
+        else {
+          //  paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.ADD));
+           paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_OVER));
+        }*//*
+        paint.setColor(color);
+        printTexturedCircle();
+    }*/
 
     protected void onDown(Canvas bitmapCanvas, Bitmap inputBitmap, float x1, float y1) {
         drawContinuouslyBetweenPoints(bitmapCanvas, x1, y1, x1, y1);
@@ -99,7 +133,7 @@ public class Tool{
         float pointY = radius;
         float horizontalShift;
         float verticalShift;
-        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+       // canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (int i = 0; i < radius*2*density; i++)
         {
             angle = rand.nextInt(360);
