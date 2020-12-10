@@ -133,7 +133,8 @@ public class Tool{
         float pointY = radius;
         float horizontalShift;
         float verticalShift;
-       // canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        //the following line clears the canvas that the tool "stamp" is drawn on
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (int i = 0; i < radius*2*density; i++)
         {
             angle = rand.nextInt(360);
