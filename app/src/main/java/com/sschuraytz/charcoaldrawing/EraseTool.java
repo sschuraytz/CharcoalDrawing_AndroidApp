@@ -32,8 +32,7 @@ public class EraseTool extends Tool{
         //recreate the buffers so that when adjust size of erase tool and need to redraw, it won't end up with multiple circles
         createNewBuffers();
         bufferCanvas.drawBitmap(this.getBitmap(), 0, 0, null);
-        bitmapCanvas.drawBitmap(bufferBitmap, x, y, paintDstIn);
-        //TODO: fix this so it draws circle center where finger is pressed, as opposed to upper-left where finger is pressed
+        bitmapCanvas.drawBitmap(bufferBitmap, x - getRadius(), y - getRadius(), paintDstIn);
     }
 
     @Override
