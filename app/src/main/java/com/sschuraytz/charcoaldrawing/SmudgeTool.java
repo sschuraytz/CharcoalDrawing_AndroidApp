@@ -1,7 +1,6 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,8 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
-import android.util.Log;
 
 /**
  * when click down, "grab" pixels in radius (circular) around finger touch
@@ -29,7 +26,6 @@ public class SmudgeTool extends Tool {
     protected int localHeight;
     protected int startX;
     protected int startY;
-    protected Bitmap whiteBitmap;
 
     public SmudgeTool() {
         super(Color.argb(15, 49, 51, 53));
@@ -60,7 +56,7 @@ public class SmudgeTool extends Tool {
     @Override
     protected void drawSinglePoint(Canvas bitmapCanvas, float x, float y) {
         if (smudgePaint.getAlpha() > 10) {
-            smudgePaint.setAlpha(smudgePaint.getAlpha() - 10);
+            smudgePaint.setAlpha(smudgePaint.getAlpha() - 5);
         }
         bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
     }
@@ -86,8 +82,7 @@ public class SmudgeTool extends Tool {
         return finalBitmap;
     }
 
-    //TODO: decide if smudge tool should have a variable width
-    //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
+        //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
 
     /* saved experimentation from drawContinuouslyBetweenPoints()
 
