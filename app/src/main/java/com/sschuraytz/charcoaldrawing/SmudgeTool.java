@@ -1,7 +1,6 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,8 +8,6 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.graphics.Shader;
-import android.util.Log;
 
 /**
  * when click down, "grab" pixels in radius (circular) around finger touch
@@ -29,7 +26,6 @@ public class SmudgeTool extends Tool {
     protected int localHeight;
     protected int startX;
     protected int startY;
-    protected Bitmap whiteBitmap;
 
     public SmudgeTool() {
         super(Color.argb(15, 49, 51, 53));
@@ -55,7 +51,6 @@ public class SmudgeTool extends Tool {
         localWidth = startX + radius > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius;
         localHeight = startY + radius > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius;
         croppedBitmap = Bitmap.createBitmap(inputBitmap, startX, startY, localWidth, localHeight);
-        createWhiteBitmap();
     }
 
     @Override
@@ -63,9 +58,7 @@ public class SmudgeTool extends Tool {
         if (smudgePaint.getAlpha() > 10) {
             smudgePaint.setAlpha(smudgePaint.getAlpha() - 5);
         }
-        if (!isBitmapWhite()) {
-            bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
-        }
+        bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
     }
 
     @Override
@@ -89,23 +82,7 @@ public class SmudgeTool extends Tool {
         return finalBitmap;
     }
 
-    private void createWhiteBitmap() {
-        if (whiteBitmap != null) {
-            whiteBitmap.recycle();
-        }
-        whiteBitmap = Bitmap.createBitmap(croppedBitmap);
-        whiteBitmap.eraseColor(Color.WHITE);
-    }
-
-    private boolean isBitmapWhite() {
-        boolean isWhite = false;
-        if (croppedBitmap.sameAs(whiteBitmap)) {
-            isWhite = true;
-        }
-        return isWhite;
-    }
-
-    //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
+        //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
 
     /* saved experimentation from drawContinuouslyBetweenPoints()
 

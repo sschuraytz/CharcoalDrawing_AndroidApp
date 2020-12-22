@@ -5,23 +5,18 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.widget.Toast;
-
 import java.util.Random;
-import java.util.Stack;
 
 
 public class Tool{
 
     private Canvas canvas;
     private Bitmap bitmap;
+
     private Paint paint;
     private static final Random rand = new Random();
     private int radius;
     private int opacity = 205; //possible alpha range: 0-255
-
 
     public Tool(int color) {
         bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
@@ -99,6 +94,7 @@ public class Tool{
         float pointY = radius;
         float horizontalShift;
         float verticalShift;
+        //the following line clears the canvas that the tool "stamp" is drawn on
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (int i = 0; i < radius*2*density; i++)
         {
@@ -139,5 +135,9 @@ public class Tool{
 
     public int getOpacity() {
         return opacity;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 }

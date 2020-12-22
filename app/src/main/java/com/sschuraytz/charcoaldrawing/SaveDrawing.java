@@ -6,6 +6,8 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -28,9 +30,19 @@ import androidx.core.content.ContextCompat;
 public class SaveDrawing {
 
     protected Activity baseActivity;
+    private Canvas saveCanvas;
+    private Bitmap bitmapToSave;
 
     public SaveDrawing(Activity activity) {
         baseActivity = activity;
+    }
+
+    public void addWhiteBackgroundToBitmap(Bitmap inputBitmap) {
+        bitmapToSave = Bitmap.createBitmap(inputBitmap.getWidth(), inputBitmap.getHeight(), Bitmap.Config.ARGB_8888);
+        saveCanvas = new Canvas(bitmapToSave);
+        //this prevents saved drawings from displaying black charcoal on default (black) background
+        saveCanvas.drawColor(Color.WHITE);
+        saveCanvas.drawBitmap(inputBitmap, 0, 0, null);
     }
 
     public void saveBitmap(Activity activity, Bitmap bitmap) {
@@ -42,17 +54,13 @@ public class SaveDrawing {
         saveBitmap(activity, bitmap, fileName);
     }
 
-    //https://stackoverflow.com/questions/36624756/how-to-save-bitmap-to-android-gallery - answer from Er Ekta Sahu
-    //https://stackoverflow.com/questions/56904485/how-to-save-an-image-in-android-q-using-mediastore - answer from PerracoLabs
+    //https://stackoverflow.com/a/49024173
+    //https://stackoverflow.com/a/56990305
     public void saveBitmap(@NonNull Activity activity, @NonNull Bitmap bitmap, @NonNull final String displayName) {
         OutputStream outStream;
-
+        addWhiteBackgroundToBitmap(bitmap);
         try {
-            //TODO: determine how to save image so that it is editable (from the gallery)
-                //and open-able from Settings --> Images the same way it's accessible from
-                // Settings --> Storage --> Other --> Pictures --> CharcoalDrawings
-                // (from there, I can open with a gallery or a few other drawing apps)
-                //also, which images are getting saved to which location?
+            // TODO: determine how to save image so that it is editable (from the gallery)
             // need separate implementation based on SDK since getExternalStoragePublicDirectory() was deprecated in SDK Q (29)
             if (Build.VERSION.SDK_INT < 29) {
                 File outputDirectory = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/CharcoalDrawings");
@@ -63,7 +71,7 @@ public class SaveDrawing {
                     newImageFile.delete();
                 }
                 FileOutputStream outputStream = new FileOutputStream(newImageFile);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
+                bitmapToSave.compress(Bitmap.CompressFormat.PNG, 100, outputStream);
                 outputStream.flush();
                 outputStream.close();
 
@@ -85,7 +93,7 @@ public class SaveDrawing {
                 Uri uri = contentResolver.insert(contentUri, contentValues);
 
                 outStream = contentResolver.openOutputStream(uri);
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+                bitmapToSave.compress(Bitmap.CompressFormat.PNG, 100, outStream);
                 if (outStream != null) {
                     outStream.close();
                 }

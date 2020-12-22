@@ -1,7 +1,6 @@
 package com.sschuraytz.charcoaldrawing;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.os.Build;
