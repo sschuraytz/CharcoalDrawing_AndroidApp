@@ -40,15 +40,15 @@ public class SmudgeTool extends Tool {
      */
     @Override
     protected void onDown(Canvas bitmapCanvas, Bitmap inputBitmap, float x1, float y1) {
-        paint.setAlpha((int) (this.getOpacity() / 3));
+        paint.setAlpha((int) (this.getOpacity() / 2.5));
         int radius = this.getRadius();
         if (croppedBitmap != null) {
             croppedBitmap.recycle();
         }
         startX = x1 > (radius/2) ? (int)(x1 - radius/2) : (int)x1;
         startY = y1 > (radius/2) ? (int)(y1 - radius/2) : (int)y1;
-        localWidth = startX + radius > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius * 2;
-        localHeight = startY + radius > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius * 2;
+        localWidth = startX + (radius*2) > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius * 2;
+        localHeight = startY + (radius*2) > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius * 2;
         croppedBitmap = Bitmap.createBitmap(inputBitmap, startX, startY, localWidth, localHeight);
         circularBitmap = getCircularBitmap(croppedBitmap);
     }
