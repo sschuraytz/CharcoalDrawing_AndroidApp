@@ -59,8 +59,10 @@ public class SmudgeTool extends Tool {
             smudgePaint.setAlpha(smudgePaint.getAlpha() - 5);
         }
         bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
+        //bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x+50, y+50, null);
     }
 
+    //need to override b/c smudge draws from upper left whereas charcoal draws from center
     @Override
     protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2) {
         super.drawContinuouslyBetweenPoints(bitmapCanvas, x1, y1, x2, y2);
