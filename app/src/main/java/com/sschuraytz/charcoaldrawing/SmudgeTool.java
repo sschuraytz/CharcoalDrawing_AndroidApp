@@ -20,8 +20,8 @@ import android.graphics.RectF;
 public class SmudgeTool extends Tool {
 
     protected Bitmap croppedBitmap;
+    protected Bitmap circularBitmap;
     protected RectF croppedRect;
-    protected Paint smudgePaint;
     protected int localWidth;
     protected int localHeight;
     protected int startX;
@@ -29,7 +29,6 @@ public class SmudgeTool extends Tool {
 
     public SmudgeTool() {
         super(Color.argb(15, 49, 51, 53));
-        smudgePaint = new Paint();
         croppedRect = new RectF();
     }
 
@@ -41,29 +40,23 @@ public class SmudgeTool extends Tool {
      */
     @Override
     protected void onDown(Canvas bitmapCanvas, Bitmap inputBitmap, float x1, float y1) {
-        smudgePaint.setAlpha(this.getOpacity());
+        paint.setAlpha((int) (this.getOpacity() / 3));
         int radius = this.getRadius();
         if (croppedBitmap != null) {
             croppedBitmap.recycle();
         }
         startX = x1 > (radius/2) ? (int)(x1 - radius/2) : (int)x1;
         startY = y1 > (radius/2) ? (int)(y1 - radius/2) : (int)y1;
-        localWidth = startX + radius > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius;
-        localHeight = startY + radius > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius;
+        localWidth = startX + radius > inputBitmap.getWidth() ? inputBitmap.getWidth() - startX - 1 : radius * 2;
+        localHeight = startY + radius > inputBitmap.getHeight() ? inputBitmap.getHeight() - startY - 1 : radius * 2;
         croppedBitmap = Bitmap.createBitmap(inputBitmap, startX, startY, localWidth, localHeight);
+        circularBitmap = getCircularBitmap(croppedBitmap);
     }
 
     @Override
     protected void drawSinglePoint(Canvas bitmapCanvas, float x, float y) {
-        if (smudgePaint.getAlpha() > 10) {
-            smudgePaint.setAlpha(smudgePaint.getAlpha() - 5);
-        }
-        bitmapCanvas.drawBitmap(getCircularBitmap(croppedBitmap), x, y, smudgePaint);
-    }
-
-    @Override
-    protected void drawContinuouslyBetweenPoints(Canvas bitmapCanvas, float x1, float y1, float x2, float y2) {
-        super.drawContinuouslyBetweenPoints(bitmapCanvas, x1, y1, x2, y2);
+        paint.setAlpha(Math.max(0, paint.getAlpha() - 5));
+        bitmapCanvas.drawBitmap(circularBitmap, x, y, paint);
     }
 
     //not quite producing the effect I want. it's printing new circles instead of blurring what exists on the canvas.

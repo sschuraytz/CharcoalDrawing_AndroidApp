@@ -13,17 +13,17 @@ public class Tool{
     private Canvas canvas;
     private Bitmap bitmap;
 
-    private Paint paint;
+    protected Paint paint;
     private static final Random rand = new Random();
     private int radius;
     private int opacity = 205; //possible alpha range: 0-255
 
     public Tool(int color) {
-        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
+        radius = 35;
+        bitmap = Bitmap.createBitmap(radius*2, radius*2, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(3);
-        radius = 35;
         paint.setColor(color);
         printTexturedCircle();
     }
