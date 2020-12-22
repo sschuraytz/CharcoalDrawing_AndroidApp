@@ -11,7 +11,7 @@ But when trying to depict an image in 3D, an artist focuses, not on the colors, 
 It is the varying tones of lights and darks that can transform a flat, white canvas into a 3D image that appears to be protruding from the canvas’s surface.
 Charcoal is the ideal tool for capturing the contrasting shades in the world because of its ability to render both extreme lights and extreme darks.
 
-![](app/src/images/mockup.png)
+![](app/src/images/threePhoneScreens.png)
 
 ## Use the Command Line to control your device
 [Android Debug Bridge](https://developer.android.com/studio/command-line/adb) (ADB) is a versatile command-line tool that lets you communicate with your device. ADB is included in the Android SDK Platform-Tools package. To use this tool, in the Android Studio terminal, navigate to the folder containing adb.exe. The default location is `%USERPROFILE%\AppData\Local\Android\sdk\platform-tools.` Then simply run one of the following commands.
