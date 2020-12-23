@@ -42,11 +42,6 @@ public class VoiceCommands {
         }
 
         @Override
-        public void smudgeShaderCommand() {
-
-        }
-
-        @Override
         public void eraserCommand() {
 
         }
@@ -178,10 +173,6 @@ public class VoiceCommands {
                 Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
                 voiceListener.smudgeCommand();
                 break;
-            case "blur":
-                Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
-                voiceListener.smudgeShaderCommand();
-                break;
             case "eraser":
             case "erase":
                 Toast.makeText(activity, commandString, Toast.LENGTH_SHORT).show();
@@ -247,10 +238,6 @@ public class VoiceCommands {
         //intent = simple message to transfer data btwn activities
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-        // info about next attribute say it's best not to modify the value
-        // also, I'm  not sure it's making a difference
-        //intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, 10);
-        //  intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
         speechRecognizer.startListening(intent);
     }

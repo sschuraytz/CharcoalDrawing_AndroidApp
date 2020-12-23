@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity
     private DrawingView drawingView;
     private FloatingActionButton fab;
     private VoiceCommands voiceCommands;
-    private BroadcastReceiver reciever;
+    private BroadcastReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(reciever);
+        unregisterReceiver(receiver);
     }
 
     /**
@@ -51,14 +51,14 @@ public class MainActivity extends AppCompatActivity
      * Replace "undo" with the command you want to execute.
      */
     private void setUpBroadcastReceiver() {
-        reciever = new BroadcastReceiver() {
+        receiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 voiceCommands.executeCommand(intent.getStringExtra("command"));
             }
         };
         IntentFilter filter = new IntentFilter(Intent.ACTION_VOICE_COMMAND);
-        registerReceiver(reciever, filter);
+        registerReceiver(receiver, filter);
     }
 
     public void setUpVoiceCommands() {
@@ -113,10 +113,6 @@ public class MainActivity extends AppCompatActivity
 
     public void smudgeCommand() {
         drawingView.setSmudgeMode();
-    }
-
-    public void smudgeShaderCommand() {
-        drawingView.setSmudgeShaderMode();
     }
 
     public void eraserCommand() {

@@ -59,9 +59,6 @@ public class SmudgeTool extends Tool {
         bitmapCanvas.drawBitmap(circularBitmap, x, y, paint);
     }
 
-    //not quite producing the effect I want. it's printing new circles instead of blurring what exists on the canvas.
-    // it's even less natural than the charcoal
-    // looks ok on emulator b/c it's small, but does not look great on actual device
    // https://stackoverflow.com/a/13737939
     private Bitmap getCircularBitmap(Bitmap inBitmap) {
         Bitmap finalBitmap = Bitmap.createBitmap(inBitmap.getWidth(), inBitmap.getHeight(), Bitmap.Config.ARGB_8888);
@@ -75,16 +72,4 @@ public class SmudgeTool extends Tool {
         return finalBitmap;
     }
 
-        //TODO? change smudge to update currentBitmap as drag so can smudge if reach dark spot even if first touch was white
-
-    /* saved experimentation from drawContinuouslyBetweenPoints()
-
-        RectF rect = new RectF(x1, y1, localWidth, localHeight);
-        bitmapCanvas.drawRoundRect(rect, this.getRadius(), this.getRadius(), localPaint);
-    //  smudgePaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));  --> this was drawing squares
-    //  croppedRect = new RectF(x1 - this.getRadius()/2, y1 - this.getRadius()/2, x1 + this.getRadius()/2, y1 + this.getRadius()/2);
-    //  bitmapCanvas.drawRoundRect(croppedRect, croppedRect.height()/2, croppedRect.height()/2, smudgePaint);
-    //  super.drawContinuouslyBetweenPoints(bitmapCanvas, x1, y1, x1 + croppedBitmap.getWidth(), y1 + croppedBitmap.getHeight());
-
-     */
 }
