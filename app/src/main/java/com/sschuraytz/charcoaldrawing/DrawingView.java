@@ -93,6 +93,7 @@ public class DrawingView extends View {
     {
         charcoalTool.setRadius(value);
         eraseTool.setRadius(value);
+        smudgeTool.setRadius(value);
     }
 
     public void setEraseMode() {

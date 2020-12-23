@@ -13,19 +13,16 @@ public class Tool{
     private Canvas canvas;
     private Bitmap bitmap;
 
-    private Paint paint;
+    protected Paint paint;
     private static final Random rand = new Random();
     private int radius;
-    private int opacity = 205; //possible alpha range: 0-255
+    private int opacity = 180; //possible alpha range: 0-255
 
     public Tool(int color) {
-        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setStrokeWidth(3);
-        radius = 35;
         paint.setColor(color);
-        printTexturedCircle();
+        setRadius(30);
     }
 
     protected void onDown(Canvas bitmapCanvas, Bitmap inputBitmap, float x1, float y1) {
@@ -119,6 +116,12 @@ public class Tool{
     public void setRadius(int value)
     {
         radius = value;
+        setUpCanvas();  //set up canvas large enough to accommodate circle with new radius
+    }
+
+    public void setUpCanvas() {
+        bitmap = Bitmap.createBitmap(radius*2, radius*2, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
         printTexturedCircle();
     }
 
