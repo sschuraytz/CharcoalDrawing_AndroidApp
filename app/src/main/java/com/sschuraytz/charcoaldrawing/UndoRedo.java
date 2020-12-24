@@ -24,8 +24,6 @@ public class UndoRedo {
         Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
         currentStack.push(bitmap);
         bitmapCanvas = new Canvas(bitmap);
-        //this prevents saved drawings from displaying black charcoal on default (black) background
-        bitmapCanvas.drawColor(Color.WHITE);
     }
 
     public void addBitmap() {
@@ -39,6 +37,7 @@ public class UndoRedo {
         bitmapCanvas = new Canvas(newBitmap);
         //after undo, if draw new line, do not let user redo
         undoneStack.clear();
+        bitmapCanvas.drawColor(Color.TRANSPARENT);
     }
 
     public Bitmap getCurrentBitmap() {

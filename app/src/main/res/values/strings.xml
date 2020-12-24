@@ -4,6 +4,8 @@
     <string name="new_canvas_description">creates new blank canvas</string>
     <string name="charcoal">charcoal</string>
     <string name="charcoal_description">enable charcoal drawing</string>
+    <string name="smudge">smudge</string>
+    <string name="smudge_description">switch to smudge mode</string>
     <string name="eraser">eraser</string>
     <string name="eraser_description">switch to eraser mode</string>
     <string name="undo">undo</string>

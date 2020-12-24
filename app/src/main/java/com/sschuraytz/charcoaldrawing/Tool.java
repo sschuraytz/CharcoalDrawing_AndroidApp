@@ -5,34 +5,28 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.util.Log;
-import android.widget.Toast;
-
 import java.util.Random;
-import java.util.Stack;
 
 
 public class Tool{
 
     private Canvas canvas;
     private Bitmap bitmap;
-    private Paint paint;
+
+    protected Paint paint;
     private static final Random rand = new Random();
     private int radius;
-    private int opacity = 205; //possible alpha range: 0-255
-
+    private int opacity = 180; //possible alpha range: 0-255
 
     public Tool(int color) {
-        bitmap = Bitmap.createBitmap(200, 200, Bitmap.Config.ARGB_8888);
-        canvas = new Canvas(bitmap);
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        //should allow user to modify
         paint.setStrokeWidth(3);
-        radius = 35;
         paint.setColor(color);
-        printTexturedCircle();
+        setRadius(30);
+    }
+
+    protected void onDown(Canvas bitmapCanvas, Bitmap inputBitmap, float x1, float y1) {
+        drawContinuouslyBetweenPoints(bitmapCanvas, x1, y1, x1, y1);
     }
 
     /**
@@ -57,22 +51,23 @@ public class Tool{
         {
             float yIncrement = slope == 0 && dx != 0 ? 0 : dy * ( i /times);
             float xIncrement = slope == 0 ? dx * (i / times ) : yIncrement / slope;
-            bitmapCanvas.drawBitmap(bitmap,
-                    x1 + xIncrement - getRadius(),
-                    y1 + yIncrement - getRadius(),
-                    paint);
+            drawSinglePoint(bitmapCanvas, x1 + xIncrement, y1 + yIncrement);
         }
 
         if (times <= 0)
         {
-            bitmapCanvas.drawBitmap(bitmap,
-                    x1 - getRadius(),
-                    y1 - getRadius(),
-                    paint);
+            drawSinglePoint(bitmapCanvas, x1, y1);
         }
     }
+    //this draws an entire textured circle of dots
+    protected void drawSinglePoint(Canvas bitmapCanvas, float x, float y) {
+        bitmapCanvas.drawBitmap(bitmap,
+                x - getRadius(),
+                y - getRadius(),
+                paint);
+    }
 
-    private void printTexturedCircleBorder(float pointX, float pointY)
+    private void printTexturedCircleBorder(float pointX, float pointY, int maxMagnitude)
     {
         float horizontalShift;
         float verticalShift;
@@ -82,8 +77,8 @@ public class Tool{
         float incrementer = radius > 80 ?(0.125f*radius) : radius + 1;
         for (int angle = 0; angle < 360; angle+=incrementer)
         {
-            horizontalShift = (float) (radius * Math.cos(angle));
-            verticalShift = (float) (radius * Math.sin(angle));
+            horizontalShift = (float) (maxMagnitude * Math.cos(angle));
+            verticalShift = (float) (maxMagnitude * Math.sin(angle));
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
     }
@@ -96,6 +91,7 @@ public class Tool{
         float pointY = radius;
         float horizontalShift;
         float verticalShift;
+        //the following line clears the canvas that the tool "stamp" is drawn on
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (int i = 0; i < radius*2*density; i++)
         {
@@ -109,7 +105,7 @@ public class Tool{
             canvas.drawPoint(pointX + horizontalShift, pointY + verticalShift, paint);
         }
 
-        printTexturedCircleBorder(pointX, pointY);
+        printTexturedCircleBorder(pointX, pointY, radius);
     }
 
     protected void printTexturedCircle()
@@ -120,6 +116,12 @@ public class Tool{
     public void setRadius(int value)
     {
         radius = value;
+        setUpCanvas();  //set up canvas large enough to accommodate circle with new radius
+    }
+
+    public void setUpCanvas() {
+        bitmap = Bitmap.createBitmap(radius*2, radius*2, Bitmap.Config.ARGB_8888);
+        canvas = new Canvas(bitmap);
         printTexturedCircle();
     }
 
@@ -136,5 +138,9 @@ public class Tool{
 
     public int getOpacity() {
         return opacity;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
     }
 }

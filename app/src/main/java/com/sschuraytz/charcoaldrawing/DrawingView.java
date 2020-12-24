@@ -17,9 +17,9 @@ public class DrawingView extends View {
     private Paint paint;
     protected UndoRedo undoRedo = new UndoRedo();
 
-
     private CharcoalTool charcoalTool;
     private EraseTool eraseTool;
+    private SmudgeTool smudgeTool;
     private Tool currentTool;
 
     private float previousX;
@@ -31,6 +31,7 @@ public class DrawingView extends View {
         super(context, attributes);
         charcoalTool = new CharcoalTool();
         eraseTool = new EraseTool();
+        smudgeTool = new SmudgeTool();
         initializeDrawing();
     }
 
@@ -50,13 +51,15 @@ public class DrawingView extends View {
         switch(event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 undoRedo.addBitmap();
-                currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
+               // currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, pointX, pointY);
+                currentTool.onDown(undoRedo.getBitmapCanvas(), undoRedo.getCurrentBitmap(), pointX, pointY);
                 previousX = pointX;
                 previousY = pointY;
                 break;
             case MotionEvent.ACTION_MOVE:
                 // avoid continuously reprinting circle (thus making it darker) if user keeps finger on same spot
                 if (pointX != previousX || pointY != previousY) {
+                    //currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
                     currentTool.drawContinuouslyBetweenPoints(undoRedo.getBitmapCanvas(), pointX, pointY, previousX, previousY);
                 }
                 previousX = pointX;
@@ -88,6 +91,7 @@ public class DrawingView extends View {
     {
         charcoalTool.setRadius(value);
         eraseTool.setRadius(value);
+        smudgeTool.setRadius(value);
     }
 
     public void setEraseMode() {
@@ -106,8 +110,11 @@ public class DrawingView extends View {
 
     protected boolean redo() {
         boolean isAvailable = undoRedo.redo();
-        invalidate();
         return isAvailable;
+    }
+
+    public void setSmudgeMode() {
+        currentTool = smudgeTool;
     }
 
     public void createNewCanvas() {
